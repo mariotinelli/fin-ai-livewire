@@ -1,0 +1,11 @@
+interface:
+  display_name: "project-flow"
+  short_description: "Define escopo, Feature ou Bug com fontes"
+  default_prompt: "Use $project-flow para definir ou retomar este escopo, Feature ou Bug com base nas fontes, concluir os itens aprovados e reconciliar issues e relações no Redmine sem duplicar operações."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "redmine"
+      description: "Authenticated Redmine project and issue tools"
+policy:
+  allow_implicit_invocation: true

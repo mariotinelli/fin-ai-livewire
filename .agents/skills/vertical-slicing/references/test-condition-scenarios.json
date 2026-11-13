@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "internal-checks-do-not-replace-functional-feature-qa",
+      "input": "An approved Feature in a UI product excludes its consuming forms until later Features. Its proposed QA only invokes internal category queries, runs mocked compatibility tests and records future UI checks as belonging elsewhere. No real product interaction will demonstrate the result when this Feature is declared complete.",
+      "expect": ["identify the missing functional QA path rather than treating passing internal tests as acceptance", "return the requirement boundary for an explicit decision before condition approval", "retain internal checks as developer evidence without inventing a screen API or demonstration consumer", "preserve approved historical artifacts and do not mutate remote issues implicitly"]
+    },
+    {
+      "id": "functional-acceptance-uses-the-real-product-channel",
+      "input": "A UI Feature includes its own new category selection and saved-record consultation. A separate CLI product Feature exposes an approved report export command. Both will have real user-facing paths at completion, although neither delivery is implemented yet. Unit tests are also planned.",
+      "expect": ["describe actor actions and observable outcomes for each product's actual channel", "accept screens included in the Feature and a genuine CLI product flow without demanding an extra GUI", "distinguish planned conditions from executed QA results", "keep unit tests as supporting verification without replacing functional acceptance", "allow prior dependencies while rejecting reliance on an entirely future consumer"]
+    },
+    {
+      "id": "visual-comparison-is-not-functional-coverage",
+      "input": "The form has approved visual criteria and a new approved field. Existing tests verify fields and mobile overflow, and failure screenshots exist.",
+      "expect": ["include reference and rendered-state comparison with viewport context", "preserve approved field adaptation", "cover visual expected result and source locators in QA conditions", "do not treat failure screenshots or overflow assertions as fidelity evidence"]
+    },
+    {
+      "id": "existing-capability-and-cross-slice-interaction",
+      "input": "A Feature adds registration and consultation in separate slices, using an existing permission boundary. The proposed conditions verify only each new screen in isolation.",
+      "expect": ["include the approved registration-to-consultation journey", "verify relevant existing permissions", "derive expected results from the approved requirement", "keep QA focused on the complete parent"]
+    },
+    {
+      "id": "bug-reproduction-and-related-preservation",
+      "input": "A Bug corrects duplicate registration after a retry. The proposal checks only the success message.",
+      "expect": ["include the approved reproduction context and retry", "verify the corrected persisted outcome", "justify related uniqueness regression", "do not invent execution results"]
+    },
+    {
+      "id": "qa-only-and-irrelevant-categories",
+      "input": "Inspection confirms all approved behavior exists and no DEV work is needed. The draft omits test conditions and proposes unrelated integration errors to fill categories.",
+      "expect": ["prepare conditions for the entire approved behavior", "retain relevant existing capabilities", "omit artificial categories and unsupported conditions"]
+    },
+    {
+      "id": "unresolved-limit-and-false-traceability",
+      "input": "A condition references the correct requirement ID but invents a timeout that neither the approved requirement nor confirmed evidence establishes.",
+      "expect": ["structural traceability does not establish semantic correctness", "resolve the behavior gap in the requirement before approving affected conditions", "do not let helper success stand in for human review"]
+    },
+    {
+      "id": "unrelated-regression-and-stable-identities",
+      "input": "A local revision reorders unchanged conditions, removes one, adds another and includes an unrelated payment regression without impact evidence.",
+      "expect": ["retain IDs for preserved conditions", "assign a new unused ID for the new behavior", "never reuse the removed ID", "require justified impact for external regressions", "review and approve the changed source again"]
+    }
+  ]
+}

@@ -1,0 +1,139 @@
+{
+  "schema_version": 2,
+  "purpose": "Evaluate proportional rounds, reuse of evidence, explicit boundaries, and final review without hiding material gaps. These cases guide behavioral evaluation; fixture checks alone do not execute an agent interview.",
+  "cases": [
+    {
+      "id": "blocking-gap",
+      "open": {"blocking": 1, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": false,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "continue"
+    },
+    {
+      "id": "deferred-gap",
+      "open": {"blocking": 0, "deferred": 1, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "deferred"
+    },
+    {
+      "id": "source-contradiction",
+      "open": {"blocking": 1, "deferred": 0, "contradictions": 1, "third_party": 0},
+      "frontier_empty": false,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "continue"
+    },
+    {
+      "id": "third-party-question",
+      "open": {"blocking": 0, "deferred": 1, "contradictions": 0, "third_party": 1},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "deferred"
+    },
+    {
+      "id": "empty-frontier-with-unsettled-prerequisite",
+      "open": {"blocking": 1, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "continue"
+    },
+    {
+      "id": "technical-choice-only",
+      "open": {"blocking": 0, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "excluded_technical_choices": 1,
+      "expected_outcome": "ready_for_review"
+    },
+    {
+      "id": "standalone-final-understanding-approved",
+      "open": {"blocking": 0, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": true,
+      "confirmation_source": "standalone-final-review",
+      "expected_outcome": "complete"
+    },
+    {
+      "id": "caller-document-review-pending",
+      "open": {"blocking": 0, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "intermediate_confirmation": false,
+      "expected_outcome": "ready_for_review"
+    },
+    {
+      "id": "caller-document-approved-without-intermediate-confirmation",
+      "open": {"blocking": 0, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": true,
+      "confirmation_source": "final-requirement-approval",
+      "intermediate_confirmation": false,
+      "expected_outcome": "complete"
+    },
+    {
+      "id": "explicit-exclusion-leaves-future-details-undefined",
+      "open": {"blocking": 0, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": true,
+      "stakeholder_confirmed": false,
+      "exclusions": [{"behavior": "Scheduled delivery", "source": "Stakeholder: this delivery only supports immediate download."}],
+      "expected_outcome": "ready_for_review"
+    },
+    {
+      "id": "proposed-exclusion-is-not-a-decision",
+      "open": {"blocking": 1, "deferred": 0, "contradictions": 0, "third_party": 0},
+      "frontier_empty": false,
+      "stakeholder_confirmed": false,
+      "expected_outcome": "continue"
+    }
+  ],
+  "interviews": [
+    {
+      "id": "simple-standalone-change",
+      "request": "Rename the invoice button from Send to Send invoice. Its action and permissions stay the same. Acceptance is the new label on the invoice screen.",
+      "evidence": "Repository confirms the existing button, action, and permissions; the conversation contains the stakeholder's exact label.",
+      "expected": "Reuse the supplied label and repository facts. Present the final understanding for review directly, without a generic questionnaire or implementation choices."
+    },
+    {
+      "id": "many-independent-material-decisions",
+      "request": "Define a report export. Eight independent product decisions remain about audience, visible fields, filtering, ordering, empty results, download behavior, repeated requests, and acceptance.",
+      "evidence": "All eight decisions affect the current delivery; no stakeholder answers exist yet.",
+      "expected": "Start with a small prioritized round, normally one to three questions. Retain the other material decisions for later rounds. Explain supported recommendations and wait for answers."
+    },
+    {
+      "id": "underexplained-functional-question",
+      "request": "Clarify what happens when a user submits an invoice that exceeds their approval limit.",
+      "evidence": "The Feature identifies the requester and approval limit, but does not define whether submission is blocked, routed for additional approval, or accepted with a warning.",
+      "expected": "Present a compact decision brief before asking: connect the question to this invoice Feature, explain which visible flow and acceptance conditions change, describe the observable consequence of each supported alternative, and give an evidence-based recommendation or explicitly state that no sound preference exists. Ask one direct decision rather than a bare yes/no or a compound question."
+    },
+    {
+      "id": "extensive-source-coverage",
+      "request": "Clarify this release from a long specification and a supplemental design.",
+      "evidence": "The specification has relevant flows in its opening and final sections. A late appendix conflicts with the design about who may cancel an approved request.",
+      "expected": "Read both sources fully, retain all relevant flows, surface the cancellation contradiction and resolve material gaps over small rounds. Source length does not justify a huge first round or omitted final sections."
+    },
+    {
+      "id": "caller-reuses-intake",
+      "request": "Continue this Feature in project-flow after issue creation.",
+      "evidence": "Earlier intake settled audience and immediate download. The stakeholder explicitly excluded scheduled delivery. The repository shows the current permissions. The only undecided behavior is the result when the report is empty.",
+      "expected": "Ask only about empty results, preserve the scheduled-delivery boundary without defining its timing, and leave implementation mechanisms to implementation. Then present the final document once for approval, also confirming understanding."
+    },
+    {
+      "id": "material-third-party-decision",
+      "request": "Finish the requirement now; Finance will decide the approval threshold later.",
+      "evidence": "Threshold behavior is part of this delivery and determines which requests users may approve. No exclusion was approved.",
+      "expected": "Keep the threshold deferred and attributable to Finance. Continue independent material questions in small rounds, but block final approval; postponement does not remove behavior from scope."
+    },
+    {
+      "id": "bug-with-known-facts",
+      "request": "Prepare the Bug requirement for the invoice total showing the wrong currency.",
+      "evidence": "The report already specifies current and expected currency, affected invoices, frequency and correction criteria. Repository evidence confirms the displayed field. Persistence and formatting implementation remain undecided.",
+      "expected": "Reuse the supplied Bug facts and repository evidence, leave technical choices to implementation, and proceed to final document review without repeating every Bug facet as a question."
+    },
+    {
+      "id": "new-evidence-reopens-one-decision",
+      "request": "Include this later stakeholder note in the requirement.",
+      "evidence": "Prior answers settled export audience and fields. The new note contradicts the audience but confirms the fields.",
+      "expected": "Identify the audience contradiction and its provenance, reopen that material decision, and ask a focused question while preserving the settled fields. Do not assume recency resolves the conflict."
+    }
+  ]
+}

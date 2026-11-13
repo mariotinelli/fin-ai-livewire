@@ -1,0 +1,6 @@
+interface:
+  display_name: "code-review"
+  short_description: "Revisa MR, PR ou branch e confere tarefas Redmine"
+  default_prompt: "Use $code-review para revisar meu MR, PR ou branch atual, conferir as tarefas do Redmine e apresentar os comentários para aprovação antes de publicá-los."
+policy:
+  allow_implicit_invocation: true

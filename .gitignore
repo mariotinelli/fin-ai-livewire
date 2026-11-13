@@ -39,7 +39,24 @@ __pycache__/
 /CLAUDE.md
 /GEMINI.md
 /opencode.json
-/.agents
+# Ignorar arquivos locais dos agentes.
+/.agents/*
+
+# Permitir a pasta de skills, ignorando seus pacotes por padrão.
+!/.agents/skills/
+/.agents/skills/*
+
+# Versionar os pacotes do Rem Soft Tools.
+!/.agents/skills/project-flow/
+!/.agents/skills/project-slices/
+!/.agents/skills/requirements-grilling/
+!/.agents/skills/domain-modeling/
+!/.agents/skills/vertical-slicing/
+!/.agents/skills/plan-issue/
+!/.agents/skills/ralph/
+!/.agents/skills/code-review/
+
+# Demais arquivos locais dos agentes.
 /.claude
 /.codex
 /.cursor

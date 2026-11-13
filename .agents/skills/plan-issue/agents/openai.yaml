@@ -1,0 +1,6 @@
+interface:
+  display_name: "plan-issue"
+  short_description: "Planeja fases para os quatro gates do Ralph"
+  default_prompt: "Use $plan-issue para planejar a filha DEV para os quatro gates do Ralph, sem implementar nem criar commits."
+policy:
+  allow_implicit_invocation: true
