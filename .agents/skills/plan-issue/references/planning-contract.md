@@ -31,7 +31,7 @@ Reprovação em Validação ou Testes volta para Dev; uma correção passa novam
 
 Quando o aceite envolver UI, identifique fonte visual, telas/estados, adaptações aprovadas e comparação esperada na Validação. Use ferramentas disponíveis; não imponha biblioteca, comando de captura ou matriz maior que a entrega exige. Screenshot sozinho não prova fidelidade.
 
-Verificação necessária sem ferramenta/evidência disponível permanece pendente no gate correspondente. Diferencie falha da aplicação de impedimento de ambiente; não enfraqueça o aceite. Preserve fontes, baselines e evidências úteis; use temporários adequados e feche somente processos que iniciou.
+Evidência necessária ainda coletável pelo Dev deve voltar como ação requerida, sem aprovar a entrega. Dependência externa realmente impeditiva exige causa observada e condição necessária para continuar; a restrição somente leitura do revisor não é esse impedimento. Diferencie falha da aplicação de impedimento de ambiente; não enfraqueça o aceite. Preserve fontes, baselines e evidências úteis; use temporários adequados e feche somente processos que iniciou.
 
 ## Revisão, resultado e planos existentes
 
