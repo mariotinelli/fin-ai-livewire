@@ -7,7 +7,7 @@
             aria-label="Abrir notificações"
             wire:loading.attr="disabled"
             wire:target="loadNotifications"
-            class="relative block h-7 w-7 cursor-pointer text-primary-content hover:text-primary-content/80 disabled:cursor-wait"
+            class="relative flex h-11 w-11 items-center justify-center rounded-field cursor-pointer text-secondary hover:bg-accent hover:text-primary disabled:cursor-wait"
         >
             <span wire:loading.remove wire:target="loadNotifications">
                 <x-icons.bell class="h-7 w-7" aria-hidden="true" />
@@ -23,7 +23,7 @@
                 sm
                 aria-label="{{ $this->unviewedNotificationsCount }} notificações não visualizadas"
                 title="Não visualizadas"
-                class="absolute -top-3 -right-3 border-secondary bg-secondary font-semibold text-secondary-content"
+                class="absolute -top-1 -right-1 border-secondary bg-secondary font-semibold text-secondary-content"
             >
                 {{ $this->unviewedNotificationsCount > 99 ? '99+' : $this->unviewedNotificationsCount }}
             </x-ui.badge>

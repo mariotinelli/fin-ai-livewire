@@ -36,7 +36,7 @@
             tabindex="-1"
             open
         >
-            <div class="pointer-events-auto modal-box w-full max-w-xl rounded-md p-0 shadow-lg">
+            <div class="pointer-events-auto modal-box w-full max-w-xl rounded-box p-0 shadow-lg">
                 <div class="flex gap-2 p-6">
                     @foreach ($alertIcons as $alertIcon)
                         <x-dynamic-component

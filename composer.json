@@ -86,7 +86,7 @@
         "refactor": "php -d memory_limit=-1 ./vendor/bin/rector process --ansi",
         "refactor:check": "php -d memory_limit=-1 ./vendor/bin/rector process --ansi --dry-run",
         "test:focused": "php artisan test --compact --tia",
-        "test:full": "php -d memory_limit=-1 ./vendor/bin/pest --tia --configuration=phpunit-ci.xml",
+        "test:full": "php -d memory_limit=-1 ./vendor/bin/pest --parallel --tia --configuration=phpunit-ci.xml",
         "coverage:code": "php -d memory_limit=-1 ./vendor/bin/pest --tia --coverage --configuration=phpunit-ci.xml",
         "coverage:type": "php -d memory_limit=-1 ./vendor/bin/pest --tia --type-coverage --configuration=phpunit.xml",
         "frontend:build": "npm run build",

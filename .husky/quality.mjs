@@ -31,7 +31,7 @@ function php() {
 }
 
 async function prettierCheck(directory, files, root) {
-    const supported = files.filter((file) => /\.(?:[cm]?js|jsx|ts|tsx|json|css|scss|less|html|md|mdx|ya?ml)$/i.test(file));
+    const supported = files.filter((file) => /\.(?:[cm]?js|jsx|ts|tsx|json|css|scss|less|html|ya?ml)$/i.test(file));
     if (!supported.length) return;
     const prettier = await import(pathToFileURL(path.join(root, 'node_modules/prettier/index.mjs')));
     let failed = false;

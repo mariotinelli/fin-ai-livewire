@@ -63,7 +63,7 @@
         @if ($loadingTarget) data-ui-loading-target="{{ $loadingTarget }}" @endif
         {{
             $attributes->class([
-                'btn normal-case rounded-sm flex items-center disabled:cursor-not-allowed',
+                'btn normal-case flex items-center disabled:cursor-not-allowed',
                 'btn-neutral'                                                                                                                  => $neutral,
                 'btn-primary'                                                                                                                  => $primary,
                 'btn-secondary'                                                                                                                => $secondary,

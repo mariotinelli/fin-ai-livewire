@@ -46,7 +46,7 @@
                                     ])
                                 ></div>
 
-                                <div class="h-0 flex-1 bg-base-100 pt-12 shadow-xl">
+                                <div class="h-0 flex-1 border-r border-base-300 bg-base-100 pt-12">
                                     <div
                                         x-data="sidebarContext(@js('sidebar-scroll-' . auth()->id() . '-desktop'))"
                                         @scroll.passive="save()"
@@ -94,7 +94,7 @@
                         >
                             <div class="flex h-full flex-col divide-y divide-base-300 bg-base-100 shadow-xl">
                                 <div
-                                    class="relative flex h-(--navbar-height) items-center justify-between bg-primary px-8 shadow-sm sm:px-6"
+                                    class="relative flex h-(--navbar-height) items-center justify-between border-b border-base-300 bg-base-100 px-8 sm:px-6"
                                 >
                                     <x-ui.application-logo class="block h-9 w-auto" />
 
@@ -104,7 +104,7 @@
                                         aria-label="Fechar menu lateral"
                                         @click="mobileAsideOpen = false"
                                     >
-                                        <x-icons.x-mark class="z-50 h-6 w-6 cursor-pointer text-primary-content" aria-hidden="true" />
+                                        <x-icons.x-mark class="z-50 h-6 w-6 cursor-pointer text-base-100" aria-hidden="true" />
                                     </button>
                                 </div>
 

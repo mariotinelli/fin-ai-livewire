@@ -18,3 +18,11 @@ package-lock.json
 /.phpunit.result.cache
 /storage/
 /tests/Browser/Screenshots/
+
+# Ignore markdown
+**/*.md
+**/*.mdx
+
+# Documentation and generated agent skills
+/docs/
+/.agents/

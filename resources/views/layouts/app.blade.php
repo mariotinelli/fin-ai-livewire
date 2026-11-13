@@ -2,7 +2,7 @@
 <html
     lang="{{ str_replace('_', '-', app()->getLocale()) }}"
     data-theme="remsoft"
-    data-application-title="{{ config('app.name', 'Laravel') }}"
+    data-application-title="FinAI"
     class="overflow-y-hidden"
 >
 <head>
@@ -14,13 +14,9 @@
         <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
     @endif
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>FinAI</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Sora:wght@100..800&display=swap" rel="stylesheet" />
-
-    <link rel="icon" href=" {{ asset('assets/favicon.png') }} " />
+    <link rel="icon" href="{{ asset('assets/finai-favicon.svg') }}" />
 
     @stack('styles')
     @vite(['resources/css/app.css', 'resources/js/app.js'])
