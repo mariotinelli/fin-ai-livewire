@@ -1,0 +1,265 @@
+scripts:
+  setup: |
+    #!/usr/bin/env bash
+
+    cd "$ORCA_WORKTREE_PATH" || exit 1
+
+    prepare_testing_environment() {
+      if [ -f .env.testing ]; then
+        return 0
+      fi
+
+      if [ -e .env.testing ] || [ -L .env.testing ]; then
+        echo "O destino .env.testing não é um arquivo válido." >&2
+        return 1
+      fi
+
+      local testing_source="$ORCA_ROOT_PATH/.env.testing"
+      if [ ! -e "$testing_source" ] && [ ! -L "$testing_source" ]; then
+        testing_source=".env.testing.example"
+      fi
+
+      if [ ! -f "$testing_source" ]; then
+        echo "Não foi encontrado um arquivo de configuração de testes válido." >&2
+        return 1
+      fi
+
+      if ! cp -n "$testing_source" .env.testing; then
+        echo "Não foi possível preparar .env.testing; setup interrompido." >&2
+        return 1
+      fi
+    }
+
+    prepare_testing_environment || exit 1
+    cp -n "$ORCA_ROOT_PATH/.env" .env 2>/dev/null || cp -n .env.example .env
+    cp -n "$ORCA_ROOT_PATH/opencode.json" opencode.json 2>/dev/null
+    cp -n "$ORCA_ROOT_PATH/boost.json" boost.json 2>/dev/null
+    mkdir -p .codex
+    cp -n "$ORCA_ROOT_PATH/.codex/config.toml" .codex/config.toml 2>/dev/null
+
+    APP_URL="http://${ORCA_WORKSPACE_NAME}.test"
+    DB_NAME="${ORCA_WORKSPACE_NAME//-/_}"
+    TEST_DB_NAME="${DB_NAME}_testing"
+
+    if ! [[ "$DB_NAME" =~ ^[A-Za-z0-9_]+$ ]] || [ "${#DB_NAME}" -gt 47 ]; then
+      echo "Invalid workspace database name: $DB_NAME" >&2
+      exit 1
+    fi
+
+    if grep -q '^APP_URL=' .env; then
+      sed "s#^APP_URL=.*#APP_URL=${APP_URL}#" .env > .env.tmp && mv .env.tmp .env
+    else
+      printf '\nAPP_URL=%s\n' "$APP_URL" >> .env
+    fi
+
+    if grep -q '^DB_CONNECTION=' .env; then
+      sed "s#^DB_CONNECTION=.*#DB_CONNECTION=pgsql#" .env > .env.tmp && mv .env.tmp .env
+    else
+      printf '\nDB_CONNECTION=pgsql\n' >> .env
+    fi
+
+    if grep -q '^DB_DATABASE=' .env; then
+      sed "s#^DB_DATABASE=.*#DB_DATABASE=${DB_NAME}#" .env > .env.tmp && mv .env.tmp .env
+    else
+      printf '\nDB_DATABASE=%s\n' "$DB_NAME" >> .env
+    fi
+
+    if grep -q '^DB_DATABASE=' .env.testing; then
+      sed "s#^DB_DATABASE=.*#DB_DATABASE=${TEST_DB_NAME}#" .env.testing > .env.testing.tmp && mv .env.testing.tmp .env.testing
+    else
+      printf '\nDB_DATABASE=%s\n' "$TEST_DB_NAME" >> .env.testing
+    fi
+
+    if grep -q '^DB_CONNECTION=' .env.testing; then
+      sed "s#^DB_CONNECTION=.*#DB_CONNECTION=pgsql#" .env.testing > .env.testing.tmp && mv .env.testing.tmp .env.testing
+    else
+      printf '\nDB_CONNECTION=pgsql\n' >> .env.testing
+    fi
+
+    for environment_file in .env .env.testing; do
+      if grep -q '^DB_URL=' "$environment_file"; then
+        sed 's#^DB_URL=.*#DB_URL=#' "$environment_file" > "$environment_file.tmp" && mv "$environment_file.tmp" "$environment_file" || exit 1
+      else
+        printf '\nDB_URL=\n' >> "$environment_file" || exit 1
+      fi
+    done
+
+    set -a
+    . ./.env
+    set +a
+
+    DB_CONNECTION="${DB_CONNECTION:-pgsql}"
+    DB_HOST="${DB_HOST:-127.0.0.1}"
+    DB_PORT="${DB_PORT:-5432}"
+    DB_USERNAME="${DB_USERNAME:-postgres}"
+    export PGPASSWORD="${DB_PASSWORD:-}"
+
+    if [ "$DB_CONNECTION" != "pgsql" ] || [ "${DB_DATABASE:-}" != "$DB_NAME" ] || [ -n "${DB_URL:-}" ]; then
+      echo "Expected the isolated PostgreSQL database configured for this workspace." >&2
+      exit 1
+    fi
+
+    if command -v psql >/dev/null 2>&1; then
+      PSQL_COMMAND="psql"
+    elif command -v psql.exe >/dev/null 2>&1; then
+      PSQL_COMMAND="psql.exe"
+    else
+      echo "PostgreSQL CLI not found. Install psql and make it available in PATH." >&2
+      exit 1
+    fi
+
+    if command -v php >/dev/null 2>&1; then
+      PHP_COMMAND="php"
+    elif command -v php.bat >/dev/null 2>&1; then
+      PHP_COMMAND="php.bat"
+    else
+      echo "PHP CLI not found. Install PHP and make it available in PATH." >&2
+      exit 1
+    fi
+
+    if command -v composer >/dev/null 2>&1 && [ "$PHP_COMMAND" = "php" ]; then
+      COMPOSER_COMMAND="composer"
+    elif command -v composer.bat >/dev/null 2>&1; then
+      COMPOSER_COMMAND="composer.bat"
+    else
+      echo "Composer not found. Install Composer and make it available in PATH." >&2
+      exit 1
+    fi
+
+    APPLICATION_DATABASE_CREATED=false
+    create_database_if_missing() {
+      local database_name="$1"
+      local exists
+
+      exists=$("$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+        -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres -At \
+        -c "SELECT 1 FROM pg_database WHERE datname = '$database_name'") || return 1
+
+      if [ "$exists" != "1" ]; then
+        "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+          -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres \
+          -c "CREATE DATABASE \"$database_name\"" || return 1
+        if [ "$database_name" = "$DB_NAME" ]; then
+          APPLICATION_DATABASE_CREATED=true
+        fi
+      fi
+
+      "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+        -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d "$database_name" \
+        -c "CREATE EXTENSION IF NOT EXISTS citext; CREATE EXTENSION IF NOT EXISTS unaccent;"
+    }
+
+    create_database_if_missing "$DB_NAME" || exit 1
+    (
+      set -a
+      . ./.env.testing || exit 1
+      set +a
+      if [ "${DB_CONNECTION:-}" != "pgsql" ] || [ "${DB_DATABASE:-}" != "$TEST_DB_NAME" ] || [ -n "${DB_URL:-}" ]; then
+        echo "Expected the isolated PostgreSQL test database configured for this workspace." >&2
+        exit 1
+      fi
+      DB_HOST="${DB_HOST:-127.0.0.1}"
+      DB_PORT="${DB_PORT:-5432}"
+      DB_USERNAME="${DB_USERNAME:-postgres}"
+      export PGPASSWORD="${DB_PASSWORD:-}"
+      create_database_if_missing "$TEST_DB_NAME"
+    ) || exit 1
+
+    if command -v herd >/dev/null 2>&1; then
+      HERD_COMMAND="herd"
+    elif command -v herd.bat >/dev/null 2>&1; then
+      HERD_COMMAND="herd.bat"
+    else
+      HERD_COMMAND=""
+    fi
+
+    if [ -n "$HERD_COMMAND" ]; then
+      "$HERD_COMMAND" link --secure --update-env "$ORCA_WORKSPACE_NAME"
+    fi
+
+    set -e
+    "$COMPOSER_COMMAND" install
+    "$PHP_COMMAND" artisan boost:update --no-discover --ansi --no-interaction
+    npm ci --ignore-scripts
+    npx --no-install husky
+    npm run build
+    if [ -z "${APP_KEY:-}" ]; then
+      "$PHP_COMMAND" artisan key:generate --no-interaction
+    fi
+    "$PHP_COMMAND" artisan migrate --no-interaction
+    if [ "$APPLICATION_DATABASE_CREATED" = true ]; then
+      "$PHP_COMMAND" artisan db:seed --no-interaction
+    fi
+
+  archive: |
+    #!/usr/bin/env bash
+    cd "$ORCA_WORKTREE_PATH" || exit 1
+
+    if command -v herd >/dev/null 2>&1; then
+      HERD_COMMAND="herd"
+    elif command -v herd.bat >/dev/null 2>&1; then
+      HERD_COMMAND="herd.bat"
+    else
+      HERD_COMMAND=""
+    fi
+
+    if [ -n "$HERD_COMMAND" ]; then
+      "$HERD_COMMAND" unsecure "$ORCA_WORKSPACE_NAME" >/dev/null 2>&1 || true
+      "$HERD_COMMAND" unlink "$ORCA_WORKSPACE_NAME" >/dev/null 2>&1 || true
+    fi
+
+    set -a
+    . ./.env
+    set +a
+
+    DB_NAME="${ORCA_WORKSPACE_NAME//-/_}"
+    TEST_DB_NAME="${DB_NAME}_testing"
+
+    if ! [[ "$DB_NAME" =~ ^[A-Za-z0-9_]+$ ]] || [ "${#DB_NAME}" -gt 47 ]; then
+      echo "Invalid workspace database name: $DB_NAME" >&2
+      exit 1
+    fi
+
+    DB_HOST="${DB_HOST:-127.0.0.1}"
+    DB_PORT="${DB_PORT:-5432}"
+    DB_USERNAME="${DB_USERNAME:-postgres}"
+    export PGPASSWORD="${DB_PASSWORD:-}"
+
+    if command -v psql >/dev/null 2>&1; then
+      PSQL_COMMAND="psql"
+    elif command -v psql.exe >/dev/null 2>&1; then
+      PSQL_COMMAND="psql.exe"
+    else
+      echo "PostgreSQL CLI not found. Install psql and make it available in PATH." >&2
+      exit 1
+    fi
+
+    "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+      -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres \
+      -c "DROP DATABASE IF EXISTS \"$DB_NAME\"" || exit 1
+
+    (
+      set -a
+      . ./.env.testing || exit 1
+      set +a
+      DB_HOST="${DB_HOST:-127.0.0.1}"
+      DB_PORT="${DB_PORT:-5432}"
+      DB_USERNAME="${DB_USERNAME:-postgres}"
+      export PGPASSWORD="${DB_PASSWORD:-}"
+
+      "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+        -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres \
+        -c "DROP DATABASE IF EXISTS \"$TEST_DB_NAME\"" || exit 1
+
+      worker_databases=$("$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+        -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres -At \
+        -c "SELECT datname FROM pg_database WHERE datname ~ '^${TEST_DB_NAME}_test_[0-9]+$'") || exit 1
+
+      while IFS= read -r worker_database; do
+        worker_database="${worker_database//$'\r'/}"
+        [ -n "$worker_database" ] || continue
+        "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
+          -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres \
+          -c "DROP DATABASE IF EXISTS \"$worker_database\"" || exit 1
+      done <<< "$worker_databases"
+    )

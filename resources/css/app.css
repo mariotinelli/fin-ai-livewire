@@ -1,0 +1,98 @@
+@import 'flatpickr/dist/flatpickr.min.css';
+@import './daisyui/custom.css';
+@import './themes.css';
+
+.ui-button-busy {
+    position: relative;
+    cursor: wait;
+    opacity: 0.6;
+}
+
+.ui-button-busy svg {
+    visibility: hidden !important;
+}
+
+.ui-button-busy > .ui-button-spinner {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    flex-shrink: 0;
+}
+
+.ui-button-text-busy > .ui-button-spinner {
+    position: static;
+    transform: none;
+}
+
+.ui-pagination-busy {
+    color: transparent !important;
+}
+
+@layer base {
+    [x-cloak] {
+        display: none !important;
+    }
+
+    :root {
+        scrollbar-color: color-mix(in oklab, var(--color-base-content) 20%, transparent) transparent;
+        scrollbar-width: thin;
+    }
+}
+
+@layer components {
+    [data-table-tooltips-ready] .tooltip[data-tip]::before,
+    [data-table-tooltips-ready] .tooltip[data-tip]::after {
+        visibility: hidden;
+        content: none !important;
+    }
+
+    [data-table-cell-truncated] {
+        cursor: help;
+    }
+    [data-table-cell-truncated]:focus-visible {
+        outline: 2px solid var(--color-primary);
+        outline-offset: 2px;
+    }
+    .table-tooltip-overlay.table-tooltip-overlay--rich {
+        display: grid;
+        gap: 0.25rem;
+        background-color: var(--color-base-100);
+        color: var(--color-base-content);
+        font-size: 0.875rem;
+        border: 1px solid var(--color-base-300);
+    }
+    .table-tooltip-overlay [data-tooltip-part='title'] {
+        font-weight: 600;
+    }
+    .table-tooltip-overlay [data-tooltip-part='eyebrow'] {
+        font-size: 0.75rem;
+    }
+
+    .table-tooltip-overlay {
+        position: fixed;
+        inset: auto;
+        margin: 0;
+        border: 0;
+        border-radius: 0.25rem;
+        padding: 0.25rem 0.5rem;
+        width: max-content;
+        max-width: calc(100vw - 1rem);
+        overflow-wrap: anywhere;
+        pointer-events: none;
+    }
+}
+
+@layer utilities {
+    @layer remsoft-controls {
+        .input[type='number'] {
+            appearance: textfield;
+        }
+
+        .input[type='number']::-webkit-outer-spin-button,
+        .input[type='number']::-webkit-inner-spin-button {
+            margin: 0;
+            appearance: none;
+        }
+    }
+}

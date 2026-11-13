@@ -1,0 +1,30 @@
+includes:
+    - ./vendor/larastan/larastan/extension.neon
+    - vendor/nesbot/carbon/extension.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/pestphp/pest-plugin-phpstan/extension.neon
+
+parameters:
+    paths:
+        - app/
+        - database/
+        - routes/
+        - bootstrap/app.php
+        - config/
+        - public/
+        - tests/Feature/Traits/Components/WithAddressTest.php
+        - tests/Feature/Traits/Components/WithCnpjTest.php
+        - tests/Feature/Traits/Components/WithFileUploadsTest.php
+        - tests/Feature/Traits/Components/WithFilterSoftDeletesTest.php
+        - tests/Feature/Traits/Components/WithFormatsTest.php
+        - tests/Feature/Traits/Components/WithLoadingTest.php
+        - tests/Feature/Traits/Components/WithRepeaterTest.php
+        - tests/Feature/Traits/Components/WithWizardTest.php
+
+    scanFiles:
+        - tests/Pest.php
+
+    stubFiles:
+        - phpstan.stub
+
+    level: max

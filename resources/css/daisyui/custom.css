@@ -1,0 +1,92 @@
+@import 'tailwindcss';
+
+@plugin '@tailwindcss/typography';
+
+@source '../../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source not '../../../storage/framework/views';
+@source '../../../app/Livewire/**/*.php';
+@source '../../../app/Support/*.php';
+@source '../../../resources/views/**/*.blade.php';
+
+@layer theme {
+    :root {
+        --control-height-xs: 1.75rem;
+        --control-height-sm: 2rem;
+        --control-height-md: 2.25rem;
+        --control-height-default: 2.5rem;
+        --control-height-lg: 2.875rem;
+    }
+}
+
+@layer base {
+    *,
+    ::after,
+    ::before,
+    ::backdrop,
+    ::file-selector-button {
+        border-color: var(--color-base-300, currentcolor);
+    }
+}
+
+@layer utilities {
+    @layer remsoft-controls {
+        .btn {
+            --size: var(--control-height-default);
+            --fontsize: 1rem;
+
+            min-height: var(--size);
+            font-weight: 500;
+        }
+
+        .btn-xs {
+            --size: var(--control-height-xs);
+            --fontsize: 0.75rem;
+        }
+
+        .btn-sm {
+            --size: var(--control-height-sm);
+            --fontsize: 0.875rem;
+        }
+
+        .btn-md {
+            --size: var(--control-height-md);
+        }
+
+        .btn-lg {
+            --size: var(--control-height-lg);
+            --fontsize: 1.125rem;
+            --btn-p: 1rem;
+
+            height: auto;
+            padding-block: 0.5rem;
+        }
+
+        .join .btn {
+            height: auto;
+        }
+
+        .btn > :where(svg, .loading) {
+            flex-shrink: 0;
+        }
+
+        .btn-ghost {
+            @apply text-base-content/75;
+        }
+
+        .btn-ghost.table-action {
+            --btn-p: 0.25rem;
+        }
+
+        .input {
+            @apply placeholder:text-base-content/65 focus-visible:ring-2 focus-visible:ring-primary focus-visible:outline-hidden disabled:cursor-default disabled:bg-base-200;
+        }
+
+        .input.input-bordered {
+            @apply border-base-content/10 focus-visible:border-primary/10;
+        }
+
+        .input.no-focus {
+            @apply focus:border-transparent focus:ring-0 focus:outline-hidden;
+        }
+    }
+}

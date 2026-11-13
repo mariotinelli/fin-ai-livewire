@@ -1,0 +1,26 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace {{ namespace }};
+
+use App\Enums\Queues;
+use {{ eventNamespace }};
+use Illuminate\Contracts\Queue\ShouldQueue;
+use Illuminate\Queue\Attributes\Backoff;
+use Illuminate\Queue\Attributes\Queue;
+use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Queue\InteractsWithQueue;
+
+#[Queue(Queues::LowPriority)]
+#[Tries(3)]
+#[Backoff([10, 30, 60, 120])]
+class {{ class }} implements ShouldQueue
+{
+    use InteractsWithQueue;
+
+    public function handle({{ event }} $event): void
+    {
+        //
+    }
+}

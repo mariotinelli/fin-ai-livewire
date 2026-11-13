@@ -1,0 +1,20 @@
+# Dependencies and lockfiles
+/node_modules/
+/vendor/
+composer.lock
+package-lock.json
+*.lock
+
+# Generated builds and published package assets
+/public/build/
+/public/hot
+/public/storage
+/public/vendor/
+
+# Runtime data, caches, coverage and test artifacts
+/bootstrap/cache/
+/coverage/
+/.phpunit.cache/
+/.phpunit.result.cache
+/storage/
+/tests/Browser/Screenshots/

@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace App\Http\Resources\Search;
+
+use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+
+/**
+ * @property-read {{ optionValueType }} ${{ optionValue }}
+ * @property-read {{ optionLabelType }} ${{ optionLabel }}
+ */
+class {{ model }}Resource extends JsonResource
+{
+    public function toArray(Request $request): array
+    {
+        return [
+            'id'   => $this->{{ optionValue }},
+            'name' => $this->{{ optionLabel }},
+        ];
+    }
+}

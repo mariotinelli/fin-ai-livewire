@@ -1,0 +1,43 @@
+{
+    "private": true,
+    "type": "module",
+    "scripts": {
+        "audit": "audit-ci --low --package-manager npm --report-type full --extra-args=--package-lock-only",
+        "build": "vite build",
+        "dev": "vite",
+        "test:js": "node --test tests/JavaScript/**/*.mjs",
+        "coverage:js": "node --test --experimental-test-coverage --test-coverage-include=resources/js/**/*.js tests/JavaScript/**/*.mjs",
+        "format": "prettier resources tests README.md package.json compose.yaml orca.yaml postcss.config.js vite.config.js prettier.config.mjs --write",
+        "format:check": "prettier resources tests README.md package.json compose.yaml orca.yaml postcss.config.js vite.config.js prettier.config.mjs --check",
+        "prepare": "husky"
+    },
+    "devDependencies": {
+        "@prettier/plugin-php": "^0.25.0",
+        "@tailwindcss/postcss": "^4.1.4",
+        "alpinejs": "^3.4.2",
+        "axios": "^1.13.5",
+        "concurrently": "^10.0.4",
+        "daisyui": "^5.0.28",
+        "husky": "^9.1.7",
+        "laravel-echo": "^2.3.1",
+        "laravel-vite-plugin": "^3.0.0",
+        "postcss": "^8.5.24",
+        "prettier": "^3.9.6",
+        "prettier-plugin-blade": "^3.2.2",
+        "prettier-plugin-tailwindcss": "^0.8.1",
+        "pusher-js": "^8.4.0-rc2",
+        "tailwindcss": "^4.1.4",
+        "vite": "^8.0.3"
+    },
+    "dependencies": {
+        "@alpinejs/collapse": "^3.14.6",
+        "@alpinejs/mask": "^3.14.8",
+        "@tailwindcss/typography": "^0.5.4",
+        "@tailwindcss/vite": "^4.1.7",
+        "audit-ci": "^7.1.0",
+        "chart.js": "^4.5.1",
+        "flatpickr": "4.6.13",
+        "playwright": "^1.62.0",
+        "puppeteer": "^25.1.0"
+    }
+}

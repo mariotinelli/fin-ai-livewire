@@ -1,0 +1,46 @@
+<?php
+
+namespace Illuminate\Support;
+
+class MessageBag {}
+
+namespace Livewire;
+
+class Component
+{
+    /** @return \Illuminate\Support\MessageBag */
+    public function getErrorBag() {}
+}
+
+namespace Livewire\Features\SupportTesting;
+
+/**
+ * @template TComponent of \Livewire\Component
+ * @method $this assertToast(string $title, ?string $description = null, mixed $type = null, int $time = 7, bool $nextPage = false, bool $persistent = false)
+ */
+class Testable
+{
+    /** @return $this */
+    public function call(mixed $method, mixed ...$params) {}
+
+    /** @return $this */
+    public function set(mixed $name, mixed $value = null) {}
+
+    /** @return $this */
+    public function assertSet(mixed $name, mixed $value, mixed $strict = false) {}
+
+    /** @return $this */
+    public function assertHasErrors(mixed $keys = []) {}
+
+    /** @return $this */
+    public function assertHasNoErrors(mixed $keys = []) {}
+
+    /** @return $this */
+    public function assertDispatched(mixed $value, mixed ...$params) {}
+
+    /** @return $this */
+    public function assertNotDispatched(mixed $value, mixed ...$params) {}
+
+    /** @return \Livewire\Component */
+    public function instance() {}
+}

@@ -1,0 +1,18 @@
+<?php
+
+declare(strict_types = 1);
+
+namespace App\Http\Controllers\Search;
+
+use App\Http\Requests\SearchRequest;
+use App\Http\Resources\Search\{{ model }}Resource;
+use App\Models\{{ model }};
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+
+class {{ pluralModel }}Controller extends BaseSearchController
+{
+    public function __invoke(SearchRequest $request): AnonymousResourceCollection
+    {
+        return {{ model }}Resource::collection($this->getOptions({{ model }}::query(), $request, '{{ searchAttribute }}'));
+    }
+}

@@ -1,0 +1,213 @@
+stages:
+  - verify
+  - build
+  - upload
+
+variables:
+  # Atualização: altere a versão, confira o SHA-256 na publicação oficial e atualize o digest da imagem
+  # com `docker buildx imagetools inspect <imagem:tag>` na mesma revisão. Divergências interrompem o pipeline.
+  COMPOSER_INSTALLER_SHA256: aad0c40a36d9938664f5a34eb2ed39dbc1021792f9706dbcb9cd6d8001227c99
+  COMPOSER_VERSION: 2.9.5
+  NODE_VERSION: 22.23.4
+  NODE_LINUX_X64_SHA256: 1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce
+
+workflow:
+  auto_cancel:
+    on_new_commit: interruptible
+
+verify:
+  stage: verify
+  image: php:8.4-cli-bookworm@sha256:54b467ede1db96c66675e7b78457dd43729d0e7be31978d4a1e5c069ceabcf76
+  interruptible: true
+  timeout: 15m
+  services:
+    - name: postgres:16.15-bookworm@sha256:e8a07d2c7579b038938cdba6c539e580e5001caf9ea203d397b5cc83e76bd938
+      alias: postgres
+  variables:
+    APP_ENV: testing
+    CACHE_STORE: array
+    COMPOSER_CACHE_DIR: $CI_PROJECT_DIR/.cache/composer
+    DB_CONNECTION: pgsql
+    DB_DATABASE: rsp_ci_testing
+    DB_HOST: postgres
+    DB_PASSWORD: postgres
+    DB_PORT: '5432'
+    DB_USERNAME: postgres
+    GIT_DEPTH: '1'
+    MAIL_MAILER: array
+    npm_config_cache: $CI_PROJECT_DIR/.cache/npm
+    POSTGRES_DB: rsp_ci_testing
+    POSTGRES_PASSWORD: postgres
+    POSTGRES_USER: postgres
+    QUEUE_CONNECTION: sync
+    QUEUE_PREFIX: rsp-tests
+    SESSION_DRIVER: array
+  cache:
+    key:
+      files:
+        - composer.lock
+        - package-lock.json
+    paths:
+      - .cache/composer/
+      - .cache/npm/
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends $PHPIZE_DEPS ca-certificates curl git gnupg libfreetype6-dev libicu-dev libjpeg62-turbo-dev libpng-dev libpq-dev libwebp-dev libzip-dev postgresql-client unzip zip
+    - curl --fail --silent --show-error --output /tmp/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
+    - echo "${NODE_LINUX_X64_SHA256}  /tmp/node.tar.xz" | sha256sum --check --strict
+    - tar --extract --file=/tmp/node.tar.xz --directory=/usr/local --strip-components=1
+    - docker-php-ext-configure gd --with-jpeg --with-freetype --with-webp
+    - docker-php-ext-install -j"$(nproc)" bcmath gd intl pcntl pdo_pgsql sockets zip
+    - curl --fail --silent --show-error --output /tmp/composer-setup.php https://getcomposer.org/installer
+    - echo "${COMPOSER_INSTALLER_SHA256}  /tmp/composer-setup.php" | sha256sum --check --strict
+    - php /tmp/composer-setup.php --version="${COMPOSER_VERSION}" --install-dir=/usr/local/bin --filename=composer
+    - cp .env.example .env
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress
+    - npm ci --ignore-scripts
+    - rm -rf /var/lib/apt/lists/*
+  script:
+    - until pg_isready --host="$DB_HOST" --port="$DB_PORT" --username="$DB_USERNAME" --dbname="$DB_DATABASE"; do sleep 2; done
+    - |
+      for TEST_DB in "$DB_DATABASE" template1; do
+        PGPASSWORD="$DB_PASSWORD" psql --host="$DB_HOST" --port="$DB_PORT" --username="$DB_USERNAME" --dbname="$TEST_DB" --set=ON_ERROR_STOP=1 --command='CREATE EXTENSION IF NOT EXISTS unaccent;'
+      done
+    - npm run build
+    - composer audit:composer
+    - composer audit:npm
+    - composer format:check
+    - composer analyse
+    - composer refactor:check
+    - npm run test:js
+    - npm run format:check
+    - pecl install pcov-1.0.12
+    - docker-php-ext-enable pcov
+    - php -d memory_limit=-1 vendor/bin/pest --ci --compact --parallel --tia --processes=5 --configuration=phpunit-ci.xml --log-junit=junit.xml
+  artifacts:
+    when: always
+    reports:
+      junit: junit.xml
+  after_script:
+    - |
+      if [ "$CI_JOB_STATUS" != "success" ] && [ -n "${DISCORD_WEBHOOK_URL:-}" ]; then
+        if php -r '$parts = parse_url($argv[1]); exit(is_array($parts) && ($parts["scheme"] ?? "") === "https" && in_array($parts["host"] ?? "", ["discord.com", "discordapp.com"], true) && preg_match("~^/api/webhooks/[0-9]+/[^/\\s]+$~", $parts["path"] ?? "") === 1 ? 0 : 1);' "$DISCORD_WEBHOOK_URL"; then
+          MESSAGE="Falha no ${CI_JOB_NAME} | Projeto: ${CI_PROJECT_PATH} | Branch: ${CI_COMMIT_REF_NAME} | Commit: ${CI_COMMIT_SHORT_SHA} | Job: ${CI_JOB_URL}"
+          PAYLOAD="$(php -r 'echo json_encode(["content" => $argv[1]], JSON_THROW_ON_ERROR);' "$MESSAGE")"
+          curl --fail --silent --show-error --request POST --header "Content-Type: application/json" --data "$PAYLOAD" "$DISCORD_WEBHOOK_URL" || true
+        else
+          echo 'DISCORD_WEBHOOK_URL inválida; notificação ignorada.'
+        fi
+      fi
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      when: manual
+      allow_failure: false
+
+build:
+  stage: build
+  image: php:8.4-cli-bookworm@sha256:54b467ede1db96c66675e7b78457dd43729d0e7be31978d4a1e5c069ceabcf76
+  before_script:
+    - apt-get update
+    - apt-get install --yes --no-install-recommends $PHPIZE_DEPS ca-certificates curl git libjpeg62-turbo-dev libpng-dev libpq-dev libwebp-dev libzip-dev unzip xz-utils zip
+    - export TZ=America/Sao_Paulo
+    - docker-php-ext-configure gd --with-jpeg --with-webp
+    - docker-php-ext-install pdo_pgsql zip sockets gd bcmath pcntl
+    - curl --fail --silent --show-error --output /tmp/node.tar.xz "https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-x64.tar.xz"
+    - echo "${NODE_LINUX_X64_SHA256}  /tmp/node.tar.xz" | sha256sum --check --strict
+    - tar --extract --file=/tmp/node.tar.xz --directory=/usr/local --strip-components=1
+    - curl --fail --silent --show-error --output /tmp/composer-setup.php https://getcomposer.org/installer
+    - echo "${COMPOSER_INSTALLER_SHA256}  /tmp/composer-setup.php" | sha256sum --check --strict
+    - php /tmp/composer-setup.php --version="${COMPOSER_VERSION}" --install-dir=/usr/local/bin --filename=composer
+    - rm -rf /var/lib/apt/lists/* /tmp/node.tar.xz /tmp/composer-setup.php
+  script:
+    - cp .env.example .env
+    - composer install --prefer-dist --no-ansi --no-interaction --no-progress --no-scripts
+    - npm ci
+    - npm run build
+
+    - export BUILD_NAME=$CI_PROJECT_PATH_SLUG-$CI_COMMIT_REF_SLUG-build-$(date +%Y%m%d-%H%M%S)
+    - echo $BUILD_NAME > build_name.txt
+
+    - rm -rf node_modules
+    - rm -rf tests
+    - rm -rf .git
+    - rm -rf .gitlab
+    - rm -rf .env
+    - rm -rf .agents
+    - rm -rf .ai
+    - rm -rf .husky
+    - rm -rf .opencode
+    - rm -f package-lock.json
+    - rm -f AGENTS.md
+
+    - zip -r ${BUILD_NAME}.zip ./*
+
+  artifacts:
+    paths:
+      - '*.zip'
+      - build_name.txt
+    expire_in: 1 day
+
+  rules:
+    - if: '$CI_COMMIT_BRANCH =~ /^(develop|homolog|main)$/'
+      when: manual
+    - when: never
+
+upload_s3_qa:
+  stage: upload
+  image:
+    name: amazon/aws-cli:2.17.40@sha256:db8d39443ef512d4724becfac59ec9b7c4f8621e7b3c6200be56cd4fc2dc9570
+    entrypoint: ['']
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_QA
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_QA
+    S3_BUCKET: $AWS_S3_BUCKET_QA
+  needs:
+    - build
+  dependencies:
+    - build
+  script:
+    - export BUILD_NAME=$(cat build_name.txt)
+    - aws s3 cp ${BUILD_NAME}.zip s3://$S3_BUCKET/deploy/${BUILD_NAME}.zip
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "develop"'
+    - when: never
+
+upload_s3_hml:
+  stage: upload
+  image:
+    name: amazon/aws-cli:2.17.40@sha256:db8d39443ef512d4724becfac59ec9b7c4f8621e7b3c6200be56cd4fc2dc9570
+    entrypoint: ['']
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_HML
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_HML
+    S3_BUCKET: $AWS_S3_BUCKET_HML
+  needs:
+    - build
+  dependencies:
+    - build
+  script:
+    - export BUILD_NAME=$(cat build_name.txt)
+    - aws s3 cp ${BUILD_NAME}.zip s3://$S3_BUCKET/deploy/${BUILD_NAME}.zip
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "homolog"'
+    - when: never
+
+upload_s3_prod:
+  stage: upload
+  image:
+    name: amazon/aws-cli:2.17.40@sha256:db8d39443ef512d4724becfac59ec9b7c4f8621e7b3c6200be56cd4fc2dc9570
+    entrypoint: ['']
+  variables:
+    AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID_PROD
+    AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY_PROD
+    S3_BUCKET: $AWS_S3_BUCKET_PROD
+  needs:
+    - build
+  dependencies:
+    - build
+  script:
+    - export BUILD_NAME=$(cat build_name.txt)
+    - aws s3 cp ${BUILD_NAME}.zip s3://$S3_BUCKET/deploy/${BUILD_NAME}.zip
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - when: never

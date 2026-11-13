@@ -1,0 +1,27 @@
+<?php
+
+declare(strict_types = 1);
+
+use Livewire\Component;
+use Livewire\Livewire;
+
+it('serializes Blade values for the Alpine expression', function (): void {
+    $payload = <<<'PAYLOAD'
+        D'Ávila " \\ </script><script>window.rsp53Executed = true</script>
+        PAYLOAD;
+    $view = Livewire::test(new class () extends Component {
+        /** @var array<int, string> */
+        public array $selection = [];
+
+        public string $payload = '';
+
+        public function render(): string
+        {
+            return '<x-ui.input.multi-select wire:model="selection" :name="$payload" :initial-value="[$payload]" :default-option-label="$payload" />';
+        }
+    }, ['payload' => $payload]);
+
+    $view->assertSee('initialValue: JSON.parse', false)
+        ->assertSee('\\u0027', false)
+        ->assertSee('\\u003C', false);
+});

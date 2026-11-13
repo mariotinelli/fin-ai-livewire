@@ -1,0 +1,60 @@
+#!/bin/sh
+
+set -eu
+
+if [ "$#" -ne 1 ] || [ ! -f "$1" ]; then
+    printf '%s\n' 'Expected a commit message file.' >&2
+    exit 1
+fi
+
+# Detached HEAD (including rebase) has no branch key to infer.
+git rev-parse --git-dir >/dev/null
+BRANCH_NAME=$(git symbolic-ref --quiet --short HEAD) || exit 0
+
+case "$BRANCH_NAME" in
+    main|develop)
+        printf '%s\n' 'You cannot commit directly to the main or develop branch' >&2
+        exit 1
+        ;;
+esac
+
+# Keep the existing branch types and description alphabet; accept any project key.
+BRANCH_REGEX='^(feature|epic|bugfix|hotfix|enhancement|task)/[A-Z][A-Z0-9]*-[0-9]+-[a-zA-Z0-9-]+$'
+if ! printf '%s\n' "$BRANCH_NAME" | LC_ALL=C grep -Eq "$BRANCH_REGEX"; then
+    printf '%s\n' "Expected branch format: 'feature/RSP-62-description' (or another YouTrack project key)." >&2
+    exit 1
+fi
+
+# Preserve Git's merge messages and autosquash/revert subjects on valid branches.
+if [ -f "$(git rev-parse --git-path MERGE_HEAD)" ]; then
+    exit 0
+fi
+
+# Locate the subject without promoting leading comments or blank lines into it.
+SUBJECT_LINE=$(LC_ALL=C sed -n '/^[[:space:]]*$/b; /^#/b; =; q' < "$1")
+if [ -z "$SUBJECT_LINE" ]; then
+    exit 0
+fi
+SUBJECT=$(sed -n "${SUBJECT_LINE}p" < "$1")
+case "$SUBJECT" in
+    'Revert "'*|'fixup! '*|'squash! '*|'amend! '*) exit 0 ;;
+esac
+
+TASK_KEY=${BRANCH_NAME#*/}
+TASK_KEY=$(printf '%s\n' "$TASK_KEY" | sed 's/^\([A-Z][A-Z0-9]*-[0-9][0-9]*\)-.*/\1/')
+case "$SUBJECT" in
+    "$TASK_KEY:"*) exit 0 ;;
+esac
+
+# Stream the original bytes so backslashes and trailing newlines survive intact.
+MESSAGE_COPY=$(mktemp "${TMPDIR:-/tmp}/commit-msg.XXXXXXXXXX")
+trap 'rm -f "$MESSAGE_COPY"' 0
+trap 'exit 1' HUP INT TERM
+{
+    if [ "$SUBJECT_LINE" -gt 1 ]; then
+        head -n "$((SUBJECT_LINE - 1))" < "$1"
+    fi
+    printf '%s: ' "$TASK_KEY"
+    tail -n "+$SUBJECT_LINE" < "$1"
+} > "$MESSAGE_COPY"
+cat < "$MESSAGE_COPY" > "$1"
