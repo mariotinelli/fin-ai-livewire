@@ -128,7 +128,6 @@ scripts:
       exit 1
     fi
 
-    APPLICATION_DATABASE_CREATED=false
     create_database_if_missing() {
       local database_name="$1"
       local exists
@@ -141,9 +140,6 @@ scripts:
         "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
           -h "$DB_HOST" -p "$DB_PORT" -U "$DB_USERNAME" -d postgres \
           -c "CREATE DATABASE \"$database_name\"" || return 1
-        if [ "$database_name" = "$DB_NAME" ]; then
-          APPLICATION_DATABASE_CREATED=true
-        fi
       fi
 
       "$PSQL_COMMAND" -X --no-password -v ON_ERROR_STOP=1 \
@@ -188,10 +184,7 @@ scripts:
     if [ -z "${APP_KEY:-}" ]; then
       "$PHP_COMMAND" artisan key:generate --no-interaction
     fi
-    "$PHP_COMMAND" artisan migrate --no-interaction
-    if [ "$APPLICATION_DATABASE_CREATED" = true ]; then
-      "$PHP_COMMAND" artisan db:seed --no-interaction
-    fi
+    "$PHP_COMMAND" artisan migrate:fresh --seed --no-interaction
 
   archive: |
     #!/usr/bin/env bash
