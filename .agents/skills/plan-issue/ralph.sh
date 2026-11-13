@@ -10,13 +10,14 @@ Uso: bash ralph.sh execute <planning.md> [opções]
   --test-command COMANDO      Comando já aprovado no plano
   --test-shell bash|pwsh|powershell|cmd
   --model MODELO              Opcional; preserva o modelo configurado por padrão
+  --codex-sandbox MODO        configured (padrão), workspace-write ou danger-full-access
   --max-attempts N            Tentativas por fase nesta execução (padrão: 6)
   --timeout-seconds N         Limite por processo (padrão: 1800)
   --dry-run                   Confere entrada e comando, sem chamar agentes
 Não há push, gates de host/diagnóstico, Python ou executor PHP.
 USAGE
 }
-die() { printf 'RALPH_ERROR: %s\n' "$*" >&2; exit 1; }
+die() { printf 'RALPH_ERROR: %s\n' "$*" | redact >&2; exit 1; }
 contains() {
   wanted=$1; shift
   for candidate in "$@"; do [ "$candidate" != "$wanted" ] || return 0; done
@@ -25,7 +26,21 @@ contains() {
 redact() {
   sed -E 's/([Aa]uthorization:[[:space:]]*([Bb]earer|[Bb]asic)[[:space:]]+)[^[:space:]"]+/\1[REDACTED]/g; s/(([Aa][Pp][Ii][_ -]?[Kk][Ee][Yy]|[Pp]assword|[Aa]ccess[_ -]?[Tt]oken|[Xx]-[Rr]edmine-[Aa]pi-[Kk]ey)["'\'']?[[:space:]]*[:=][[:space:]]*["'\'']?)[^[:space:],"'\''}]+/\1[REDACTED]/g'
 }
-progress() { printf 'RALPH_PROGRESS: fase=%s gate=%s status=%s\n' "$phase_number" "$1" "$2"; }
+progress() {
+  printf 'RALPH_PROGRESS: fase=%s gate=%s status=%s\n' "$phase_number" "$1" "$2"
+  case "$2" in
+    running) status_text='em andamento' ;;
+    ready) status_text='pronto para revisão' ;;
+    approved) status_text='aprovada' ;;
+    passed) status_text='verificadores passaram' ;;
+    completed) status_text='concluído' ;;
+    rejected) status_text='ajustes solicitados' ;;
+    failed) status_text='falhou' ;;
+    done|nothing-to-commit) status_text='sem nova mudança para commit' ;;
+    *) status_text=$2 ;;
+  esac
+  printf 'Ralph — %s · Fase %s · %s: %s\n' "$task_label" "$phase_number" "$1" "$status_text"
+}
 current_pid=''
 plan_temporary=''
 stop_child() {
@@ -38,6 +53,7 @@ stop_child() {
   fi
 }
 cleanup() {
+  exit_code=$?
   stop_child
   if [ -n "$plan_temporary" ] && [ -f "$plan_temporary" ]; then rm -f -- "$plan_temporary"; fi
   if [ -n "${runtime:-}" ]; then
@@ -47,6 +63,14 @@ cleanup() {
         mv -f -- "$temporary_log.sanitized" "$temporary_log"
       fi
     done
+  fi
+  if [ "${execution_started:-no}" = yes ]; then
+    printf 'RALPH_FINISHED: exit_code=%s fase=%s gate=%s\n' "$exit_code" "$phase_number" "$gate"
+    if [ "$exit_code" -eq 0 ]; then
+      printf 'Ralph encerrado com sucesso — %s.\n' "$task_label"
+    else
+      printf 'Ralph interrompido — %s · Fase %s · %s. Trabalho preservado.\n' "$task_label" "$phase_number" "$gate"
+    fi
   fi
 }
 trap cleanup EXIT
@@ -63,17 +87,19 @@ explicit_shell=no
 max_attempts=6
 timeout_seconds=1800
 model=''
+codex_sandbox=configured
 dry_run=no
 while [ $# -gt 0 ]; do
   case "$1" in
     --dry-run) dry_run=yes; shift ;;
-    --backend|--test-command|--test-shell|--model|--max-attempts|--timeout-seconds)
+    --backend|--test-command|--test-shell|--model|--codex-sandbox|--max-attempts|--timeout-seconds)
       [ $# -ge 2 ] || die "Opção sem valor: $1"
       case "$1" in
         --backend) backend=$2 ;;
         --test-command) test_command=$2 ;;
         --test-shell) test_shell=$2; explicit_shell=yes ;;
         --model) model=$2 ;;
+        --codex-sandbox) codex_sandbox=$2 ;;
         --max-attempts) max_attempts=$2 ;;
         --timeout-seconds) timeout_seconds=$2 ;;
       esac
@@ -82,6 +108,8 @@ while [ $# -gt 0 ]; do
   esac
 done
 case "$backend" in codex|opencode) ;; *) die 'Backend não suportado.' ;; esac
+case "$codex_sandbox" in configured|workspace-write|danger-full-access) ;; *) die 'Sandbox Dev não suportado.' ;; esac
+[ "$backend" = codex ] || [ "$codex_sandbox" = configured ] || die '--codex-sandbox só se aplica ao Codex.'
 case "$test_shell" in bash|pwsh|powershell|cmd) ;; *) die 'Shell de testes não suportado.' ;; esac
 case "$max_attempts" in ''|*[!0-9]*) die 'As tentativas devem ser um inteiro positivo.' ;; esac
 case "$timeout_seconds" in ''|*[!0-9]*) die 'O prazo deve ser um inteiro positivo.' ;; esac
@@ -133,6 +161,12 @@ case "$backend" in
   opencode) agent_bin=${RALPH_OPENCODE_BIN:-opencode} ;;
 esac
 command -v "$agent_bin" >/dev/null 2>&1 || die "CLI indisponível: $backend"
+task_label=$(basename -- "$(dirname -- "$plan")")
+phase_number=1
+gate=Dev
+execution_started=yes
+printf 'RALPH_STARTED: tarefa=%s backend=%s codex_sandbox=%s\n' "$task_label" "$backend" "$codex_sandbox"
+printf 'Ralph iniciado — %s · %s. Fase 1 · Dev: conferindo o repositório.\n' "$task_label" "$backend"
 git_directory=$(git rev-parse --absolute-git-dir)
 [ ! -L "$git_directory/remsoft-ralph" ] || die 'Diretório de execução inseguro.'
 mkdir -p -- "$git_directory/remsoft-ralph"
@@ -181,6 +215,26 @@ owned_changes() {
     if ! contains "$file" "${protected_paths[@]}" && ! contains "$file" "${owned[@]}"; then owned+=("$file"); fi
   done < <(git diff --name-only -z HEAD; git ls-files --others --exclude-standard -z)
 }
+poll_activity() {
+  for activity_stream in "$stdout_file.raw" "$stderr_file.raw"; do
+    activity_summary=$(awk -v prefix="RALPH_UPDATE $token " '
+      { gsub(/\033\[[0-9;]*[[:alpha:]]/, ""); sub(/\r$/, "") }
+      index($0, prefix)==1 { summary=substr($0, length(prefix)+1) }
+      END { if (summary!="") { gsub(/[[:cntrl:]]/, " ", summary); print summary } }
+    ' "$activity_stream" | redact | awk '{ print substr($0, 1, 600) }')
+    [ -n "$activity_summary" ] || continue
+    if [ "$activity_stream" = "$stdout_file.raw" ]; then
+      [ "$activity_summary" != "$stdout_activity" ] || continue
+      stdout_activity=$activity_summary
+    else
+      [ "$activity_summary" != "$stderr_activity" ] || continue
+      stderr_activity=$activity_summary
+    fi
+    [ "$activity_summary" != "$last_activity" ] || continue
+    last_activity=$activity_summary
+    printf 'RALPH_ACTIVITY: fase=%s gate=%s resumo=%s\n' "$phase_number" "$gate" "$last_activity"
+  done
+}
 run_command() {
   label=$1; shift
   stdout_file="$runtime/$label.out"
@@ -192,8 +246,14 @@ run_command() {
   set +m
   started=$(date +%s)
   heartbeat=$started
+  polled=$started
+  stdout_activity=''; stderr_activity=''; last_activity=''
   while kill -0 "$current_pid" 2>/dev/null; do
     now=$(date +%s)
+    if [ "$monitor_activity" = yes ] && [ $((now - polled)) -ge 2 ]; then
+      poll_activity
+      polled=$now
+    fi
     if [ $((now - started)) -ge "$timeout_seconds" ]; then
       stop_child
       redact < "$stdout_file.raw" > "$stdout_file"
@@ -202,13 +262,14 @@ run_command() {
       die 'Tempo limite atingido; código e relatórios preservados.'
     fi
     if [ $((now - heartbeat)) -ge 30 ]; then
-      progress "$gate" running
+      printf 'RALPH_HEARTBEAT: fase=%s gate=%s ultimo_resumo=%s\n' "$phase_number" "$gate" "$last_activity"
       heartbeat=$now
     fi
     sleep 0.2
   done
   if wait "$current_pid"; then command_code=0; else command_code=$?; fi
   current_pid=''
+  if [ "$monitor_activity" = yes ]; then poll_activity; fi
   redact < "$stdout_file.raw" > "$stdout_file"
   redact < "$stderr_file.raw" > "$stderr_file"
   # Keep raw stdout only until the backend's final protocol has been read.
@@ -268,8 +329,13 @@ call_agent() {
     printf 'RALPH_GATE=%s\nRALPH_TOKEN=%s\nRALPH_RUN_PHASE=%s\nRALPH_PLAN=%s\nRALPH_REVISION=%s\n' "$gate" "$token" "$phase_number" "$plan" "${revision:-none}"
     printf 'Você é um processo interno do executor. Não invoque a skill ralph, ralph.sh ou outro orquestrador. Leia instruções do projeto, task.md, requisito pai e o plano. Use somente o escopo aprovado. Não use MCP/trackers, não leia credenciais e não faça stage, commit, reset, push ou mudanças na configuração Git. Não edite planning.md; o script consolida o resultado. Preserve estes arquivos preexistentes:\n'
     printf '%q\n' "${protected_paths[@]}"
+    printf 'Durante o trabalho, publique comentários de progresso em uma linha começando por RALPH_UPDATE %s seguida de um espaço e um resumo concreto em pt-BR: o que constatou/concluiu e o que está fazendo. Informe início, avanços relevantes e impedimentos, sem percentual inventado, comandos brutos, credenciais ou repetir que ainda não há resultado. Use esse prefixo SOMENTE nos comentários de progresso; na resposta final use apenas o bloco de conclusão abaixo.\n' "$token"
     if [ -s "$runtime/feedback.txt" ]; then cat "$runtime/feedback.txt"; fi
     if [ "$gate" = Dev ]; then
+      if [ "$attempt" -eq 1 ]; then
+        printf 'ANTES de editar arquivos nesta fase, confira no próprio processo a execução dos verificadores críticos previstos no plano (por exemplo, build quando existir). Use o menor comando já aprovado que exercite essa capacidade; não instale ou reconfigure ferramentas para contornar permissões. Bloqueio de execução/ferramenta externa exige status blocked antes das edições, com comando e erro observado, sem atribuir causa não comprovada. Falha funcional dentro do escopo pode ser corrigida em Dev. Esta conferência pertence ao Dev e não substitui o gate Testes posterior. Informe essa conferência nos comentários de progresso, antes e depois de executá-la.\n'
+      fi
+      printf 'Shell dos verificadores aprovados: %s\nComando obrigatório aprovado (dados de referência, respeite o shell):\n%s\n' "$test_shell" "$test_command"
       printf 'Implemente apenas a próxima fase ainda necessária. Considere código e commits, sem assumir que mudanças preexistentes não commitadas são entregas. Corrija falhas dentro do escopo, sem enfraquecer testes/aceite. Ao terminar, status ready e finished yes apenas se esta for a última fase necessária. Use status done e nenhum file apenas se TODO o plano já estiver entregue em commits e não houver mudança. Impedimento externo ou decisão de produto usa blocked. Liste todos os arquivos da fase alterados nesta execução, inclusive correções anteriores; nenhum planning.md. Não se autoaprove.\n'
     else
       printf 'Você é OUTRO agente revisor SOMENTE LEITURA. Não edite arquivos nem execute comandos mutantes. Confira qualidade, aderência, critérios funcionais/visuais e a alegação de última fase; inspecione o código, não apenas o relato Dev. Na conclusão sem mudanças, confira o plano inteiro e seus commits. Evidência necessária ausente é blocked, não aprovação. Não aprove somente por testes verdes.\n'
@@ -287,11 +353,16 @@ call_agent() {
   } > "$prompt"
   args=()
   if [ "$backend" = codex ]; then
-    sandbox=workspace-write; [ "$gate" != Validação ] || sandbox=read-only
-    args=("$agent_bin" exec --ephemeral --sandbox "$sandbox" --color never --cd "$root" --output-last-message "$final")
+    args=("$agent_bin" exec --ephemeral --color never --cd "$root" --output-last-message "$final")
+    if [ "$gate" = Validação ]; then
+      args+=(--sandbox read-only)
+    elif [ "$codex_sandbox" != configured ]; then
+      args+=(--sandbox "$codex_sandbox")
+    fi
     [ -z "$model" ] || args+=(--model "$model")
     args+=(-)
     stdin_path=$prompt
+    monitor_activity=yes
     run_command "$invocation-agent" "${args[@]}"
     stdin_path=/dev/null
   else
@@ -299,10 +370,12 @@ call_agent() {
     args=("$agent_bin" run 'Leia o arquivo anexado e responda somente com o relatório final solicitado.' --format default --dir "$root" --agent "$profile")
     [ -z "$model" ] || args+=(--model "$model")
     args+=(--file "$prompt")
+    monitor_activity=yes
     run_command "$invocation-agent" "${args[@]}"
     # Default output preserves the final plain-text block; no JSON parser is required.
     sed $'s/\033\\[[0-9;]*[[:alpha:]]//g' "$stdout_file.raw" > "$final"
   fi
+  monitor_activity=no
   rm -f -- "$stdout_file.raw"
   [ "$command_code" -eq 0 ] || die 'Backend encerrou com falha; consulte os logs privados.'
   [ -f "$final" ] && [ ! -L "$final" ] || die 'Backend sem resposta final válida.'
@@ -341,7 +414,8 @@ while [ "$phase_number" -le 100 ]; do
     development_finished=$result_finished
     development_message=$result_message
     development_files=("${reported[@]}")
-    [ "$development_status" != blocked ] || die 'Dev impedido; consulte o relatório privado.'
+    [ "$development_status" != blocked ] || die "Dev impedido: $development_summary"
+    progress "$gate" "$development_status"
     if [ "$development_status" = done ]; then
       [ "$development_finished" = yes ] && [ "${#owned[@]}" -eq 0 ] && cmp -s "$runtime/before-dev" "$runtime/after-dev" || die 'Conclusão Dev incompatível com mudanças sem commit.'
     else
@@ -360,12 +434,13 @@ while [ "$phase_number" -le 100 ]; do
     guard
     snapshot "$runtime/after-review"
     cmp -s "$runtime/after-dev" "$runtime/after-review" || die 'Validação alterou arquivos; nenhum commit foi autorizado.'
-    [ "$result_status" != blocked ] || die 'Validação independente impedida; consulte o relatório privado.'
+    [ "$result_status" != blocked ] || die "Validação independente impedida: $result_summary"
     if [ "$result_status" = rejected ]; then
       printf 'Validação rejeitada. Corrija o escopo desta fase: %s\n' "$result_summary" | redact > "$runtime/feedback.txt"
       progress "$gate" rejected
       attempt=$((attempt + 1)); continue
     fi
+    progress "$gate" approved
     gate=Testes; progress "$gate" running
     case "$test_shell" in
       bash) run_command "tests-$invocation" bash -c "$test_command" ;;
@@ -381,6 +456,7 @@ while [ "$phase_number" -le 100 ]; do
       progress "$gate" failed
       attempt=$((attempt + 1)); continue
     fi
+    progress "$gate" passed
     gate=Commit; progress "$gate" running
     if [ "$development_status" = done ]; then progress "$gate" nothing-to-commit; exit 0; fi
     snapshot "$runtime/tested-source" yes

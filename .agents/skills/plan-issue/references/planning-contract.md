@@ -10,6 +10,8 @@ Um único plano ao lado de task.md liga planejamento e execução. Escreva em pt
 
 O baseline é observado uma vez no planejamento; não é um gate extra nem autorização para aceitar falhas. Comandos devem propagar falhas intermediárias e usar modo de checagem quando disponível. O plano não exige headings ou fences exatos: o handoff passa os verificadores explicitamente ao executor, conforme [execução](ralph-execution.md).
 
+Registre o contexto em que o baseline foi obtido. Um resultado fora do processo executor não comprova compatibilidade de permissões dentro dele. O Dev confere a execução dos verificadores críticos no próprio processo antes da primeira edição; mantenha essa atividade dentro do Dev, sem criar fase ou gate adicional.
+
 ## Preparar os quatro gates por fase
 
 Cada fase fornece o necessário para o Ralph seguir Dev → Validação → Testes → Commit:
