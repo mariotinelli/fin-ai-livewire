@@ -32,7 +32,9 @@ scripts:
 
     prepare_testing_environment || exit 1
     cp -n "$ORCA_ROOT_PATH/.env" .env 2>/dev/null || cp -n .env.example .env
-    cp -n "$ORCA_ROOT_PATH/opencode.json" opencode.json 2>/dev/null
+    if [ -f "$ORCA_ROOT_PATH/opencode.json" ]; then
+      cp -n "$ORCA_ROOT_PATH/opencode.json" opencode.json
+    fi
     cp -n "$ORCA_ROOT_PATH/boost.json" boost.json 2>/dev/null
     mkdir -p .codex
     cp -n "$ORCA_ROOT_PATH/.codex/config.toml" .codex/config.toml 2>/dev/null
