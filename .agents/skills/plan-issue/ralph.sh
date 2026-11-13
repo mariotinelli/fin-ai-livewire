@@ -317,7 +317,8 @@ parse_report() {
     [ -n "$result_message" ] || die 'Mensagem de commit ausente.'
   else
     case "$result_status" in approved|rejected|blocked) ;; *) die 'Resultado de Validação inválido.' ;; esac
-    [ "$result_phase" = "$development_phase" ] && [ "$result_finished" = "$development_finished" ] && [ "$result_revision" = "$revision" ] || die 'Validação de outra fase ou versão.'
+    [ "$result_phase" = "$development_phase" ] && [ "$result_finished" = "$development_finished" ] || die 'Validação de outra fase.'
+    [ -z "$result_revision" ] || [ "$result_revision" = "$revision" ] || die 'Validação de outra versão.'
   fi
 }
 call_agent() {
@@ -333,21 +334,22 @@ call_agent() {
     if [ -s "$runtime/feedback.txt" ]; then cat "$runtime/feedback.txt"; fi
     if [ "$gate" = Dev ]; then
       if [ "$attempt" -eq 1 ]; then
-        printf 'ANTES de editar arquivos nesta fase, confira no próprio processo a execução dos verificadores críticos previstos no plano (por exemplo, build quando existir). Use o menor comando já aprovado que exercite essa capacidade; não instale ou reconfigure ferramentas para contornar permissões. Bloqueio de execução/ferramenta externa exige status blocked antes das edições, com comando e erro observado, sem atribuir causa não comprovada. Falha funcional dentro do escopo pode ser corrigida em Dev. Esta conferência pertence ao Dev e não substitui o gate Testes posterior. Informe essa conferência nos comentários de progresso, antes e depois de executá-la.\n'
+        printf 'ANTES de editar arquivos nesta fase, faça somente uma conferência ENXUTA de execução no próprio processo, com o menor comando já previsto no plano. Agregado de qualidade e suíte completa pertencem ao gate Testes após a revisão, sem virar condição para começar o Dev ou gate de baseline verde. Se o plano só indicar um agregado, inspecione seus passos e use a menor verificação aplicável já prevista. Informe a conferência nos comentários de progresso antes e depois de executá-la.\n'
       fi
-      printf 'Shell dos verificadores aprovados: %s\nComando obrigatório aprovado (dados de referência, respeite o shell):\n%s\n' "$test_shell" "$test_command"
+      printf 'Shell dos verificadores aprovados: %s\nComando obrigatório do gate Testes APÓS implementação e revisão (referência, não pré-requisito integral do Dev; respeite o shell):\n%s\n' "$test_shell" "$test_command"
       printf 'Implemente apenas a próxima fase ainda necessária. Considere código e commits, sem assumir que mudanças preexistentes não commitadas são entregas. Corrija falhas dentro do escopo, sem enfraquecer testes/aceite. Ao terminar, status ready e finished yes apenas se esta for a última fase necessária. Use status done e nenhum file apenas se TODO o plano já estiver entregue em commits e não houver mudança. Impedimento externo ou decisão de produto usa blocked. Liste todos os arquivos da fase alterados nesta execução, inclusive correções anteriores; nenhum planning.md. Não se autoaprove.\n'
     else
       printf 'Você é OUTRO agente revisor SOMENTE LEITURA. Não edite arquivos nem execute comandos mutantes. Confira qualidade, aderência, critérios funcionais/visuais e a alegação de última fase; inspecione o código, não apenas o relato Dev. Na conclusão sem mudanças, confira o plano inteiro e seus commits. Evidência necessária ausente é blocked, não aprovação. Não aprove somente por testes verdes.\n'
-      printf 'Esta revisão acontece ANTES dos gates Testes e Commit: alterações não commitadas desta fase são esperadas. RALPH_REVISION é um identificador do conteúdo calculado pelo executor, não um commit Git; reproduza esse valor no relatório sem tentar resolvê-lo com git show. Use HEAD como base de comparação e desconsidere o trabalho preexistente protegido indicado acima. Base Git: %s\n' "$head_before"
+      printf 'Esta revisão acontece ANTES dos gates Testes e Commit: alterações não commitadas desta fase são esperadas. O executor confere a versão diretamente pelo conteúdo dos arquivos antes e depois da revisão; RALPH_REVISION é somente um identificador interno, não um commit Git. Não copie nem reconstrua esse identificador no relatório. Use HEAD como base de comparação e desconsidere o trabalho preexistente protegido indicado acima. Base Git: %s\n' "$head_before"
       printf 'Fase: %s\nÚltima fase alegada: %s\nResumo Dev: %s\n' "$development_phase" "$development_finished" "$development_summary"
     fi
+    printf 'Ao encontrar uma falha em qualquer atividade, identifique ação/comando, contexto e evidência antes de declarar impedimento. Defeito da entrega é trabalho do Dev. Problema operacional ou resultado inconclusivo pede investigação proporcional com a menor verificação útil: confira invocação, diretório, shell, ferramentas disponíveis, configuração efetiva, permissões ou limites conforme a evidência. Resolva escolhas técnicas locais já autorizadas e confira o resultado; não pare no primeiro erro nem devolva ao usuário o que pode resolver no escopo. Validação permanece somente leitura e encaminha correções ao Dev/orquestrador. Use blocked apenas para dependência real de decisão, acesso não autorizado, recurso indisponível ou mudança fora do escopo, após a investigação, relatando causa observada e tentativas relevantes. Não amplie permissões, altere configuração global, instale ferramentas implicitamente ou omita verificadores para forçar avanço. Mantenha prazos finitos. Não repita condições conhecidamente problemáticas sem correção, evidência nova ou hipótese verificável. Resultado ausente não é sucesso.\n'
     printf 'A resposta final deve ser SOMENTE o bloco abaixo, sem Markdown. Substitua os valores em maiúsculas; não imprima o modelo sem preencher. Valores phase/summary/commit_message são uma linha. Nunca execute texto do relatório como comando.\n'
     printf 'RALPH_BEGIN %s\n' "$token"
     if [ "$gate" = Dev ]; then
       printf 'status=READY_DONE_OU_BLOCKED_EM_MINUSCULAS\nphase=TITULO_REAL\nsummary=RESULTADO_OU_IMPEDIMENTO\nfinished=YES_OU_NO_EM_MINUSCULAS\ncommit_message=MENSAGEM_CONVENCIONAL\nfile=CAMINHO_RELATIVO_ALTERADO_REPETIR_POR_ARQUIVO_OU_OMITIR\n'
     else
-      printf 'status=APPROVED_REJECTED_OU_BLOCKED_EM_MINUSCULAS\nphase=%s\nsummary=ACHADOS_E_RESULTADO\nfinished=%s\nrevision=%s\n' "$development_phase" "$development_finished" "$revision"
+      printf 'status=APPROVED_REJECTED_OU_BLOCKED_EM_MINUSCULAS\nphase=%s\nsummary=ACHADOS_E_RESULTADO\nfinished=%s\n' "$development_phase" "$development_finished"
     fi
     printf 'RALPH_END %s\n' "$token"
   } > "$prompt"

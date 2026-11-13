@@ -25,12 +25,12 @@ Inspecione comandos/configuração e pré-requisitos do projeto. Execute os veri
 
 Use [contrato do plano](references/planning-contract.md) para produzir somente `planning.md` ao lado de task.md. Cada fase prepara Dev → Validação → Testes → Commit: mudança e limites, critérios para outro agente revisar, comandos obrigatórios e uma entrega coerente para commit. Critérios visuais entram na Validação quando aplicáveis. Host, diagnóstico e investigação são atividades dos gates, sem etapas próprias ou registro por microtransição.
 
-Apresente o arquivo completo ao desenvolvedor e incorpore ajustes. Autorização já dada para o mesmo conteúdo vale; mudança material exige nova revisão. Não implemente nem faça commits neste fluxo.
+Apresente a proposta na conversa conforme [apresentação e decisão](references/planning-contract.md#apresentar-o-plano-e-receber-a-decisão), para que o desenvolvedor avalie objetivo, limites, fases, aceite, verificações e impedimentos sem precisar abrir o arquivo. O link complementa a apresentação. Incorpore ajustes e reutilize autorização já dada para o mesmo conteúdo; mudança material exige nova revisão. Não implemente nem faça commits neste fluxo.
 
-**Concluído quando:** conteúdo revisado, um único plano canônico e critérios verificáveis por fase; rascunhos bloqueados permanecem identificados como tais.
+**Concluído quando:** proposta apresentada na conversa, decisão recebida, um único plano canônico e critérios verificáveis por fase; rascunhos ou decisões pendentes permanecem identificados como tais.
 
 ## 4. Entregar
 
-Indique o caminho real de planning.md e os verificadores obrigatórios para a skill `ralph`, que inicia e acompanha [o executor](references/ralph-execution.md). Solicitar a execução do plano revisado autoriza os commits das fases, respeitadas instruções explícitas do projeto; revisão do plano sozinha não inicia execução. Descreva pré-requisitos pendentes sem anunciar prontidão quando falta verificação essencial.
+Indique o caminho real de planning.md, verificadores obrigatórios, decisão recebida e contexto do pedido para a skill `ralph`, que inicia e acompanha [o executor](references/ralph-execution.md). No pedido de execução pelo Ralph, a aprovação da proposta apresentada permite ao orquestrador iniciar sem outra confirmação; um pedido somente de planejamento continua limitado ao plano. Descreva pré-requisitos pendentes sem anunciar prontidão quando falta verificação essencial.
 
 **Concluído quando:** o handoff identifica plano, verificadores, autorização conhecida e comando aplicável do ralph.sh, sem iniciar a execução neste fluxo.
