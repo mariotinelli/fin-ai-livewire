@@ -1,10 +1,5 @@
 <!DOCTYPE html>
-<html
-    lang="{{ str_replace('_', '-', app()->getLocale()) }}"
-    data-theme="remsoft"
-    data-application-title="FinAI"
-    class="overflow-y-hidden"
->
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="remsoft" data-application-title="FinAI" class="overflow-y-hidden">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -30,20 +25,19 @@
     <div
         x-cloak
         @class([
-            'bg-base-200 text-base-content',
+            'finai-app bg-base-200 text-base-content',
             'min-h-[calc(100dvh-var(--dev-bar-height))]' => withEnvBar(),
             'min-h-dvh' => !withEnvBar()
         ])
-        x-data="{
-            asideOpen: localStorage.getItem('asideOpen') === 'true',
-            mobileAsideOpen: false,
-        }"
+        x-data="sidebarLayout()"
+        @resize.window="resize()"
+        :data-sidebar-expanded="asideOpen"
+        @style(['--app-height: calc(100dvh - var(--dev-bar-height))' => withEnvBar(), '--app-height: 100dvh' => !withEnvBar()])
     >
-        <x-ui.navbar />
+        <livewire:sidebar />
 
-        <div class="h-full">
-            <livewire:sidebar />
-
+        <div class="finai-workspace">
+            <x-ui.navbar />
             <x-ui.main> {{ $slot }} </x-ui.main>
         </div>
     </div>

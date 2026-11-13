@@ -21,12 +21,13 @@
 
         <ul
             id="group-links-{{ $mode }}-{{ Str::slug($context ?? $name) }}"
+            aria-label="{{ $name }}"
             class="relative space-y-1"
             x-show="expanded || !asideOpen"
             x-collapse.duration.200ms
-            x-bind:class="asideOpen ? 'ml-7 px-2' : 'px-4'"
+            x-bind:class="asideOpen ? 'ml-4 px-2' : 'px-1'"
         >
-            <span x-show="expanded" class="absolute top-0 bottom-0 left-0 w-px bg-base-300"></span>
+            <span x-show="expanded && asideOpen" class="absolute top-0 bottom-0 left-0 w-px bg-base-300"></span>
 
             {{ $slot }}
         </ul>

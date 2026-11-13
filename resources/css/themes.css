@@ -1,8 +1,8 @@
 :root {
     --dev-bar-height: 3.125rem;
     --navbar-height: 5rem;
-    --open-sidebar-width: 20rem;
-    --closed-sidebar-width: 5.563rem;
+    --open-sidebar-width: 15rem;
+    --closed-sidebar-width: calc(4.5rem + env(safe-area-inset-left, 0px));
     --mobile-sidebar-width: 18rem;
 }
 

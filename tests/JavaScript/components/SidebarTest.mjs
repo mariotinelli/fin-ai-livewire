@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { sidebarGroup, sidebarContext } from '../../../resources/js/components/sidebar.js';
+import { sidebarGroup, sidebarContext, sidebarLayout } from '../../../resources/js/components/sidebar.js';
 import { mount } from '../support/component.js';
 
 function storage(t, entries = []) {
@@ -12,6 +12,68 @@ function storage(t, entries = []) {
     t.after(() => delete globalThis.sessionStorage);
     return values;
 }
+
+test('keeps desktop preference across tablet and mobile boundaries and closes the mobile overlay', (t) => {
+    const values = new Map();
+    globalThis.window = { innerWidth: 1440 };
+    globalThis.localStorage = {
+        getItem: (key) => values.get(key) ?? null,
+        setItem: (key, value) => values.set(key, value),
+    };
+    t.after(() => {
+        delete globalThis.window;
+        delete globalThis.localStorage;
+    });
+    const layout = sidebarLayout();
+    layout.init();
+    assert.equal(layout.asideOpen, true);
+    layout.toggleSidebar();
+    assert.equal(values.get('asideOpen'), 'false');
+    for (const width of [1024, 768, 767, 768, 1024, 1025]) {
+        window.innerWidth = width;
+        layout.mobileAsideOpen = true;
+        layout.resize();
+        assert.equal(layout.asideOpen, false);
+        assert.equal(layout.mobileAsideOpen, width < 768);
+    }
+    layout.toggleSidebar();
+    window.innerWidth = 1024;
+    layout.resize();
+    assert.equal(layout.asideOpen, false);
+    assert.equal(values.get('asideOpen'), 'true');
+    window.innerWidth = 1025;
+    layout.resize();
+    assert.equal(layout.asideOpen, true);
+    const restored = sidebarLayout();
+    restored.init();
+    assert.equal(restored.asideOpen, true);
+    layout.toggleSidebar();
+    restored.init();
+    assert.equal(restored.asideOpen, false);
+});
+
+test('allows opening and closing navigation without browser storage', (t) => {
+    globalThis.window = { innerWidth: 1025 };
+    globalThis.localStorage = {
+        getItem() {
+            throw new Error('blocked');
+        },
+        setItem() {
+            throw new Error('blocked');
+        },
+    };
+    t.after(() => {
+        delete globalThis.window;
+        delete globalThis.localStorage;
+    });
+    const layout = sidebarLayout();
+    layout.init();
+    assert.equal(layout.asideOpen, true);
+    layout.toggleSidebar();
+    assert.equal(layout.asideOpen, false);
+    layout.toggleSidebar();
+    assert.equal(layout.asideOpen, true);
+});
 
 test('remembers independent groups and synchronizes desktop with mobile', (t) => {
     const values = storage(t, [['user-1-group', 'false']]);

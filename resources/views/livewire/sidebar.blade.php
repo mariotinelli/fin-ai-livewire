@@ -1,74 +1,56 @@
-<div>
-    {{-- Desktop sidebar --}}
-    <div>
-        <div class="relative z-5 hidden bg-base-200 lg:block" role="complementary" aria-label="Menu lateral">
+<div class="finai-navigation">
+    <aside id="desktop-sidebar-panel" class="finai-sidebar hidden md:flex" aria-label="Menu lateral">
+        <div class="flex shrink-0 items-center justify-between gap-2" :class="asideOpen ? 'px-4' : 'justify-center'">
+            <a
+                id="home-link"
+                href="{{ route('dashboard') }}"
+                aria-label="FinAI — início"
+                class="flex min-h-12 min-w-12 items-center rounded-lg"
+            >
+                <span x-show="asideOpen"><x-ui.application-logo class="block h-10 w-30" /></span>
+                <span x-show="!asideOpen" class="block h-10 w-10 overflow-hidden">
+                    <x-ui.application-logo class="block h-10 w-30 max-w-none" />
+                </span>
+            </a>
             <button
                 type="button"
                 aria-label="Alternar menu lateral"
                 aria-controls="desktop-sidebar-panel"
-                x-bind:aria-expanded="asideOpen ? 'true' : 'false'"
-                @click="
-                    localStorage.setItem('asideOpen', !asideOpen);
-                    asideOpen = !asideOpen;
-                "
-                @class([
-                    'fixed sidebar-toggle transition-all duration-300 ease-linear shadow-lg bg-base-100
-                        p-1.5 hover:text-primary-content rounded-full border border-base-300 hover:cursor-pointer
-                        hover:bg-primary text-base-content z-20',
-                    'top-[calc(var(--navbar-height)+var(--dev-bar-height)+.3rem)]' => withEnvBar(),
-                    'top-[calc(var(--navbar-height)+.3rem)]'                       => !withEnvBar(),
-                ])
-                x-bind:class="
-                    asideOpen ? 'left-[calc(var(--open-sidebar-width)-1.1rem)]' : 'left-[calc(var(--closed-sidebar-width)-1.1rem)]'
-                "
+                :aria-expanded="asideOpen ? 'true' : 'false'"
+                @click="toggleSidebar()"
+                class="sidebar-toggle hidden h-12 w-12 shrink-0 cursor-pointer items-center justify-center rounded-lg text-secondary hover:bg-accent hover:text-primary min-[1025px]:flex"
+                x-show="asideOpen"
             >
-                <x-icons.chevron-left
-                    class="h-[1.15rem] w-[1.15rem] font-bold transition-transform duration-600 ease-linear"
-                    x-bind:class="asideOpen ? '' : 'rotate-180'"
-                    aria-hidden="true"
-                />
+                <x-icons.chevron-left class="h-5 w-5" aria-hidden="true" />
             </button>
-
-            <div class="fixed inset-y-0 z-5 overflow-hidden">
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full">
-                        <div
-                            id="desktop-sidebar-panel"
-                            class="pointer-events-auto w-screen transition-all duration-300 ease-linear"
-                            x-bind:class="asideOpen ? 'max-w-(--open-sidebar-width)' : 'max-w-(--closed-sidebar-width)'"
-                        >
-                            <div class="flex h-full flex-col">
-                                <div
-                                    @class([
-                                        'opacity-0',
-                                        'h-[calc(var(--navbar-height)+var(--dev-bar-height))]' => withEnvBar(),
-                                        'h-(--navbar-height)'                                  => !withEnvBar(),
-                                    ])
-                                ></div>
-
-                                <div class="h-0 flex-1 border-r border-base-300 bg-base-100 pt-12">
-                                    <div
-                                        x-data="sidebarContext(@js('sidebar-scroll-' . auth()->id() . '-desktop'))"
-                                        @scroll.passive="save()"
-                                        @resize.window="restore()"
-                                        data-sidebar-scroll="desktop"
-                                        class="h-full space-y-6 overflow-x-hidden overflow-y-auto pt-2"
-                                    >
-                                        @include('livewire.partials.sidebar-groups', ['sidebarMode' => 'desktop'])
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
+        <button
+            x-show="!asideOpen"
+            type="button"
+            aria-label="Expandir menu lateral"
+            aria-controls="desktop-sidebar-panel"
+            :aria-expanded="asideOpen ? 'true' : 'false'"
+            @click="toggleSidebar()"
+            class="sidebar-toggle hidden h-12 w-12 shrink-0 cursor-pointer items-center justify-center self-center rounded-lg text-secondary hover:bg-accent hover:text-primary min-[1025px]:flex"
+        >
+            <x-icons.chevron-right class="h-5 w-5" aria-hidden="true" />
+        </button>
+        <nav
+            aria-label="Navegação principal"
+            x-data="sidebarContext(@js('sidebar-scroll-' . auth()->id() . '-desktop'))"
+            @scroll.passive="save()"
+            @resize.window="restore()"
+            data-sidebar-scroll="desktop"
+            class="min-h-0 flex-1 space-y-6 overflow-x-hidden overflow-y-auto px-2 py-2"
+        >
+            @include('livewire.partials.sidebar-groups', ['sidebarMode' => 'desktop'])
+        </nav>
+    </aside>
 
     {{-- Mobile sidebar --}}
     <div>
         <div
-            class="relative z-10 bg-base-200 lg:hidden"
+            class="relative z-30 bg-base-200 md:hidden"
             x-data="{ asideOpen: true }"
             @keydown.window.escape="mobileAsideOpen = false"
             x-show="mobileAsideOpen"

@@ -1,13 +1,1 @@
-<main
-    @class([
-        'inset-0 transition-all duration-300 ease-linear overflow-y-auto p-4 sm:p-8 mx-auto',
-        'h-[calc(100dvh-var(--dev-bar-height)-var(--navbar-height))]' => withEnvBar(),
-        'h-[calc(100dvh-var(--navbar-height))]' => !withEnvBar()
-    ])
-    x-bind:class="{
-        'lg:ml-(--open-sidebar-width) lg:w-[calc(100vw-var(--open-sidebar-width))]': asideOpen,
-        'lg:ml-(--closed-sidebar-width) lg:w-[calc(100vw-var(--closed-sidebar-width))]': !asideOpen,
-    }"
->
-    {{ $slot }}
-</main>
+<main class="min-h-0 min-w-0 flex-1 overflow-auto p-4 sm:p-8 min-[90rem]:p-12">{{ $slot }}</main>
