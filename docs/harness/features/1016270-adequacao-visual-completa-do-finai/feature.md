@@ -1,12 +1,12 @@
 # Adequação visual completa do FinAI
 
-## Identidade e situação
+## Identidade
 
-- Identidade local: FinAI MVP de 13/11/2026, F01.
-- Escopo aprovado: [scope.md](../../scopes/2026-11-13-finai-mvp/scope.md).
-- Situação: requisito e publicação aprovados pelo responsável nesta conversa em 13/11/2026. Feature #1016270 publicada e relida, incluindo a referência definitiva. Não implementado.
-- Destino escolhido: projeto FinAi (65224), versão Livewire (20359).
-- Origem estável: `docs/harness/.runs/2026-11-13-finai-mvp/f01-fundacao-visual/feature.md`.
+- Feature: [#1016270](https://redmine.remsoft.com.br/issues/1016270).
+- Projeto: FinAi (65224).
+- Versão: Livewire (20359).
+- Situação: requisito aprovado; implementação não realizada neste fluxo.
+- [Catálogo](../../scopes/2026-11-13-finai-mvp/scope.md).
 
 ## Objetivo
 
@@ -122,25 +122,3 @@ Adequação visual integral das telas atuais, correção da estrutura e geometri
 ## Fora do escopo
 
 Novas operações financeiras, criação de telas de Transações ou Assistente, indicadores financeiros reais, integração com IA e mudanças de autenticação ou permissões. Esses comportamentos pertencem aos demais itens aprovados. Não há redução da cobertura visual de telas existentes.
-
-## Revisão e publicação
-
-- Catálogo aprovado nesta conversa em 13/11/2026, incluindo o esclarecimento da cobertura integral de F01. O responsável aprovou o requisito completo e a publicação apresentada respondendo “aprovado” nesta conversa.
-- Projeto: FinAi, ID 65224; servidor `https://redmine.remsoft.com.br`; usuário autenticado confirmado: Mário Tinelli.
-- Versão aberta: Livewire, ID 20359, escolhida pelo responsável; sem data de entrega.
-- Operação proposta: criar uma Feature de título **[WEB] [USUARIO] Adequação visual completa do FinAI**, tracker Feature (2), status inicial New (1), sem categoria (projeto sem categorias), sem pai, sem responsável designado, sem estimativa, sem datas e sem Sequencing. Usar prioridade padrão do servidor. Não criar tarefas DEV/QA nem relações nesta etapa.
-- Descrição proposta exata: delimitadores `<!-- project-flow:start -->` e `<!-- project-flow:end -->` envolvendo todas as seções deste documento de **Objetivo** até **Fora do escopo**, com seus títulos e conteúdo integrais; acrescentar dentro dos delimitadores a referência estável de origem identificada no início do documento. Não incluir as seções administrativas de identidade ou revisão como substitutas do requisito funcional.
-- Após criação confirmada: preservar a referência de origem, mover este requisito para `docs/harness/features/<ID>-adequacao-visual-completa-do-finai/feature.md`, corrigir links relativos para as mesmas fontes e acrescentar na descrição remota a referência ao caminho definitivo. Essa atualização de referência faz parte da mesma operação proposta; o ID só será preenchido após confirmação real.
-- Similaridade conferida antes da criação: versão Livewire sem issues; projeto com 30 issues no total, todas na Sprint 1. Feature #1016101 — Adequação visual do FinAI lida com suas filhas e relações; descreve outro inventário (incluindo aparência, 2FA e passkeys) e possui filhas já encerradas. A criação própria na versão Livewire foi aprovada, preservando integralmente os registros da Sprint 1.
-- Resultado atual: [Feature #1016270](https://redmine.remsoft.com.br/issues/1016270) publicada pelo MCP e relida após atualização da referência definitiva. Descrição funcional integral, projeto 65224, versão 20359, tracker Feature e status New conferidos; sem pai, categoria, responsável, estimativa, datas, Sequencing, filhas ou relações. Nenhum resultado incerto de publicação.
-
-| Operação autorizada                                          | ID/URL                                                                        | Resultado                                                                                       | Pendência |
-| ------------------------------------------------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | --------- |
-| Criar F01 na versão Livewire com o requisito aprovado        | [#1016270](https://redmine.remsoft.com.br/issues/1016270)                     | Criação e leitura final confirmadas                                                             | Nenhuma   |
-| Materializar requisito definitivo e atualizar sua referência | `docs/harness/features/1016270-adequacao-visual-completa-do-finai/feature.md` | Documento materializado, fontes preservadas e descrição remota relida com referência definitiva | Nenhuma   |
-
-## Passagem
-
-Entrada pronta para `project-slices`: este requisito aprovado, pai #1016270 confirmado na versão Livewire e design fornecido, preservado nas fontes compartilhadas do escopo. Nenhum slicing, tarefa DEV/QA ou implementação realizado. A conclusão da publicação não comprova adequação visual implementada.
-
-Correção editorial solicitada pelo responsável: mencionar apenas o design fornecido, sem expor sua origem no computador pessoal. Critérios visuais e comportamento aprovados preservados.

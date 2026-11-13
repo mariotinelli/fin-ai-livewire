@@ -1,11 +1,12 @@
 # Dashboard financeiro
 
-## Identidade e situação
+## Identidade
 
-- Item F05 do [catálogo aprovado](../../scopes/2026-11-13-finai-mvp/scope.md).
-- Situação: requisito completo e publicação aprovados pelo responsável; Feature #1016275 publicada e relida, com referência definitiva e duas relações conferidas. Não implementada.
-- Destino: projeto FinAi (65224), versão Livewire (20359).
-- Referência estável: `docs/harness/.runs/2026-11-13-finai-mvp/f05-dashboard/feature.md`.
+- Feature: [#1016275](https://redmine.remsoft.com.br/issues/1016275).
+- Projeto: FinAi (65224).
+- Versão: Livewire (20359).
+- Situação: requisito aprovado; implementação não realizada neste fluxo.
+- [Catálogo](../../scopes/2026-11-13-finai-mvp/scope.md).
 
 ## Objetivo
 
@@ -47,7 +48,7 @@ O titular reconhece seu saldo acumulado e o resultado de um mês, consulta as ci
 - Durante o carregamento, identificar o estado de processamento. Falha de consulta não é apresentada como saldo zero ou ausência de transações; informar indisponibilidade e oferecer nova tentativa.
 - Se o mês solicitado não puder ser carregado, não exibir valores do mês anterior como se correspondessem ao novo recorte. Identificar a indisponibilidade do recorte e permitir nova tentativa.
 - Edição ou exclusão iniciada nos detalhes usa os fluxos e confirmações de F04. Depois do sucesso, atualizar valores e recentes de acordo com o conjunto persistido; cancelar ou falhar não altera os números.
-- A área de convite ao assistente segue o design. A ação de abrir o chat é integrada quando F06 entregar o destino real, sem antecipar chat simulado, respostas ou links sem destino funcional.
+- A área de convite ao assistente segue o design e abre o chat real já entregue pela F06. Uma falha do serviço não é substituída por chat simulado, resposta fictícia ou link sem destino funcional.
 
 ## Regras de negócio
 
@@ -65,11 +66,11 @@ O titular reconhece seu saldo acumulado e o resultado de um mês, consulta as ci
 
 **R7 — Ações de continuidade.** Nova transação usa o formulário e as regras de F04, sem criar outro fluxo de cadastro. Ver todas abre todo o histórico, removendo filtros anteriores de descrição, tipo, categoria e mês para cumprir o destino aprovado. Detalhes, edição e exclusão reutilizam as ações da gestão de transações.
 
-**R8 — Atualização.** Após criação, edição ou exclusão bem-sucedida realizada a partir da interface disponível, recalcular os indicadores e a lista exibidos na mesma sessão, sem exigir novo login. Uma transação passada altera seu respectivo mês e o saldo geral; não altera indevidamente os totais do mês selecionado se estiver fora dele. Quando F07 estiver disponível, registros confirmados pela IA seguem a mesma regra.
+**R8 — Atualização.** Após criação, edição ou exclusão manual bem-sucedida nas ações disponíveis, recalcular indicadores e recentes na mesma sessão, sem novo login. Uma transação fora do mês selecionado altera seu próprio mês e o saldo geral, sem afetar indevidamente o recorte atual. Os cálculos usam todos os registros reais válidos do titular; F07 verifica o efeito integrado dos registros que introduzir pela IA.
 
 **R9 — Formatação e estados.** Apresentar moeda em reais e centavos conforme F04, valores negativos com sinal e identificação textual dos tipos além de cor. Contagens correspondem a registros, não a somas de valores. Distinguir zero real, carregamento, ausência de registros e erro de consulta.
 
-**R10 — Identidade visual.** Seguir o design fornecido para a Visão geral: cabeçalho, seletor de mês, ação de cadastro, cartões de saldo/receitas/despesas, balanço simples, área de convite ao assistente e últimas movimentações, usando a base responsiva de F01. Mensagens de armazenamento local ou assistente simulado não são transportadas para o produto. A integração funcional do convite ao chat pertence a F06 e não impede demonstrar os indicadores de F05.
+**R10 — Identidade visual.** Seguir o design fornecido para a Visão geral: cabeçalho, seletor de mês, ação de cadastro, cartões de saldo/receitas/despesas, balanço simples, área de convite ao assistente e últimas movimentações, usando a base responsiva de F01. Mensagens de armazenamento local ou assistente simulado não são transportadas para o produto. O convite pertence a esta entrega e abre o chat real de F06, que deve estar disponível para o aceite do dashboard.
 
 ## Dados percebidos pelo usuário
 
@@ -95,17 +96,18 @@ Mês e ano de referência; saldo geral; totais e contagens de receitas/despesas 
 
 **CA09 — Acesso pessoal.** Visitante e conta com e-mail pendente não acessam o dashboard financeiro. Com duas contas, cada uma vê seus próprios totais, contagens e recentes; referências diretas e troca de conta não revelam dados alheios.
 
-**CA10 — Dados registrados pela IA.** Quando F07 estiver disponível, confirmar uma transação pela IA e conferir seu efeito real nos indicadores e recentes. Mensagem ou proposta ainda não confirmada não altera o dashboard.
+**CA10 — Dados reais dos indicadores.** Os valores apresentados correspondem ao conjunto atual de transações persistidas do titular, sem valores demonstrativos, dados de outras contas ou resultados fabricados.
 
 **CA11 — Aceite visual.** Comparar a Visão geral e seus estados aplicáveis com o design fornecido nas nove dimensões de F01. Preservar composição, hierarquia, cartões, comparação, lista, botões e seletor, com dados e valores extensos legíveis e controles acessíveis. No celular, os detalhes mantêm acesso aos campos resumidos na lista.
 
-**CA12 — Convite ao assistente.** Preservar a composição visual do convite sem identificar a IA como simulada nem criar destino fictício. A ação funcional é integrada por F06; quando disponível, abre o chat real. A aceitação dos indicadores de F05 não requer antecipar o assistente.
+**CA12 — Convite funcional ao assistente.** Acionar o convite no dashboard abre o chat real de F06, já entregue, mantendo a identidade e a composição do design. Não há controle sem destino, rótulo de simulação ou dependência de uma implementação futura para demonstrar essa ação.
 
 ## Dependências
 
-- F01 — [#1016270](https://redmine.remsoft.com.br/issues/1016270): identidade, estrutura e responsividade.
-- F04 — [#1016274](https://redmine.remsoft.com.br/issues/1016274): transações persistidas, ordem de consulta e ações de manutenção, consumindo acesso F02 e categorias F03.
-- F06 integra a ação de abrir o assistente; F07 permite conferir o reflexo dos registros por IA. Esses critérios integrados acompanham as entregas consumidoras, sem criar dependência circular ou antecipar sua implementação.
+- F01 — [#1016270](https://redmine.remsoft.com.br/issues/1016270): identidade e responsividade.
+- F04 — [#1016274](https://redmine.remsoft.com.br/issues/1016274): transações, categorias e manutenção disponíveis.
+- F06 — [#1016276](https://redmine.remsoft.com.br/issues/1016276): chat real disponível para o convite do dashboard.
+- F07 consome posteriormente os indicadores e é responsável por verificar seu registro conversacional no sistema. Não é necessária para encerrar a QA de F05.
 
 ## Designs e evidências
 
@@ -118,33 +120,3 @@ Saldo acumulado, totais e contagens mensais, comparação e resultado do mês, s
 ## Fora do escopo
 
 Saldo inicial separado, valores previstos, novos cálculos bancários, metas, orçamento, relatórios avançados, exportação e consolidação entre titulares. Chat e registro por IA são entregues em F06/F07; não criar versões simuladas dessas capacidades nesta Feature.
-
-## Decisões e revisão
-
-- Q7 resolvida: o responsável respondeu “pode ser” ao saldo geral de todo o histórico, sem saldo inicial; totais e balanço no mês selecionado; cinco recentes de todo o histórico; Ver todas abrindo histórico completo.
-- Q2 já incluiu o seletor de mês, balanço simples e demais controles do design; F04 definiu BRL e referência temporal America/Sao_Paulo.
-- Este documento consolida as decisões e os estados propostos para a revisão integral. A confirmação de Q7 não equivale à aprovação automática da publicação.
-- Preferência editorial respeitada: design mencionado como fornecido, sem sua origem pessoal.
-- O responsável aprovou o requisito completo e a publicação apresentada respondendo “aprovado” nesta conversa, incluindo materialização definitiva e as relações F01/F04 bloqueiam F05.
-
-## Publicação proposta
-
-- Projeto FinAi (65224), versão Livewire (20359), selecionada pelo responsável.
-- Criar Feature (tracker 2), título **[WEB] [USUARIO] Dashboard financeiro**, status inicial New (1), sem categoria, pai, responsável, datas, estimativa ou Sequencing; prioridade padrão do servidor.
-- Descrição integral: seções de **Objetivo** até **Fora do escopo**, dentro de `<!-- project-flow:start -->` e `<!-- project-flow:end -->`, com a referência estável identificada no início.
-- Após ID confirmado, materializar em `docs/harness/features/<ID>-dashboard-financeiro/feature.md`, corrigir referências relativas e acrescentar o caminho definitivo à descrição remota, preservando a referência estável inicial.
-- Relações propostas: F01 #1016270 **bloqueia** a nova F05 pela base visual; F04 #1016274 **bloqueia** a nova F05 pelos dados e ações financeiras. Não criar tarefas DEV/QA nem relações com demandas da Sprint 1.
-- Similaridade: a consulta na versão Livewire encontrou apenas F01–F04. Na Sprint 1 existe #1016106 — Dashboard financeiro, de outro catálogo, que permanece preservado; não adotar nem mover seu requisito ou filhas. Propõe-se publicação própria na versão escolhida.
-- Publicação autorizada e confirmada como [Feature #1016275](https://redmine.remsoft.com.br/issues/1016275), com descrição integral e referência definitiva relidas. Projeto FinAi (65224), versão Livewire (20359), tracker Feature e status New conferidos; sem pai, categoria, responsável, datas, estimativa, Sequencing ou filhas. Relações #882 e #883 confirmadas nos dois endpoints de cada vínculo: F01 #1016270 e F04 #1016274 bloqueiam F05 #1016275. Nenhum resultado incerto de publicação.
-
-## Resultado da publicação
-
-| Operação autorizada                           | Identidade                                                      | Resultado                                                                 | Pendência |
-| --------------------------------------------- | --------------------------------------------------------------- | ------------------------------------------------------------------------- | --------- |
-| Criar F05 com o requisito aprovado            | #1016275, projeto FinAi, versão Livewire                        | Criação e leitura final confirmadas                                       | Nenhuma   |
-| Materializar requisito e atualizar referência | `docs/harness/features/1016275-dashboard-financeiro/feature.md` | Documento materializado, fontes preservadas e referência remota conferida | Nenhuma   |
-| F01 e F04 bloqueiam F05                       | #1016270 e #1016274 → #1016275, relações #882/#883              | Criadas e relidas nos dois endpoints de cada vínculo                      | Nenhuma   |
-
-## Passagem
-
-Entrada pronta para `project-slices`: este requisito aprovado, pai #1016275 confirmado na versão Livewire e dependências F01/F04 registradas. Design fornecido preservado nas fontes do escopo. Sem slicing, tarefas DEV/QA ou implementação nesta etapa.

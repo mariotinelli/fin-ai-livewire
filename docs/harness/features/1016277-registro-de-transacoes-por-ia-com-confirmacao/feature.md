@@ -1,11 +1,12 @@
 # Registro de transações por IA com confirmação
 
-## Identidade e situação
+## Identidade
 
-- Item F07 do [catálogo aprovado](../../scopes/2026-11-13-finai-mvp/scope.md).
-- Situação: requisito completo e publicação aprovados pelo responsável; Feature #1016277 publicada e relida, com referência definitiva e três relações conferidas. Não implementada.
-- Destino: projeto FinAi (65224), versão Livewire (20359).
-- Referência estável: `docs/harness/.runs/2026-11-13-finai-mvp/f07-registro-ia/feature.md`.
+- Feature: [#1016277](https://redmine.remsoft.com.br/issues/1016277).
+- Projeto: FinAi (65224).
+- Versão: Livewire (20359).
+- Situação: requisito aprovado; implementação não realizada neste fluxo.
+- [Catálogo](../../scopes/2026-11-13-finai-mvp/scope.md).
 
 ## Objetivo
 
@@ -38,7 +39,7 @@ O titular informa movimentações com suas palavras. A IA identifica os dados ex
 5. Depois de todos os campos obrigatórios estarem informados ou expressamente aceitos e válidos, apresentar o resumo completo: tipo, valor, descrição, categoria e data, com Confirmar, Corrigir e Cancelar próprios.
 6. Corrigir abre a revisão dos cinco campos conforme o formulário de F04; a conversa também pode receber correções quando o alvo for inequívoco. Após corrigir, apresentar novo resumo, ainda não gravado.
 7. Confirmar no resumo atual persiste uma única transação do titular com os dados revisados. Exibir sucesso somente após confirmação da gravação e marcar a proposta como registrada, sem permitir nova gravação pela mesma proposta.
-8. Atualizar o histórico e os indicadores disponíveis. As demais propostas continuam em seus estados próprios, até que sejam completadas, confirmadas ou canceladas individualmente.
+8. Atualizar o histórico e os indicadores do dashboard já entregue. As demais propostas continuam em seus estados próprios, até que sejam completadas, confirmadas ou canceladas individualmente.
 
 ## Fluxos alternativos e exceções
 
@@ -49,7 +50,7 @@ O titular informa movimentações com suas palavras. A IA identifica os dados ex
 - Cada proposta pode ser completada em momentos diferentes. Uma proposta pronta pode ser confirmada mesmo com outra incompleta; uma proposta cancelada não impede concluir as demais.
 - Cancelar uma proposta informa que ela não foi registrada. Não apaga mensagens históricas nem cancela automaticamente propostas vizinhas.
 - Corrigir o tipo exige categoria compatível; se a IA sugerir outra categoria, pedir aceitação. Correção ou nova sugestão invalida o resumo anterior para confirmação.
-- Data futura ou inválida, valor fora das regras, descrição inválida ou categoria incompatível impede concluir a proposta ou gravá-la, conforme F03/F04. Não ajustar data ou valor automaticamente para torná-los válidos.
+- Data futura ou inválida, valor fora das regras, descrição inválida ou categoria incompatível impede concluir a proposta ou gravá-la, conforme F04. Não ajustar data ou valor automaticamente para torná-los válidos.
 - Ao surgir consulta financeira durante propostas pendentes, atender conforme F06 sem gravar ou cancelar propostas. Movimentações não confirmadas não entram nos resultados. Correções ambíguas continuam exigindo identificação do alvo.
 - Ao sair, recarregar ou abrir outro navegador, retomar a conversa e as propostas com seus estados reais; proposta registrada, cancelada ou substituída não volta a permitir confirmação.
 - Falha de interpretação solicita esclarecimento ou nova tentativa, sem apresentar classificação incerta como aceita e sem criar registros.
@@ -67,7 +68,7 @@ O titular informa movimentações com suas palavras. A IA identifica os dados ex
 
 **R4 — Múltiplas movimentações.** Uma mensagem pode originar várias propostas independentes. Mostrar qual movimentação cada uma representa. Não unir valores de movimentações distintas nem aplicar uma confirmação, correção ou cancelamento a todas por inferência. Não oferecer confirmação final em lote no MVP: cada proposta tem seu próprio Confirmar.
 
-**R5 — Regras financeiras comuns.** As cinco informações obrigatórias, moeda BRL, precisão, limites, descrição, datas até hoje em America/Sao_Paulo e categorias seguem F03/F04. Datas relativas expressamente informadas, como hoje ou ontem, podem ser convertidas para a data correspondente, exibida no resumo; isso não autoriza inventar uma data omitida. Os dados revisados devem ser os mesmos que serão persistidos.
+**R5 — Regras financeiras comuns.** As cinco informações obrigatórias, moeda BRL, precisão, limites, descrição, datas até hoje em America/Sao_Paulo e categorias seguem F04. Datas relativas expressamente informadas, como hoje ou ontem, podem ser convertidas para a data correspondente, exibida no resumo; isso não autoriza inventar uma data omitida. Os dados revisados devem ser os mesmos que serão persistidos.
 
 **R6 — Confirmação atual.** A ação final proposta para esta revisão é o botão Confirmar do resumo completo atual. Respostas de aceitação de sugestões e mensagens genéricas como “sim” não gravam transações. Se alguém pedir confirmação por texto, orientar o uso do botão da proposta pronta, sem dispensar campos pendentes. Resumos antigos ou substituídos não podem gravar após correção.
 
@@ -101,7 +102,7 @@ Mensagens, propostas identificáveis, dados fornecidos, sugestões pendentes e a
 
 **CA05 — Duas decisões distintas.** Aceitar uma sugestão completa apenas os campos identificados. Com todos os dados válidos, mostrar os cinco campos no resumo e exigir o Confirmar individual atual. Mensagem genérica de aceitação, navegação ou silêncio não registra.
 
-**CA06 — Validações comuns.** Exercitar campos ausentes, valor zero/negativo/acima do limite/com precisão inválida, descrição vazia/longa, categoria incompatível/inexistente e data inválida/futura. Recusar conforme F03/F04, sem ajustes silenciosos, sucesso falso ou gravação parcial. Datas relativas explícitas são exibidas como datas revisáveis no resumo.
+**CA06 — Validações comuns.** Exercitar campos ausentes, valor zero/negativo/acima do limite/com precisão inválida, descrição vazia/longa, categoria incompatível/inexistente e data inválida/futura. Recusar conforme F04, sem ajustes silenciosos, sucesso falso ou gravação parcial. Datas relativas explícitas são exibidas como datas revisáveis no resumo.
 
 **CA07 — Correção.** Corrigir cada campo pelo formulário e por mensagens de alvo claro. A revisão não cria transação; apresenta novo resumo completo. Trocar tipo requer categoria compatível e aceitação de qualquer nova sugestão. Confirmar o resumo antigo é impedido.
 
@@ -115,7 +116,7 @@ Mensagens, propostas identificáveis, dados fornecidos, sugestões pendentes e a
 
 **CA12 — Falhas.** Falhas de IA, persistência de propostas ou gravação final são comunicadas com possibilidade de retomada, sem estado salvo fictício ou transação alegadamente criada. Resultado de confirmação incerto é conferido antes da nova tentativa para evitar duplicação.
 
-**CA13 — Efeito no sistema.** Após confirmação, encontrar o registro em F04 e conferir seu efeito em F05/F06 disponíveis, respeitando data, tipo, valor e categoria. Propostas só sugeridas, aceitas nos campos ou canceladas não alteram histórico e indicadores financeiros.
+**CA13 — Efeito funcional completo.** Após confirmar uma proposta, encontrar a transação real no histórico F04, consultar seu estado atual no chat F06 e conferir os indicadores do dashboard F05, todos já disponíveis na conclusão. Respeitar data, tipo, valor e categoria. Propostas só sugeridas, campos apenas aceitos ou propostas canceladas não alteram histórico, consultas ou indicadores financeiros.
 
 **CA14 — Fronteira de operações.** Pedido de editar/excluir uma transação já registrada orienta F04 e não é executado pela conversa. Regras de acesso de F02 permanecem válidas; nenhuma mensagem ou referência contorna a confirmação de e-mail ou a titularidade.
 
@@ -123,10 +124,10 @@ Mensagens, propostas identificáveis, dados fornecidos, sugestões pendentes e a
 
 ## Dependências
 
-- F03 — [#1016273](https://redmine.remsoft.com.br/issues/1016273): categorias e compatibilidade.
-- F04 — [#1016274](https://redmine.remsoft.com.br/issues/1016274): regras e persistência das transações, com acesso F02 e base visual F01.
-- F06 — [#1016276](https://redmine.remsoft.com.br/issues/1016276): chat real, conversa salva e contexto do titular.
-- F05 — [#1016275](https://redmine.remsoft.com.br/issues/1016275): conferência integrada dos indicadores de CA13, sem necessidade dos cálculos do dashboard para registrar a transação. Não criar dependência circular.
+- F04 — [#1016274](https://redmine.remsoft.com.br/issues/1016274): categorias, regras e persistência das transações, com conta F02 e base visual F01.
+- F06 — [#1016276](https://redmine.remsoft.com.br/issues/1016276): chat real, conversa salva e consultas.
+- F05 — [#1016275](https://redmine.remsoft.com.br/issues/1016275): dashboard real para conferir o efeito dos registros confirmados.
+- As três capacidades precisam estar entregues para o aceite integrado de F07; não remeter a confirmação dos seus resultados a um consumidor futuro.
 
 ## Designs e evidências
 
@@ -139,34 +140,3 @@ Criação de receitas e despesas por IA real no chat existente, várias proposta
 ## Fora do escopo
 
 Preenchimento automático de dados omitidos, confirmação final em lote, lançamentos futuros, edição/exclusão de registros existentes pela IA, categorias personalizadas, anexos, áudio e múltiplos agentes. Aceitar uma sugestão não equivale a autorizar a gravação final.
-
-## Decisões e revisão
-
-- Q10 resolvida: o responsável aceitou várias movimentações por mensagem, com propostas e ações individuais.
-- Q11 resolvida: “nunca complete, sempre faça sugestões e perguntar se pode ser”. Essa decisão substitui a sugestão anterior de assumir hoje/categoria sem pergunta; campos omitidos permanecem pendentes até resposta explícita.
-- Q2 já incluiu revisão, correção e cancelamento; F03/F04/F06 definem categorias, regras financeiras e conversa persistida.
-- Propostas desta revisão completa: aceitação identificável de um conjunto de sugestões da mesma proposta, seguida de resumo e botão Confirmar individual; retomada de estados entre acessos; consultas sem cancelar pendências. A revisão completa confirma esses detalhes, sem atribuí-los antecipadamente à resposta Q11.
-- Preferência editorial respeitada: apenas design fornecido, sem origem pessoal.
-- O responsável aprovou o requisito completo e a publicação apresentada respondendo “aprovado” nesta conversa, incluindo detalhes de aceitação, confirmação, retomada, materialização definitiva e relações F03/F04/F06 bloqueiam F07.
-
-## Publicação proposta
-
-- Projeto FinAi (65224), versão Livewire (20359), escolhida pelo responsável.
-- Criar Feature (tracker 2), título **[WEB] [USUARIO] Registro de transações por IA com confirmação**, status inicial New (1), sem categoria, pai, responsável, datas, estimativa ou Sequencing; prioridade padrão do servidor.
-- Descrição integral: seções de **Objetivo** até **Fora do escopo**, dentro de `<!-- project-flow:start -->` e `<!-- project-flow:end -->`, com a referência estável identificada no início.
-- Após ID confirmado, materializar em `docs/harness/features/<ID>-registro-de-transacoes-por-ia-com-confirmacao/feature.md`, corrigir referências relativas e acrescentar o caminho definitivo à descrição remota, preservando a referência estável inicial.
-- Relações propostas: F03 #1016273, F04 #1016274 e F06 #1016276 **bloqueiam** a nova F07, por categorias, operações financeiras e chat. F05 integra a conferência dos indicadores, sem relação de bloqueio para a criação de registros. Não criar tarefas DEV/QA nem relações com a Sprint 1.
-- Similaridade: consulta da versão Livewire encontrou apenas F01–F06. Na Sprint 1, #1016107 reúne funcionalidades de assistente de outro catálogo; permanece preservada com suas filhas. Nova publicação respeita a separação F06/F07 aprovada neste catálogo.
-- Publicação autorizada e confirmada como [Feature #1016277](https://redmine.remsoft.com.br/issues/1016277), com descrição integral e referência definitiva relidas. Projeto FinAi (65224), versão Livewire (20359), tracker Feature e status New conferidos; sem pai, categoria, responsável, datas, estimativa, Sequencing ou filhas. Relações #887, #888 e #889 confirmadas nos dois endpoints de cada vínculo: F03 #1016273, F04 #1016274 e F06 #1016276 bloqueiam F07 #1016277. Nenhum resultado incerto de publicação.
-
-## Resultado da publicação
-
-| Operação autorizada                           | Identidade                                                                               | Resultado                                                                 | Pendência |
-| --------------------------------------------- | ---------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------- |
-| Criar F07 com o requisito aprovado            | #1016277, projeto FinAi, versão Livewire                                                 | Criação e leitura final confirmadas                                       | Nenhuma   |
-| Materializar requisito e atualizar referência | `docs/harness/features/1016277-registro-de-transacoes-por-ia-com-confirmacao/feature.md` | Documento materializado, fontes preservadas e referência remota conferida | Nenhuma   |
-| F03, F04 e F06 bloqueiam F07                  | #1016273, #1016274 e #1016276 → #1016277, relações #887/#888/#889                        | Criadas e relidas nos dois endpoints de cada vínculo                      | Nenhuma   |
-
-## Passagem
-
-Entrada pronta para `project-slices`: este requisito aprovado, pai #1016277 confirmado na versão Livewire e dependências F03/F04/F06 registradas. Design fornecido preservado nas fontes do escopo. Conferência integrada dos indicadores usa F05, sem nova relação de bloqueio. Sem slicing, tarefas DEV/QA ou implementação nesta etapa.

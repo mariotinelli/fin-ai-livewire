@@ -1,19 +1,20 @@
 # Acesso autenticado e espaço financeiro pessoal
 
-## Identidade e situação
+## Identidade
 
-- Item F02 do [catálogo aprovado](../../scopes/2026-11-13-finai-mvp/scope.md).
-- Situação: requisito e publicação aprovados pelo responsável nesta conversa. Feature #1016271 publicada e relida, com referência definitiva e relação com F01 conferidas. Não implementada.
-- Destino escolhido pelo responsável: projeto FinAi (65224), versão Livewire (20359).
-- Referência estável do requisito: `docs/harness/.runs/2026-11-13-finai-mvp/f02-acesso-pessoal/feature.md`.
+- Feature: [#1016271](https://redmine.remsoft.com.br/issues/1016271).
+- Projeto: FinAi (65224).
+- Versão: Livewire (20359).
+- Situação: requisito aprovado; implementação não realizada neste fluxo.
+- [Catálogo](../../scopes/2026-11-13-finai-mvp/scope.md).
 
 ## Objetivo
 
-Permitir que qualquer pessoa crie e acesse sua conta no FinAI, exigindo confirmação do e-mail antes do uso das finanças e mantendo um espaço financeiro separado por usuário em todos os canais.
+Permitir que qualquer pessoa crie e utilize sua conta pessoal, confirme o e-mail atual, entre, recupere a senha e saia pelo canal real do produto. A jornada entrega identidade e estado de confirmação corretos para as funcionalidades financeiras consumidoras.
 
 ## Resultado esperado
 
-O usuário consegue cadastrar-se sem convite, confirmar seu e-mail, entrar, sair e recuperar uma senha esquecida. Ao acessar as capacidades financeiras disponíveis, vê e altera apenas seus próprios dados. Uma conta sem e-mail confirmado permanece impedida de usar as finanças, mesmo estando autenticada.
+O titular conclui cadastro, confirmação, entrada, recuperação e saída e reencontra a própria conta nos próximos acessos. A QA verifica esses resultados pelas telas e links reais, sem precisar criar transações ou usar uma funcionalidade financeira futura.
 
 ## Atores e permissões
 
@@ -36,9 +37,9 @@ O usuário consegue cadastrar-se sem convite, confirmar seu e-mail, entrar, sair
 1. O visitante encontra a entrada da conta pessoal e as opções de cadastro e recuperação. A entrada principal do produto conduz ao acesso pessoal; áreas administrativas e de suporte mantêm suas entradas próprias.
 2. No cadastro, informar nome, e-mail, senha e confirmação da senha. Com dados válidos e e-mail disponível, criar uma única conta pessoal e apresentar a orientação para confirmar o e-mail. Não solicitar dados financeiros no cadastro.
 3. Solicitar o envio da confirmação ao e-mail cadastrado. Enquanto a confirmação estiver pendente, informar essa condição e disponibilizar reenvio e saída, sem liberar funcionalidades financeiras.
-4. Ao abrir um link de confirmação válido da própria conta, autenticar-se quando necessário e confirmar o endereço. Liberar o espaço pessoal e encaminhar ao destino financeiro originalmente solicitado, se disponível e autorizado, ou à área inicial pessoal existente.
+4. Ao abrir um link de confirmação válido da própria conta, autenticar-se quando necessário e confirmar o endereço. Liberar o espaço pessoal e encaminhar ao destino próprio originalmente solicitado, quando disponível e autorizado, ou à área inicial pessoal existente.
 5. Nos próximos acessos, entrar com e-mail e senha. Uma conta confirmada acessa sua área pessoal; uma conta pendente continua na jornada de confirmação quando tentar usar as finanças.
-6. Ao acessar funcionalidades financeiras disponíveis, usar somente os dados do titular autenticado. A identidade financeira acompanha a conta ao entrar novamente ou em outro navegador; não depende de um conjunto de registros exclusivo do navegador.
+6. Ao voltar à área pessoal existente ou entrar em outro navegador, reconhecer a própria conta e acessar somente seus dados pessoais permitidos. Trocar de conta não reaproveita a identidade da anterior.
 7. Ao sair, encerrar a sessão atual e retornar ao login pessoal. Um novo acesso protegido exige autenticação.
 
 ## Fluxos alternativos e exceções
@@ -64,13 +65,13 @@ O usuário consegue cadastrar-se sem convite, confirmar seu e-mail, entrar, sair
 
 **R4 — Retomada.** Após autenticar e confirmar, retomar apenas um destino próprio, disponível e autorizado. Sem destino elegível, abrir a área inicial pessoal existente. A ausência de uma Feature financeira futura não autoriza criar página vazia ou simulada nesta entrega.
 
-**R5 — Separação por titular.** Transações, indicadores, respostas, mensagens e propostas do assistente pertencem ao titular da conta. Usuários não podem consultar ou alterar dados financeiros de outras pessoas, inclusive alterando referências de registros, fazendo pedidos ao assistente ou reutilizando uma sessão após trocar de conta. Não há compartilhamento de finanças ou visão financeira geral para administradores e suporte no MVP aprovado.
+**R5 — Identidade e responsabilidade financeira.** A jornada de conta identifica o próprio titular e não permite trocar sua identidade por referência de outra pessoa. A separação de transações, indicadores, respostas, mensagens e propostas é uma regra transversal obrigatória: F04, F05, F06 e F07 a aplicam e verificam nas próprias interfaces quando introduzem esses recursos. Administração e suporte não recebem visão financeira de terceiros.
 
-**R6 — Registros duráveis.** A entrada em outro navegador ou novo login com a mesma conta recupera o acesso aos mesmos registros persistidos, conforme as Features disponíveis. Criar uma conta não gera receitas, despesas ou saldos de exemplo. A ausência real de dados é diferente de falha ao consultá-los.
+**R6 — Retorno à conta.** Novo login ou acesso em outro navegador identifica a mesma conta pessoal, sem gerar dados financeiros de exemplo. A persistência e a consulta dos registros financeiros pertencem às Features que entregam esses registros e permanecem obrigatórias nelas.
 
 **R7 — Recuperação e saída.** Reutilizar a recuperação por e-mail e a saída existentes, preservando limites, validade de links e restrições atuais. A saída encerra o acesso atual; esta Feature não acrescenta gestão global de sessões ou dispositivos.
 
-**R8 — Cobertura financeira nas Features consumidoras.** F02 é dona da jornada de conta, da exigência de confirmação e da definição do titular autenticado. F04–F07 aplicam essa fronteira aos seus próprios dados, consultas e operações; sua aceitação inclui tentativas entre contas. A publicação de F02 não significa que essas operações financeiras já existem.
+**R8 — Aceite próprio e consumidores.** F02 entrega cadastro, entrada, confirmação/reenvio, recuperação, saída, retomada e identidade do titular, verificáveis nas telas atuais. F04–F07 consomem essa identidade e exigem a confirmação antes de expor suas operações financeiras; cada Feature testa essa condição e o isolamento dos seus dados no próprio canal. O encerramento da QA da conta não declara esses recursos futuros testados.
 
 **R9 — Apresentação.** Usar a fundação visual de F01 nas telas de cadastro, acesso, confirmação e recuperação, com rótulos, mensagens e estados em português brasileiro. Preservar os controles existentes de conta e perfil, sem aplicar regras de outras versões do projeto por inferência.
 
@@ -84,7 +85,7 @@ Nome, e-mail, senha e confirmação; opção de lembrar acesso; condição de e-
 
 **CA02 — Dados inválidos.** Exercitar campos obrigatórios, e-mail inválido ou duplicado, limites e política de senha, confirmação divergente e tentativas repetidas. Erros orientam a correção e não criam outra conta nem concluem a operação inválida. Cadastro e redefinição seguem a mesma política de senha.
 
-**CA03 — Confirmação pendente.** Após cadastro ou login de conta pendente, informar a necessidade de confirmar o e-mail e oferecer reenvio e saída. Quando uma capacidade financeira estiver disponível, bloquear seu acesso por navegação normal, endereço direto ou ação, inclusive com acesso lembrado.
+**CA03 — Confirmação pendente.** Após cadastro ou login de conta pendente, apresentar a orientação de confirmar o e-mail atual, com reenvio e saída. A opção de lembrar acesso não transforma a conta em confirmada; as funções não financeiras de perfil mantêm as permissões atuais. A condição de acesso financeiro é aplicada e testada também nos canais que F04–F07 introduzirem.
 
 **CA04 — Confirmação válida e retomada.** Abrir o link válido do próprio e-mail, autenticar-se se necessário e confirmar. Retomar destino próprio disponível e autorizado ou área inicial pessoal. Abrir novamente um link válido de conta já confirmada não repete efeitos nem cria conta.
 
@@ -96,11 +97,11 @@ Nome, e-mail, senha e confirmação; opção de lembrar acesso; condição de e-
 
 **CA08 — Recuperação.** Solicitar recuperação com conta existente e inexistente mantém resposta genérica. Link próprio válido permite definir senha conforme a política; a nova senha permite novos logins e a anterior deixa de permiti-los. Link inválido, expirado ou reutilizado não muda a senha. Redefinir não dispensa confirmação pendente.
 
-**CA09 — E-mail alterado.** Após alterar o e-mail no perfil existente, se a confirmação for retirada como no comportamento atual, exigir confirmação do novo endereço antes de retomar finanças, sem perder seus registros. Alterar somente o nome preserva a confirmação.
+**CA09 — E-mail alterado.** Alterar o e-mail no perfil existente retira a confirmação do endereço anterior e permite retomar a confirmação do endereço atual, preservando a identidade da conta. Alterar somente o nome mantém a confirmação. Não é necessário criar movimentações para verificar esse estado; o bloqueio financeiro decorrente é testado nos consumidores.
 
-**CA10 — Separação de contas.** Na integração com as Features financeiras entregues, criar registros conhecidos em duas contas confirmadas e comparar acesso normal, referências diretas, consultas e propostas da IA. Cada conta só vê e altera os próprios dados. Trocar de conta ou abrir outro navegador não mistura os titulares.
+**CA10 — Identidade da própria conta.** Usar duas contas nas telas reais de entrada e perfil: cada uma reencontra sua identificação e seus dados pessoais permitidos. Sair, trocar de conta e acessar por outro navegador não mistura as identidades. Os testes de transações, indicadores, chat e propostas entre contas pertencem respectivamente a F04, F05, F06 e F07, mantendo o isolamento exigido em cada canal.
 
-**CA11 — Fronteira da entrega.** A jornada de conta e confirmação pode ser aceita sobre a área pessoal existente. Não criar novas páginas, tabelas de apresentação, valores financeiros ou respostas simuladas para demonstrar F02; a verificação dos recursos de CA10 acompanha os itens que os introduzem.
+**CA11 — Fechamento da jornada.** Concluir cadastro, confirmação, entrada, recuperação, saída e retomada pela interface e links reais da área pessoal existente. Nenhum cenário obrigatório da QA da conta depende de telas financeiras futuras ou de valores demonstrativos.
 
 **CA12 — Identidade visual.** As telas e estados abrangidos seguem o design fornecido e a base F01 em celular, tablet e desktop, incluindo espera, validação, falha, sucesso e limitação. A composição mantém disponíveis os controles de confirmação, reenvio, recuperação e saída, sem expor origem pessoal do design.
 
@@ -123,33 +124,3 @@ Cadastro público pessoal com os dados existentes, entrada pessoal, login, confi
 ## Fora do escopo
 
 Criação de transações, cálculos financeiros e integração com IA nesta Feature; contas compartilhadas; acesso administrativo às finanças de terceiros; novos fatores de autenticação, login social ou gestão de dispositivos. A edição de perfil existente é preservada e sua alteração de e-mail deve respeitar a regra de confirmação; não é uma nova gestão de perfil.
-
-## Decisões e revisão
-
-- Q1 aprovada pelo responsável: qualquer usuário pode usar o produto, com autenticação e finanças separadas por pessoa.
-- Q3 resolvida nesta conversa: “Sim, exigir”, confirmando a obrigatoriedade de confirmar o e-mail antes de usar as finanças.
-- Demais comportamentos deste requisito consolidam a jornada existente e a proposta funcional para os estados exigidos; serão confirmados na revisão completa, sem presumir aprovação de cada detalhe pela resposta Q3.
-- Preferência editorial do responsável: mencionar o design como fornecido, sem expor sua origem no computador pessoal.
-- O responsável aprovou o requisito completo e a publicação proposta respondendo “aprovado” nesta conversa. A aprovação inclui materialização definitiva e relação F01 bloqueia F02.
-
-## Publicação proposta
-
-- Projeto FinAi (65224), versão aberta Livewire (20359), selecionada pelo responsável.
-- Criar Feature (tracker 2), título **[WEB] [USUARIO] Acesso autenticado e espaço financeiro pessoal**, status inicial New (1), sem categoria, pai, responsável, datas, estimativa ou Sequencing; prioridade padrão do servidor.
-- Descrição integral proposta: seções de **Objetivo** até **Fora do escopo** deste documento, dentro de `<!-- project-flow:start -->` e `<!-- project-flow:end -->`, com a referência estável do requisito identificada no início. Preservar todos os critérios e regras, sem substituí-los por links.
-- Após ID confirmado, materializar em `docs/harness/features/<ID>-acesso-autenticado-e-espaco-financeiro-pessoal/feature.md`, corrigir referências relativas e acrescentar o caminho definitivo na descrição, mantendo a referência estável inicial.
-- Relação proposta: #1016270 **bloqueia** a nova F02, pela base visual exigida na entrega. Não criar relações com itens da Sprint 1 nem tarefas DEV/QA.
-- Similaridade: consulta da versão Livewire encontrou apenas F01. A Feature #1016104 — Acesso à conta pessoal existe na Sprint 1 e possui relações próprias; não será movida nem alterada. A proposta é um novo requisito específico para este catálogo e repositório, na versão escolhida.
-- Publicação autorizada e confirmada como [Feature #1016271](https://redmine.remsoft.com.br/issues/1016271), com descrição integral e referência definitiva relidas. Projeto FinAi (65224), versão Livewire (20359), tracker Feature e status New conferidos; sem pai, categoria, responsável, datas, estimativa, Sequencing ou filhas. Relação #877 confirmada nos dois endpoints: F01 #1016270 bloqueia F02 #1016271. Nenhum resultado incerto de publicação.
-
-## Resultado da publicação
-
-| Operação autorizada                                     | Identidade                                                                                | Resultado                                                                 | Pendência |
-| ------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | --------- |
-| Criar Feature F02 com o requisito aprovado              | #1016271, projeto FinAi, versão Livewire                                                  | Criação e leitura final confirmadas                                       | Nenhuma   |
-| Materializar requisito definitivo e atualizar descrição | `docs/harness/features/1016271-acesso-autenticado-e-espaco-financeiro-pessoal/feature.md` | Documento materializado, fontes preservadas e referência remota conferida | Nenhuma   |
-| F01 bloqueia F02                                        | #1016270 → #1016271, relação #877                                                         | Criada e relida nos dois endpoints                                        | Nenhuma   |
-
-## Passagem
-
-Entrada pronta para `project-slices`: este requisito aprovado, pai #1016271 confirmado na versão Livewire e dependência visual de F01 #1016270 registrada. Sem slicing, tarefas DEV/QA ou implementação nesta etapa. Publicação não comprova comportamento implementado.

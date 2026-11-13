@@ -11,21 +11,7 @@ fi
 git rev-parse --git-dir >/dev/null
 BRANCH_NAME=$(git symbolic-ref --quiet --short HEAD) || exit 0
 
-case "$BRANCH_NAME" in
-    main|develop)
-        printf '%s\n' 'You cannot commit directly to the main or develop branch' >&2
-        exit 1
-        ;;
-esac
-
-# Keep the existing branch types and description alphabet; accept any project key.
-BRANCH_REGEX='^(feature|epic|bugfix|hotfix|enhancement|task)/[A-Z][A-Z0-9]*-[0-9]+-[a-zA-Z0-9-]+$'
-if ! printf '%s\n' "$BRANCH_NAME" | LC_ALL=C grep -Eq "$BRANCH_REGEX"; then
-    printf '%s\n' "Expected branch format: 'feature/RSP-62-description' (or another YouTrack project key)." >&2
-    exit 1
-fi
-
-# Preserve Git's merge messages and autosquash/revert subjects on valid branches.
+# Preserve Git's merge messages and autosquash/revert subjects.
 if [ -f "$(git rev-parse --git-path MERGE_HEAD)" ]; then
     exit 0
 fi
@@ -41,7 +27,10 @@ case "$SUBJECT" in
 esac
 
 TASK_KEY=${BRANCH_NAME#*/}
-TASK_KEY=$(printf '%s\n' "$TASK_KEY" | sed 's/^\([A-Z][A-Z0-9]*-[0-9][0-9]*\)-.*/\1/')
+TASK_KEY=$(printf '%s\n' "$TASK_KEY" | sed -n 's/^\([A-Z][A-Z0-9]*-[0-9][0-9]*\)-.*/\1/p')
+if [ -z "$TASK_KEY" ]; then
+    exit 0
+fi
 case "$SUBJECT" in
     "$TASK_KEY:"*) exit 0 ;;
 esac

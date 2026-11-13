@@ -1,11 +1,12 @@
 # Gestão de transações
 
-## Identidade e situação
+## Identidade
 
-- Item F04 do [catálogo aprovado](../../scopes/2026-11-13-finai-mvp/scope.md).
-- Situação: requisito completo e publicação aprovados pelo responsável; Feature #1016274 publicada e relida, com referência definitiva e três relações conferidas. Não implementada.
-- Destino: projeto FinAi (65224), versão Livewire (20359).
-- Referência estável: `docs/harness/.runs/2026-11-13-finai-mvp/f04-transacoes/feature.md`.
+- Feature: [#1016274](https://redmine.remsoft.com.br/issues/1016274).
+- Projeto: FinAi (65224).
+- Versão: Livewire (20359).
+- Situação: requisito aprovado; implementação não realizada neste fluxo.
+- [Catálogo](../../scopes/2026-11-13-finai-mvp/scope.md).
 
 ## Objetivo
 
@@ -13,7 +14,7 @@ Permitir ao usuário registrar, editar, excluir e consultar receitas e despesas 
 
 ## Resultado esperado
 
-O titular registra suas movimentações manualmente e encontra os mesmos dados ao voltar ao sistema ou acessar sua conta em outro navegador. Pode consultar detalhes, corrigir um registro ou excluí-lo após confirmação. Histórico, dashboard e consultas posteriores da IA refletem os dados atuais quando essas capacidades estiverem disponíveis.
+O titular registra suas movimentações manualmente e encontra os mesmos dados ao voltar ao sistema ou acessar sua conta em outro navegador. Pode consultar detalhes, corrigir um registro ou excluí-lo após confirmação. O histórico e os detalhes refletem os dados atuais na própria conclusão. F05, F06 e F07 verificam os efeitos nos canais que cada uma entrega.
 
 ## Atores e permissões
 
@@ -33,7 +34,7 @@ O titular registra suas movimentações manualmente e encontra os mesmos dados a
 
 1. Abrir Transações. Apresentar o histórico do mês corrente do titular, com filtros e ação Nova transação.
 2. Iniciar o cadastro. Apresentar tipo, valor em reais, descrição, categoria e data. A data inicial é hoje, e o usuário pode informar uma data anterior válida.
-3. Escolher receita ou despesa, informar valor positivo, descrição, categoria compatível de F03 e data não futura.
+3. Escolher receita ou despesa, informar valor positivo, descrição, categoria compatível do catálogo predefinido desta Feature e data não futura.
 4. Salvar. Validar todos os dados e a autorização antes de persistir; após sucesso, confirmar o registro e atualizar a consulta conforme os filtros ativos.
 5. Localizar a transação no histórico e abrir detalhes. Mostrar tipo, valor, descrição, categoria e data, com ações de editar e excluir.
 6. Editar qualquer um desses cinco campos, mantendo as mesmas validações do cadastro e a titularidade original. Confirmar a atualização somente após o salvamento.
@@ -62,7 +63,7 @@ O titular registra suas movimentações manualmente e encontra os mesmos dados a
 
 **R4 — Datas de realização.** Aceitar datas de calendário válidas entre 01/01/1900 e hoje, inclusive. Recusar data futura na criação e na edição. Hoje e mês corrente são determinados pelo fuso America/Sao_Paulo para todos os usuários do MVP. O dado financeiro é uma data, sem exigir que o usuário informe horário.
 
-**R5 — Categorias.** Usar exatamente as categorias compatíveis aprovadas em F03. Rejeitar categoria inexistente ou do tipo oposto em criação e edição. A edição do tipo só pode ser concluída com uma categoria válida para o novo tipo.
+**R5 — Categorias predefinidas.** Disponibilizar o mesmo catálogo a todos os titulares, com quatro receitas — Salário, Freelance, Rendimentos, Outras receitas — e oito despesas — Alimentação, Moradia, Transporte, Saúde, Educação, Lazer, Compras, Outras despesas. Preservar nomes e acentos, sem manutenção, personalização, subcategorias ou importação pelo usuário. Uma transação exige categoria existente e compatível com seu tipo, incluindo as alternativas gerais. Trocar o tipo reapresenta as opções compatíveis e não permite salvar uma categoria anterior incompatível ou oculta. As categorias continuam disponíveis sem movimentações; falha real de obtenção das opções não é apresentada como catálogo vazio nem permite categoria improvisada. Histórico, filtros e futuras consultas/propostas utilizam o mesmo vocabulário.
 
 **R6 — Titularidade e persistência.** Associar o registro ao usuário autenticado, sem aceitar escolha de outro titular. A titularidade não é campo editável. Consultas, detalhes e alterações respeitam F02, inclusive em acessos diretos. A mesma conta reencontra os registros ao retornar ou trocar de navegador.
 
@@ -74,9 +75,9 @@ O titular registra suas movimentações manualmente e encontra os mesmos dados a
 
 **R10 — Exclusão confirmada.** Exigir confirmação explícita antes de excluir. Explicar que o registro deixa o histórico e os totais e que não existe desfazer no produto. Após sucesso, o registro não aparece em consultas financeiras ativas nem contribui para saldo, totais ou balanços. A regra define o efeito percebido pelo usuário, sem impor mecanismo interno de armazenamento.
 
-**R11 — Atualização dos consumidores.** Criação, edição e exclusão bem-sucedidas atualizam as informações financeiras apresentadas na sessão, sem exigir novo login. F05 apresenta os indicadores; F06/F07 usam os dados atuais em consultas novas. Mensagens históricas já respondidas pela IA não são reescritas por uma alteração posterior.
+**R11 — Fechamento e consumidores.** Criação, edição e exclusão bem-sucedidas atualizam o histórico e os detalhes apresentados nesta Feature, sem exigir novo login. F05 verifica seus indicadores após alterações manuais; F06 verifica consultas novas sobre dados atuais; F07 verifica os efeitos de seus registros por IA no histórico, nas consultas e no dashboard já entregue. Essas integrações não são condições futuras de encerramento da QA de F04. Mensagens históricas da IA não são reescritas por alterações posteriores.
 
-**R12 — Apresentação.** Seguir o design fornecido para Transações, formulário, detalhes, confirmação e estados aplicáveis, usando F01. No celular, campos ocultos na linha resumida continuam disponíveis nos detalhes. Manter os nomes das categorias de F03 e as informações de valor, tipo e data compreensíveis.
+**R12 — Apresentação.** Seguir o design fornecido para Transações, formulário, detalhes, confirmação e estados aplicáveis, usando F01. No celular, campos ocultos na linha resumida continuam disponíveis nos detalhes. Manter os nomes das categorias predefinidas e as informações de valor, tipo e data compreensíveis.
 
 ## Dados percebidos pelo usuário
 
@@ -98,7 +99,7 @@ Tipo, valor em reais, descrição, categoria, data da movimentação; pesquisa, 
 
 **CA07 — Cancelamentos.** Cancelar ou fechar criação e edição mantém os dados persistidos anteriores. Cancelar ou fechar a confirmação de exclusão não remove o registro nem altera os totais.
 
-**CA08 — Exclusão.** Excluir exige a confirmação descrita em R10. Após sucesso, o registro sai de histórico, detalhes e resultados financeiros atuais, sem desfazer. Nas integrações disponíveis, saldo, totais, balanço e consultas novas da IA deixam de considerá-lo.
+**CA08 — Exclusão.** Excluir exige a confirmação de R10. Após sucesso, o registro deixa o histórico e os detalhes disponíveis ao titular, sem desfazer. A exclusão é preservada nos dados reais; F05 e F06 verificam o reflexo nos seus indicadores e consultas ao entregarem esses canais.
 
 **CA09 — Falhas e repetição.** Falhas de leitura não parecem histórico vazio; falhas de gravação não parecem sucesso e permitem retomada. Enquanto processa, a interface não permite repetir o mesmo envio. Duas transações intencionais de dados iguais continuam permitidas. Registro removido durante a edição não é recriado silenciosamente.
 
@@ -106,57 +107,28 @@ Tipo, valor em reais, descrição, categoria, data da movimentação; pesquisa, 
 
 **CA11 — Estados vazios.** Sem registros, mostrar orientação de primeiro cadastro; sem correspondências, informar ausência no recorte e permitir limpar filtros. Nenhum desses estados inventa transações ou substitui falhas de consulta.
 
-**CA12 — Efeito financeiro integrado.** Com F05/F06 disponíveis, conferir criação e edição de valores, tipos, datas e categorias e exclusão contra indicadores e consultas novas. Usar os dados atuais persistidos, sem exigir novo login e sem reescrever respostas antigas do assistente.
+**CA12 — Fechamento funcional e integração.** Demonstrar cadastro, consulta, filtros, detalhes, edição e exclusão de transações reais na interface desta Feature. O aceite dos indicadores após mudanças manuais pertence a F05 e o das novas consultas pertence a F06; o registro por IA e seu efeito integrado pertencem a F07. O aceite de F04 é concluído pelo fluxo manual real.
 
 **CA13 — Fidelidade visual.** Comparar a superfície Transações e os diálogos aplicáveis com o design fornecido nas nove dimensões previstas por F01. Preservar hierarquia, controles, estados e ações utilizáveis; descrições e valores extensos não encobrem controles, e detalhes expõem o conteúdo resumido na listagem móvel.
+
+**CA14 — Catálogo visível e classificação.** No formulário de receita, encontrar exatamente as quatro categorias de receita; no de despesa, exatamente as oito de despesa de R5. Duas contas recebem o mesmo catálogo, sem compartilhar registros. Criar e editar com categoria compatível é permitido; categoria inexistente ou do tipo oposto é recusada. A troca de tipo mostra a categoria compatível que será salva, e histórico e filtros preservam os mesmos nomes, inclusive Outras receitas e Outras despesas.
+
+**CA15 — Catálogo sem manutenção e estados.** Mesmo sem transações, as opções predefinidas continuam disponíveis no formulário. A interface não oferece criação, edição, exclusão ou personalização de categorias nem uma nova tela de gestão. Falha real ao obter opções é comunicada e não permite salvar categoria improvisada. Nomes e seleção são legíveis em celular, tablet e desktop, conforme a base visual de F01.
 
 ## Dependências
 
 - F01 — [#1016270](https://redmine.remsoft.com.br/issues/1016270): base visual e navegação.
-- F02 — [#1016271](https://redmine.remsoft.com.br/issues/1016271): acesso autenticado, confirmação de e-mail e titular financeiro.
-- F03 — [#1016273](https://redmine.remsoft.com.br/issues/1016273): catálogo e compatibilidade das categorias.
-- F05–F07 consomem as movimentações desta Feature. Seus indicadores, chat e gravação por IA não precisam ser antecipados para aceitar a gestão manual; CA12 e a parte integrada de CA08 acompanham a entrega desses consumidores.
+- F02 — [#1016271](https://redmine.remsoft.com.br/issues/1016271): conta, identidade e confirmação do e-mail.
+- F05/F06/F07 consomem transações e categorias já entregues. F04 encerra seu próprio aceite na interface de gestão, sem exigir esses consumidores futuros.
 
 ## Designs e evidências
 
-O design fornecido é a referência da listagem, filtros, seleção de mês, paginação, formulário, detalhes e confirmação de exclusão. Os controles adicionais foram incluídos pelo responsável em Q2. A proibição de datas futuras e o efeito da exclusão foram confirmados em Q5/Q6. O requisito aplica a base visual de F01 e a classificação aprovada em F03. Referência de aceite visual: CA13.
+O design fornecido é a referência da listagem, filtros, mês, paginação, formulário, detalhes e confirmação de exclusão. Os controles foram aprovados em Q2, as categorias em Q4 e as regras de data/exclusão em Q5/Q6. A revisão de catálogo aprovada incorpora as categorias no primeiro fluxo que permite selecioná-las, persistir e conferir sua classificação. Referência de aceite visual: CA13 e CA14/CA15 para as categorias.
 
 ## Dentro do escopo
 
-Gestão manual completa de receitas e despesas realizadas, em BRL, com categoria, persistência por titular, edição, detalhes, exclusão confirmada sem desfazer, pesquisa, filtros, paginação, estados e atualização dos consumidores disponíveis.
+Gestão manual completa de receitas e despesas realizadas em BRL, catálogo comum de categorias, validação da classificação, persistência por titular, edição, detalhes, exclusão confirmada, pesquisa, filtros, paginação e estados. O resultado é verificável no formulário e histórico reais.
 
 ## Fora do escopo
 
 Lançamentos futuros ou previstos, recorrência, parcelamento, transferências entre contas, importação, integração bancária, cartões, categorias personalizadas e desfazer exclusão. Dashboard e assistente são entregues nas Features responsáveis; esta entrega não cria versões simuladas dessas capacidades.
-
-## Decisões e revisão
-
-- Q1/Q3: finanças por titular, com autenticação e confirmação de e-mail, conforme F02.
-- Q2: controles adicionais do design incluídos no MVP.
-- Q4: categorias e vínculos aprovados, conforme F03.
-- Q5/Q6: responsável respondeu “concordo com os dois” à recusa de datas futuras e à exclusão confirmada sem desfazer, retirando o registro do histórico e dos totais.
-- Propostas para confirmação nesta revisão completa: BRL; precisão de duas casas; limite de R$ 999.999.999,99; descrição de até 120 caracteres; data mínima 01/01/1900; hoje/mês corrente em America/Sao_Paulo; mês corrente inicial; limpeza consultando todo o histórico; ordem por data decrescente e criação; 50 resultados por página. Limites e comportamento do protótipo são propostas avaliadas, não decisões atribuídas ao responsável antes da revisão.
-- O responsável aprovou o requisito completo e a publicação, incluindo todas as propostas acima, respondendo “aprovado” nesta conversa. A autorização inclui materialização definitiva e as três relações de dependência apresentadas.
-- Preferência editorial: mencionar apenas o design fornecido, sem expor sua origem pessoal.
-
-## Publicação proposta
-
-- Projeto FinAi (65224), versão Livewire (20359), escolhida pelo responsável.
-- Criar Feature (tracker 2), título **[WEB] [USUARIO] Gestão de transações**, status inicial New (1), sem categoria, pai, responsável, datas, estimativa ou Sequencing; prioridade padrão do servidor.
-- Descrição integral: seções de **Objetivo** até **Fora do escopo**, dentro de `<!-- project-flow:start -->` e `<!-- project-flow:end -->`, com a referência estável identificada no início.
-- Após ID confirmado, materializar em `docs/harness/features/<ID>-gestao-de-transacoes/feature.md`, corrigir referências relativas e acrescentar o caminho definitivo à descrição, preservando a referência estável inicial.
-- Relações propostas: F01 #1016270 **bloqueia** a nova F04; F02 #1016271 **bloqueia** a nova F04; F03 #1016273 **bloqueia** a nova F04. Motivos: base visual, identidade/acesso e categorias. Não criar tarefas DEV/QA nem alterar registros da Sprint 1.
-- Similaridade: consulta da versão Livewire encontrou apenas F01, F02 e F03. Na Sprint 1 existe #1016105 — Gestão de transações, de outro catálogo, que permanece preservada; não adotar nem mover seu requisito ou suas filhas. Publicação proposta própria na versão escolhida.
-- Publicação autorizada e confirmada como [Feature #1016274](https://redmine.remsoft.com.br/issues/1016274), com descrição integral e referência definitiva relidas. Projeto FinAi (65224), versão Livewire (20359), tracker Feature e status New conferidos; sem pai, categoria, responsável, datas, estimativa, Sequencing ou filhas. Relações #879, #880 e #881 confirmadas nos dois endpoints de cada vínculo: F01 #1016270, F02 #1016271 e F03 #1016273 bloqueiam F04 #1016274. Nenhum resultado incerto de publicação.
-
-## Resultado da publicação
-
-| Operação autorizada                           | Identidade                                                        | Resultado                                                                 | Pendência |
-| --------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------- | --------- |
-| Criar F04 com o requisito aprovado            | #1016274, projeto FinAi, versão Livewire                          | Criação e leitura final confirmadas                                       | Nenhuma   |
-| Materializar requisito e atualizar referência | `docs/harness/features/1016274-gestao-de-transacoes/feature.md`   | Documento materializado, fontes preservadas e referência remota conferida | Nenhuma   |
-| F01, F02 e F03 bloqueiam F04                  | #1016270, #1016271 e #1016273 → #1016274, relações #879/#880/#881 | Criadas e relidas nos dois endpoints de cada vínculo                      | Nenhuma   |
-
-## Passagem
-
-Entrada pronta para `project-slices`: este requisito aprovado, pai #1016274 confirmado na versão Livewire e dependências F01/F02/F03 registradas. Design fornecido preservado nas fontes do escopo. Sem slicing, tarefas DEV/QA ou implementação nesta etapa.
