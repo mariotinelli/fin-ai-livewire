@@ -31,6 +31,6 @@ Apresente o arquivo completo ao desenvolvedor e incorpore ajustes. Autorização
 
 ## 4. Entregar
 
-Indique o caminho real de planning.md para a skill `ralph`. Solicitar a execução do plano revisado autoriza os commits das fases, respeitadas instruções explícitas do projeto; revisão do plano sozinha não inicia execução. Descreva pré-requisitos pendentes sem anunciar prontidão quando falta verificação essencial.
+Indique o caminho real de planning.md e os verificadores obrigatórios para a skill `ralph`, que inicia e acompanha [o executor](references/ralph-execution.md). Solicitar a execução do plano revisado autoriza os commits das fases, respeitadas instruções explícitas do projeto; revisão do plano sozinha não inicia execução. Descreva pré-requisitos pendentes sem anunciar prontidão quando falta verificação essencial.
 
-**Concluído quando:** o handoff identifica plano, autorização conhecida e próximo passo, sem comandos de executor próprio.
+**Concluído quando:** o handoff identifica plano, verificadores, autorização conhecida e comando aplicável do ralph.sh, sem iniciar a execução neste fluxo.

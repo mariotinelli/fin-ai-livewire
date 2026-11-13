@@ -8,7 +8,7 @@ Um único plano ao lado de task.md liga planejamento e execução. Escreva em pt
 - Baseline observado: verificadores, comandos reproduzíveis, shell/runtime e resultados reais.
 - Fases com dependências, objetivo, mudança esperada, arquivos prováveis e critérios de aceite.
 
-O baseline é observado uma vez no planejamento; não é um gate extra nem autorização para aceitar falhas. Comandos devem propagar falhas intermediárias e usar modo de checagem quando disponível. Não há parser exigindo headings ou fences exatos.
+O baseline é observado uma vez no planejamento; não é um gate extra nem autorização para aceitar falhas. Comandos devem propagar falhas intermediárias e usar modo de checagem quando disponível. O plano não exige headings ou fences exatos: o handoff passa os verificadores explicitamente ao executor, conforme [execução](ralph-execution.md).
 
 ## Preparar os quatro gates por fase
 

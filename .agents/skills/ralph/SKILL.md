@@ -1,62 +1,42 @@
 ---
 name: ralph
-description: Execute uma filha DEV pelos gates Dev, Validação por outro agente, Testes e Commit. Use para implementar fases de um planning.md revisado pelas ferramentas do agente.
+description: Orquestre o ralph.sh para executar uma filha DEV por Dev, Validação, Testes e Commit. Use para iniciar e acompanhar um planning.md revisado com Codex CLI ou OpenCode.
 ---
 
 # Ralph
 
-Leia [comunicação](references/user-communication.md) uma vez por conversa. Responda em pt-BR. O agente conduz a execução sem runner próprio.
+Leia [comunicação](references/user-communication.md) uma vez por conversa. Responda em pt-BR. Esta skill prepara, inicia e acompanha o executor; os processos chamados pelo script implementam e revisam as fases.
 
-## Preparar a execução
+## 1. Preparar
 
-Receba o ID DEV e localize task.md, requisito pai e planning.md. Confira instruções, Git, dependências e alterações existentes; preserve trabalho alheio. ID ausente/ambíguo ou filha QA/Study impede implementação por este fluxo. Não altere Redmine.
+Receba o ID DEV e localize task.md, requisito pai e planning.md. Confira instruções do projeto, Git e alterações existentes, preservando trabalho alheio. ID ausente/ambíguo ou filha QA/Study impede execução. Não altere Redmine.
 
-Sem plano, siga [novo planejamento](references/new-planning.md); para mudança material, siga [substituição](references/replace-planning.md). Apresente o plano para revisão antes de implementar; reutilize revisão e autorização já dadas ao mesmo conteúdo, sem repetir perguntas. Aprovar o conteúdo não é solicitar sua execução. Ao solicitar a execução do plano revisado, o usuário autoriza os commits das fases, sem nova confirmação por gate; instruções explícitas do projeto prevalecem. Essa autorização não inclui push.
+Sem plano, siga [novo planejamento](references/new-planning.md); para mudança material, siga [substituição](references/replace-planning.md). Apresente o plano para revisão e reutilize autorizações já dadas ao mesmo conteúdo. Solicitar a execução do plano revisado autoriza os commits das fases, respeitadas instruções explícitas do projeto, sem novas perguntas por gate e sem push. Aprovar apenas o conteúdo não inicia execução.
 
-Planos existentes continuam válidos sem conversão: incorpore verificações antigas de host, diagnóstico ou investigação aos quatro gates abaixo, preservando aceite e trabalho concluído. Mudança material de escopo volta ao usuário.
+**Concluído quando:** DEV e plano revisado identificados, execução autorizada e trabalho existente conhecido.
 
-**Concluído quando:** uma DEV e seu plano revisado estão identificados, execução autorizada e situação real do código conhecida.
+## 2. Iniciar o executor
 
-## Executar cada fase
+Leia [execução](../plan-issue/references/ralph-execution.md). Localize `ralph.sh` no pacote `plan-issue` instalado ao lado desta skill. Use Codex CLI por padrão ou OpenCode conforme a escolha do usuário. Preserve o modelo configurado, salvo escolha explícita. O ambiente precisa de Bash, Git e do CLI selecionado; no Windows, use Git Bash ou WSL com as ferramentas no mesmo ambiente.
 
-Siga as dependências do plano e somente estes quatro gates, em ordem. Preparação de ambiente, diagnóstico, investigação e captura de evidências são atividades do gate que precisar delas; não criam etapas, aprovações ou registros próprios. Um impedimento externo que não possa ser resolvido dentro do escopo interrompe o gate com causa e próximo passo, preservando o trabalho.
+Na raiz do projeto, inicie uma única execução com o caminho real do plano e os comandos obrigatórios já revisados. Reaproveite o shell desses comandos. O executor faz somente Dev → Validação → Testes → Commit: uma sessão implementa, outra revisa, e o script executa os testes e cria o commit. Host, diagnóstico e investigação pertencem ao gate que precisar deles.
 
-### 1. Dev
+A skill não implementa a fase em paralelo nem substitui o script por uma sequência manual. Uma indisponibilidade do executor permanece como impedimento concreto.
 
-Implemente a mudança prevista, mantendo limites e comportamento a preservar. Investigue falhas com evidência atual e corrija dentro do escopo; não altere aceite ou testes para esconder defeitos. Uma tarefa de negócio consome a fundação visual comprovada do fornecedor, sem absorver trabalho compartilhado fora de seu escopo.
+**Concluído quando:** processo iniciado uma vez, com backend, plano, verificadores e identificador da execução conhecidos.
 
-**Concluído quando:** implementação da fase está pronta para revisão contra seus critérios de aceite.
+## 3. Acompanhar
 
-### 2. Validação
+Acompanhe o mesmo processo por leituras incrementais, com esperas de até 60 segundos. Use `RALPH_PROGRESS` para comunicar fase e gate atuais; informe commits somente após `RALPH_COMMIT`. Um período sem saída pede consultar o processo, sem iniciar outra cópia.
 
-Outro agente revisa a mudança sem editar a implementação. Forneça task.md, plano, critérios, base de comparação e alterações atuais. A revisão confere qualidade, aderência e os critérios funcionais/visuais aplicáveis; compare a UI com as referências aprovadas quando necessário.
+Reprovação em Validação ou Testes volta para Dev e repete a revisão e os testes. Outro processo realiza a revisão, sem editar a implementação. Evidência funcional ou visual necessária e indisponível impede aprovação. Os testes usam o comando aprovado, sem aceitar um comando substituto inventado pelo executor.
 
-Identifique revisor, versão/base examinada, achados e resultado. Achado impeditivo retorna para Dev. Revisão indisponível ou evidência necessária ausente mantém este gate pendente; autorrevisão não substitui o outro agente.
+Em falha, consulte somente os relatórios relevantes e informe causa e próximo passo, sem expor segredos. Respeite hooks e preserve trabalho existente. Se o processo interromper, confira Git, código e plano antes de nova execução; não prometa retomada automática. Mudanças não commitadas preexistentes são protegidas pelo script e podem exigir separar o trabalho antes de continuar. Não apague estado, locks ou arquivos para forçar avanço.
 
-**Concluído quando:** outro agente revisou a versão atual e nenhum achado impeditivo permanece.
+**Concluído quando:** execução acompanhada até encerramento ou impedimento identificado, sem execução duplicada ou gate declarado por suposição.
 
-### 3. Testes
+## 4. Encerrar
 
-Execute os verificadores obrigatórios do plano e do projeto e confira seus resultados reais. Baseline vermelho não autoriza aceitar testes obrigatórios falhando. Uma falha volta para Dev; após qualquer correção na implementação, repita Validação e Testes antes de avançar.
+Confira resultado do processo, commits e resumo consolidado por fase no próprio planning.md. Informe mudanças, verificações, commits e limitações. Código de saída diferente de zero deixa o fluxo pendente; revisão do código não substitui testes não executados. Uma correção na implementação volta para Dev, Validação e Testes antes do Commit.
 
-Ferramenta ausente ou execução não realizada mantém o gate pendente, sem declarar sucesso por inspeção. Preserve evidências úteis; um verde posterior sozinho não demonstra a causa de uma falha anterior.
-
-**Concluído quando:** todos os verificadores obrigatórios da fase passaram na versão validada.
-
-### 4. Commit
-
-Consolide uma vez no próprio planning.md a entrega, as verificações e o resultado do revisor. Confira o diff e prepare somente alterações da fase e esse resumo, preservando arquivos, hunks e mudanças já staged de outros trabalhos. Se não for possível separar o conteúdo com segurança, registre o impedimento em vez de incluir trabalho alheio.
-
-Crie o commit automaticamente, respeitando as instruções do projeto e os hooks, sem nova pergunta. Não faça push. O resumo não precisa conter o hash do próprio commit nem um histórico por gate.
-
-Falha operacional no commit mantém a fase neste gate: preserve código e índice, informe a causa e tente novamente quando resolvida. Não remova locks alheios nem ignore hooks. Se a solução exigir mudar a implementação, retorne para Dev e repita Validação e Testes.
-
-**Concluído quando:** commit da fase criado com sucesso e seu conteúdo conferido, sem alterações alheias incluídas.
-
-## Continuar ou encerrar
-
-Depois do commit, prossiga para a próxima fase autorizada. Em interrupção, informe o gate pendente e o próximo passo seguro; retome por documentos, código e Git, sem estados, locks ou contadores próprios. Uma fase já entregue é reconhecida pela evidência existente, sem gerar commit vazio.
-
-Ao final, informe mudanças, verificações, commits e limitações. Preserve evidências e trabalho anterior.
-
-**Concluído quando:** todas as fases solicitadas têm commit e resultado verificável, ou o impedimento concreto está exposto sem alegar conclusão.
+**Concluído quando:** entregas e commits conferidos ou impedimento exposto com o trabalho preservado.
