@@ -1,451 +1,235 @@
 {
-    "schema_version": 1,
-    "scenarios": [
-        {
-            "id": "testable-bundle-below-ceiling-still-needs-boundary-review",
-            "input": "A proposed DEV estimated at five hours lets a user submit a request, browse all past requests and open a full detail view. The author calls it end-to-end and therefore minimal. The approved requirement gives these operations distinct goals and acceptance outcomes; submission needs only enough confirmation to recognize its actual saved result.",
-            "expect": [
-                "review separate user goals before validating hours even below six hours",
-                "evaluate submission browsing and full consultation as separately useful deliveries",
-                "retain only indispensable result verification with submission",
-                "do not use shared records screens code or agreement on hours as justification for grouping",
-                "do not prescribe a fixed task count or CRUD template"
-            ]
-        },
-        {
-            "id": "action-and-necessary-response-form-one-interaction",
-            "input": "A search Feature accepts criteria and presents matching authorized results. A draft separates entering or submitting criteria from obtaining and displaying results, with database logic and UI also proposed as separate DEV tasks. Neither half produces a useful result alone.",
-            "expect": [
-                "keep a complete useful search interaction including its necessary response",
-                "reject splitting by button field or architectural layer",
-                "consider narrower valid paths or data variants only when they still produce real results",
-                "preserve applicable permission and validation requirements",
-                "do not demand mathematically minimal fragments or uniform task sizes"
-            ]
-        },
-        {
-            "id": "verification-must-reach-results-outside-the-default-view",
-            "input": "A delivery accepts and persists records across an approved range, but its only readback displays a default subset. Valid results outside that subset disappear from the view. The proposal calls a success message sufficient and leaves any way to inspect those saved results to a later filtering task.",
-            "expect": [
-                "identify that part of the promised outcome cannot yet be verified through the product",
-                "define the minimum approved result verification or expose a boundary decision before approval",
-                "do not absorb full search filtering or history merely to claim readback",
-                "do not invent a demonstration screen endpoint or mocked result",
-                "preserve the approved range and allocate every remaining requirement"
-            ]
-        },
-        {
-            "id": "approval-and-management-report-have-distinct-goals",
-            "input": "An approval Feature lets an authorized reviewer decide a submitted document and observe the persisted decision. A proposed DEV also adds a supervisor report of approval volumes and export because both use the same records and could fit in six hours. The report is not needed to make or confirm the decision.",
-            "expect": [
-                "identify deciding and confirming a document as one complete interaction",
-                "evaluate management reporting and export separately by their goals and acceptance",
-                "keep authorization and valid state transitions with the approval interaction",
-                "do not group solely for shared data or the hour ceiling",
-                "preserve report and export coverage in later coherent deliveries without setting a mandatory count"
-            ]
-        },
-        {
-            "id": "cli-and-public-api-use-the-same-granularity-principle",
-            "input": "A CLI product can export an approved report now and later add recurring delivery of that report. An unrelated public API product accepts an order, returns its confirmed identity and supports a separate bulk consultation operation. A draft bundles all operations in each product because they share implementation. These are genuine approved product channels, not endpoints created for demonstration.",
-            "expect": [
-                "identify complete useful interactions in each real product channel",
-                "evaluate recurring delivery and bulk consultation as separate goals rather than mandatory readback",
-                "keep the necessary response and observable result with the initiating interaction",
-                "preserve applicable channel contracts and prerequisites",
-                "do not force GUI tasks or a registration-specific splitting rule"
-            ]
-        },
-        {
-            "id": "smaller-variants-must-not-weaken-correctness",
-            "input": "A proposed smaller path removes required ownership checks, value validation and approved visual acceptance to reduce effort. Another path or supported data variant could be deferred explicitly, but no requirement may disappear from the complete proposal and every delivered path must remain correct.",
-            "expect": [
-                "reject weakening required correctness permissions validation or visual criteria",
-                "consider only coherent path rule or data variations with valid complete interactions",
-                "assign every remaining requirement without omission or duplicate ownership",
-                "do not reduce estimates or mandatory acceptance merely to fit the cap",
-                "retain real product verification and avoid mocked functionality as delivery evidence"
-            ]
-        },
-        {
-            "id": "internal-catalog-is-not-an-independent-product-feature",
-            "input": "A UI application's scope proposes a predefined category catalog as a separate Feature. It contains four income and eight expense categories and compatibility rules, but excludes every form, transaction and other consumer. The first transaction Feature will introduce category selection and saving. QA works through the application's screens; only internal queries and automated tests can currently demonstrate the catalog.",
-            "expect": [
-                "require an actor action observable result and functional QA path in the catalog's existing fields",
-                "propose incorporating the catalog and its rules into the first real transaction flow",
-                "preserve all category names types and compatibility requirements",
-                "do not promote shared internal code to a separate Feature solely because it is reused",
-                "do not invent category management demonstration screens or public endpoints",
-                "retain internal and automated tests as DEV support rather than Feature QA acceptance"
-            ]
-        },
-        {
-            "id": "standalone-feature-excludes-its-acceptance-flow",
-            "input": "A new-issue request without a scope catalog describes a Feature whose main flow lets a user select a category and save a record, while its exclusions place all screens and record operations in later Features. The proposed completion evidence is a passing test of an internal method.",
-            "expect": [
-                "apply the functional acceptance rule to a standalone Feature as well as scope catalogs",
-                "identify the contradiction between main flow acceptance and exclusions before requirement approval",
-                "propose a coherent boundary with the real consuming delivery without discarding rules",
-                "do not approve the Feature solely because internal tests pass",
-                "use the existing requirement review without a new gate questionnaire or state file"
-            ]
-        },
-        {
-            "id": "future-consumer-creates-an-acceptance-cycle",
-            "input": "An approved historical Feature A delivers only an internal classification rule and blocks Feature B. B will introduce the only UI through which QA could check A's promised result. A's proposed QA calls internal methods now and defers all product acceptance until B exists. Both issues have confirmed IDs and native relations.",
-            "expect": [
-                "identify circular acceptance even when the existing technical relation graph is acyclic",
-                "return the boundary gap to requirement review before approving decomposition",
-                "do not add B as a reverse blocker or declare A complete through internal checks",
-                "preserve existing requirements IDs approvals and relations until a specific correction is authorized",
-                "do not silently merge cancel rewrite or republish historical issues"
-            ]
-        },
-        {
-            "id": "transaction-with-category-has-a-functional-acceptance-path",
-            "input": "A Feature delivers a real transaction form with predefined categories, type changes, saving and minimal consultation of the saved classification. QA can select income or expense, see compatible categories, save and inspect the record. Authentication is a prior dependency that will be available at acceptance. The form does not exist yet but is included in this Feature; internal catalog code can be reused later by an assistant.",
-            "expect": [
-                "accept the proposed functional boundary without requiring the form to be implemented before planning",
-                "identify the actor form actions and observable saved result",
-                "keep internal catalog preparation with its first consuming delivery",
-                "preserve type-change validation and prior authentication dependency",
-                "do not require implementing the future assistant or full transaction history just to prove this flow"
-            ]
-        },
-        {
-            "id": "real-cli-or-public-api-can-be-the-product-channel",
-            "input": "One product is a CLI whose approved Feature exports a report through its documented command. Another product is a public API whose approved Feature lets an authorized client submit and retrieve an order. QA can execute these real product flows and inspect their outputs. Neither product has a graphical UI, and no channel is being added solely to expose internal implementation.",
-            "expect": [
-                "accept an observable flow through the actual CLI or public API when that is the product",
-                "identify actor inputs actions and observable results",
-                "do not require a graphical screen or create a demonstration UI",
-                "distinguish real product behavior from direct internal-method calls or mocked execution",
-                "keep automated implementation tests as supplementary evidence"
-            ]
-        },
-        {
-            "id": "visual-only-reference-and-shared-shell",
-            "input": "Approved UI criteria identify a visual-only design and one additional field. Existing authentication works but its shared shell is an unadapted starter theme.",
-            "expect": [
-                "cover visual criteria alongside functional rules",
-                "require a separate first visual foundation Feature",
-                "return a business parent absorbing foundation work for boundary alignment",
-                "decompose the foundation under its own parent and estimate its work there",
-                "retain normalized source and screen/state locators in visual_references",
-                "preserve the approved additional field within the design",
-                "include comparison conditions for QA"
-            ]
-        },
-        {
-            "id": "visual-foundation-is-not-technical-preparation",
-            "input": "A separately approved visual foundation Feature covers brand assets, logo, colors, typography, shell and navigation on existing screens. QA can navigate those screens and compare their appearance with the approved reference before new transaction functionality exists. A transaction Feature consumes it. Their combined work could fit in one six-hour task.",
-            "expect": [
-                "keep distinct Feature ownership even for small combined effort",
-                "recognize navigation and comparison on existing screens as a real functional acceptance path",
-                "prepare DEV and QA for the visual foundation",
-                "name the visual supplier in business dependencies",
-                "deliver the foundation before dependent business work",
-                "do not import future business functionality into foundation acceptance",
-                "do not infer implementation from publication"
-            ]
-        },
-        {
-            "id": "historical-design-without-visual-acceptance",
-            "input": "A historical approved parent merely says design is visual-only, while its proposed children cover fields and persistence without visual acceptance.",
-            "expect": [
-                "identify missing visual acceptance as a requirement gap",
-                "return exact correction and child impact for alignment",
-                "preserve historical approved bytes until authorized",
-                "do not silently approve functional-only coverage"
-            ]
-        },
-        {
-            "id": "human-readable-adaptation",
-            "input": "Inspection confirms existing login rejects a supported profile. The draft merely promises login for all profiles and combines missing fields, invalid credentials and inactive accounts into one error criterion.",
-            "expect": [
-                "explain confirmed current limitation and intended change in delivery",
-                "state permissions to preserve",
-                "separate independently verifiable scenarios",
-                "preserve every assigned condition",
-                "avoid implementation recipe and internal category labels"
-            ]
-        },
-        {
-            "id": "editorial-review-of-final-task-description",
-            "input": "An unapproved proposal for a dashboard identity task contains 'Entrega: substituir a marca atual. Esta é a dona da paleta', 'Escopo: manter as operações existentes' and 'Dependências: pode iniciar agora; compartilhar componentes não é bloqueio de início'. Its final description copies these fragments as lowercase standalone paragraphs and imports a common block about every screen and sibling task. One acceptance paragraph mixes approved colors #F5F7F8 and #145C46, Georgia typography, viewports 360×800 and 1440×900, keyboard focus, existing error/loading states and permission preservation. This task owns dashboard identity and shared visual standards; desktop layout belongs to the already confirmed task 'Layout desktop e tablet' at https://tracker.example.test/issues/12, needed for final integration but not startup. A mobile supplier is known only by name, without a published ID. No new behavior, estimate or task split is requested.",
-            "expect": [
-                "review the final formatted description before presenting the complete preview for approval",
-                "use complete Portuguese sentences with capitalized paragraph and list-item openings while preserving literal values and identifiers",
-                "replace ownership shorthand with the concrete visual outcome",
-                "separate independently verifiable acceptance outcomes while retaining all approved colors typography viewports states permissions and keyboard conditions",
-                "adapt the common block to dashboard identity without importing sibling screen or layout deliveries",
-                "name each required supplier capability and task with the provided confirmed desktop link and no invented mobile ID or URL",
-                "distinguish startup from integration needed for completion without explaining blocker mechanics",
-                "retain requirement references and stable creation identity",
-                "do not add a gate checklist file script schema or extra approval question",
-                "preserve authorized text after approval and use the existing revision flow for later edits"
-            ]
-        },
-        {
-            "id": "standalone-task-relations",
-            "input": "A draft refers to delivery 1 and says shared code is not a start blocker, while integration is required to verify deactivation. The related child is not published yet.",
-            "expect": [
-                "identify related task by name without invented remote ID",
-                "distinguish start blocker from completion integration",
-                "remove workflow commentary",
-                "do not silently modify approved descriptions to add links during publication"
-            ]
-        },
-        {
-            "id": "qa-execution-focused-writing",
-            "input": "QA puts its estimate in the objective, tech lead approval policy under impacts, and remember-me restoration and expiration in one long journey.",
-            "expect": [
-                "keep objective short and estimate in native field",
-                "split journeys by verifiable behavior with required setup",
-                "keep impacts about product behavior",
-                "preserve full parent coverage including existing behavior",
-                "keep workflow approval administration out of task description"
-            ]
-        },
-        {
-            "id": "installed-default-differs-from-assumption",
-            "input": "A proposal calls remembered access indefinite, but the installed dependency defines a finite duration and project overrides may change it.",
-            "expect": [
-                "inspect installed version and project overrides",
-                "cite actual value with unit and conditions",
-                "distinguish inspected evidence from executed verification",
-                "record unavailable effective configuration as uncertainty without requesting a product decision"
-            ]
-        },
-        {
-            "id": "partial-existing-behavior",
-            "input": "A requirement demands revocation on the next action in every connected device; inspection only identifies a soft-delete mechanism and a single-session logout test.",
-            "expect": [
-                "follow relevant authentication paths before declaring existing coverage",
-                "test presence does not prove untested scenarios",
-                "confirmed missing behavior becomes adapt with a slice for the gap",
-                "inconclusive evidence remains explicit uncertainty",
-                "no DEV task solely because a test is absent"
-            ]
-        },
-        {
-            "id": "traceability-with-missing-acceptance-conditions",
-            "input": "A slice maps an accessibility criterion requiring desktop/mobile use, keyboard navigation and visible focus, but its description only promises accessible feedback.",
-            "expect": [
-                "reject semantic coverage based solely on requirement IDs",
-                "express assigned observable conditions in acceptance criteria before approval",
-                "keep descriptions human-readable without prescribing implementation"
-            ]
-        },
-        {
-            "id": "qa-covers-existing-behavior",
-            "input": "A publication adds one DEV slice while logout and cross-device deactivation are confirmed existing behavior in the parent requirement.",
-            "expect": [
-                "integrated QA includes existing logout and deactivation scenarios",
-                "preserve approved device and session conditions",
-                "no artificial DEV work for confirmed existing behavior"
-            ]
-        },
-        {
-            "id": "independent-profile-actions",
-            "input": "A profile Feature whose view and password-change behaviors can be verified independently.",
-            "expect": ["independent vertical slices", "no artificial layer task", "complete coverage"]
-        },
-        {
-            "id": "cross-feature-integration-owner",
-            "input": "Project, task, and time Features share an integration point owned by one approved Feature.",
-            "expect": ["one delivery owner", "specific blockers", "no duplicated integration"]
-        },
-        {
-            "id": "unsliced-external-feature",
-            "input": "A DEV slice cannot start without a capability owned by an external Feature that has no children yet.",
-            "expect": ["explicit provisional parent blocker", "blocking capability and reason", "later specific refinement"]
-        },
-        {
-            "id": "external-feature-now-sliced",
-            "input": "A previously provisional external Feature now has DEV children and the relevant graph contains other blocking edges.",
-            "expect": ["tech-lead-approved exact replacement", "complete-graph cycle rejection", "unrelated relations preserved"]
-        },
-        {
-            "id": "approved-api-delivery",
-            "input": "The Feature explicitly promises a consumable API.",
-            "expect": ["API marker after WEB", "API behavior is verifiable", "no scope expansion"]
-        },
-        {
-            "id": "internal-endpoint",
-            "input": "A WEB behavior needs an internal endpoint but the Feature does not promise an API product.",
-            "expect": ["no API marker", "endpoint remains inside the vertical behavior"]
-        },
-        {
-            "id": "unapproved-api-expansion",
-            "input": "The proposed slices add a consumable API although the approved parent promises only WEB behavior.",
-            "expect": [
-                "material divergence",
-                "exact parent correction and affected children",
-                "no child publication before tech-lead decision and verified parent alignment",
-                "fresh ordinary approvals after alignment"
-            ]
-        },
-        {
-            "id": "already-implemented",
-            "input": "Inspection proves every approved behavior already exists.",
-            "expect": ["coverage cites evidence", "empty DEV slice set", "versioned tech-lead confirmation", "QA-only handoff"]
-        },
-        {
-            "id": "existing-partial-child-set",
-            "input": "The parent has one reusable DEV child, one external child, and one uncovered behavior.",
-            "expect": [
-                "all existing children presented",
-                "explicit adopt or external decision",
-                "only uncovered DEV work proposed",
-                "stable adopted ID"
-            ]
-        },
-        {
-            "id": "small-feature",
-            "input": "All behavior forms one complete useful interaction with no smaller independently valuable outcome. Further splitting would separate the action from its necessary response or isolate architectural layers. Its estimate is under six hours after boundary review.",
-            "expect": [
-                "one DEV slice is valid after reviewing granularity",
-                "no artificial split",
-                "do not infer adequate granularity from hours alone",
-                "no fixed minimum task count"
-            ]
-        },
-        {
-            "id": "inherited-oversized-estimate",
-            "input": "The source document says the task is estimated at 17 hours. Inspection exposes separable user-visible delivery and recovery behaviors.",
-            "expect": [
-                "ignore the inherited 17-hour estimate",
-                "review separable goals and coherent non-overlapping boundaries before estimating",
-                "obtain independent agent assessments of boundaries and effort without revealing the inherited value when agents are available",
-                "calculate new estimates from approved behavior and code evidence",
-                "do not preserve a multi-goal grouping solely because a new estimate is below six hours",
-                "every DEV QA and Study estimate is at most six hours",
-                "no estimate exception above the limit"
-            ]
-        },
-        {
-            "id": "blocking-technical-uncertainty",
-            "input": "A precise concurrency uncertainty prevents a complete vertical decomposition.",
-            "expect": [
-                "bounded Study question",
-                "attributed source-bound result",
-                "new proposal revision",
-                "ordinary approval repeated",
-                "no invented DEV or QA children"
-            ]
-        },
-        {
-            "id": "editorial-requirement-revision",
-            "input": "The approved requirement has formatting, spelling, and wording changes but retains every observable behavior and rule.",
-            "expect": [
-                "editorial classification based on meaning",
-                "recorded byte/version change",
-                "all tasks and coverage remain valid",
-                "no re-slicing"
-            ]
-        },
-        {
-            "id": "localized-functional-revision",
-            "input": "One approved behavior changes after DEV and QA children have been published, while other behavior and dependencies remain valid.",
-            "expect": [
-                "human-readable affected and unaffected inventory",
-                "specific tech-lead approval",
-                "stable unaffected remote IDs",
-                "no whole-set recreation"
-            ]
-        },
-        {
-            "id": "revision-across-task-states",
-            "input": "A localized approved revision affects not-started, in-progress, and completed work and one DEV-to-QA blocker.",
-            "expect": [
-                "fresh native status readback",
-                "task-bound approval for in-progress mutation",
-                "new child for completed history",
-                "approved cancellation reason and replacements",
-                "unrelated relations preserved"
-            ]
-        },
-        {
-            "id": "uncertain-revision-application",
-            "input": "Create, update, cancel, relation-add, or relation-remove returns an uncertain result while applying an approved revision.",
-            "expect": [
-                "persisted intent",
-                "readback before retry",
-                "append-only observation",
-                "no duplicate remote work",
-                "final preservation proof"
-            ]
-        },
-        {
-            "id": "calibrated-reference",
-            "input": "An old issue says 17h without context. The lead supplies comparable local adaptations at 2h and corrects this proposal to 3h.",
-            "expect": [
-                "distinguish inherited number, reference and explicit correction",
-                "preserve old estimate",
-                "record 3h as human correction, not independent calculation"
-            ]
-        },
-        {
-            "id": "registration-readback",
-            "input": "Registration saves records but all ways to inspect its result belong to a later history task. The proposed remedy absorbs a monthly list, ordering, full detail navigation and their independent loading and failure states into registration, calling them minimal confirmation. The bundle might fit under six hours.",
-            "expect": [
-                "define minimum verification of the real saved outcome within registration and its stated prerequisites",
-                "evaluate history ordering and full details as separate user goals rather than automatic confirmation",
-                "retain every mandatory validation and persistence criterion",
-                "do not replace real verification with a success message alone",
-                "do not invent demonstration UI or direct internal QA calls",
-                "apply the ceiling after coherent cuts without forcing a fixed number of DEV tasks"
-            ]
-        },
-        {
-            "id": "manual-heavy-ai",
-            "input": "Simple consumer UI is quick in this team. A first AI journey needs integration, persistence and extensive manual verification.",
-            "expect": ["allow higher effort for AI", "no uniform discount", "estimate concrete manual effort"]
-        },
-        {
-            "id": "shared-qa",
-            "input": "Thirty conditions share setup and journeys. Some require manual tests and others have reproducible automated evidence.",
-            "expect": [
-                "preserve all coverage",
-                "share execution where valid",
-                "no fixed time per condition or DEV percentage",
-                "declare preparation and retest assumptions"
-            ]
-        },
-        {
-            "id": "pending-provider",
-            "input": "Dashboard consumes calculations assigned to an unimplemented external task.",
-            "expect": [
-                "estimate consumer only",
-                "distinguish planned and implemented reuse",
-                "state completion dependencies",
-                "no completion with mocked data"
-            ]
-        },
-        {
-            "id": "different-team",
-            "input": "An unfamiliar team has no comparable calibration. After reuse review, a delivery still exceeds six hours.",
-            "expect": [
-                "do not transfer local hours automatically",
-                "declare assumptions",
-                "split coherent behavior or request scope review",
-                "never lower hours just to pass cap"
-            ]
-        },
-        {
-            "id": "mutual-completion",
-            "input": "Correction and confirmation can start separately but must integrate version checks to finish.",
-            "expect": [
-                "state joint acceptance",
-                "do not create native start-blocking cycle",
-                "reconsider boundaries if neither result is demonstrable"
-            ]
-        },
-        {
-            "id": "changed-calibrated-scope",
-            "input": "A calibrated two-hour slice gains new behavior in a later approved revision.",
-            "expect": ["compare behavior and revision, not row position", "reassess changed work", "preserve previous reference context"]
-        }
-    ]
+  "schema_version": 1,
+  "scenarios": [
+    {
+      "id": "testable-bundle-below-ceiling-still-needs-boundary-review",
+      "input": "A proposed DEV estimated at five hours lets a user submit a request, browse all past requests and open a full detail view. The author calls it end-to-end and therefore minimal. The approved requirement gives these operations distinct goals and acceptance outcomes; submission needs only enough confirmation to recognize its actual saved result.",
+      "expect": ["review separate user goals before validating hours even below six hours", "evaluate submission browsing and full consultation as separately useful deliveries", "retain only indispensable result verification with submission", "do not use shared records screens code or agreement on hours as justification for grouping", "do not prescribe a fixed task count or CRUD template"]
+    },
+    {
+      "id": "action-and-necessary-response-form-one-interaction",
+      "input": "A search Feature accepts criteria and presents matching authorized results. A draft separates entering or submitting criteria from obtaining and displaying results, with database logic and UI also proposed as separate DEV tasks. Neither half produces a useful result alone.",
+      "expect": ["keep a complete useful search interaction including its necessary response", "reject splitting by button field or architectural layer", "consider narrower valid paths or data variants only when they still produce real results", "preserve applicable permission and validation requirements", "do not demand mathematically minimal fragments or uniform task sizes"]
+    },
+    {
+      "id": "verification-must-reach-results-outside-the-default-view",
+      "input": "A delivery accepts and persists records across an approved range, but its only readback displays a default subset. Valid results outside that subset disappear from the view. The proposal calls a success message sufficient and leaves any way to inspect those saved results to a later filtering task.",
+      "expect": ["identify that part of the promised outcome cannot yet be verified through the product", "define the minimum approved result verification or expose a boundary decision before approval", "do not absorb full search filtering or history merely to claim readback", "do not invent a demonstration screen endpoint or mocked result", "preserve the approved range and allocate every remaining requirement"]
+    },
+    {
+      "id": "approval-and-management-report-have-distinct-goals",
+      "input": "An approval Feature lets an authorized reviewer decide a submitted document and observe the persisted decision. A proposed DEV also adds a supervisor report of approval volumes and export because both use the same records and could fit in six hours. The report is not needed to make or confirm the decision.",
+      "expect": ["identify deciding and confirming a document as one complete interaction", "evaluate management reporting and export separately by their goals and acceptance", "keep authorization and valid state transitions with the approval interaction", "do not group solely for shared data or the hour ceiling", "preserve report and export coverage in later coherent deliveries without setting a mandatory count"]
+    },
+    {
+      "id": "cli-and-public-api-use-the-same-granularity-principle",
+      "input": "A CLI product can export an approved report now and later add recurring delivery of that report. An unrelated public API product accepts an order, returns its confirmed identity and supports a separate bulk consultation operation. A draft bundles all operations in each product because they share implementation. These are genuine approved product channels, not endpoints created for demonstration.",
+      "expect": ["identify complete useful interactions in each real product channel", "evaluate recurring delivery and bulk consultation as separate goals rather than mandatory readback", "keep the necessary response and observable result with the initiating interaction", "preserve applicable channel contracts and prerequisites", "do not force GUI tasks or a registration-specific splitting rule"]
+    },
+    {
+      "id": "smaller-variants-must-not-weaken-correctness",
+      "input": "A proposed smaller path removes required ownership checks, value validation and approved visual acceptance to reduce effort. Another path or supported data variant could be deferred explicitly, but no requirement may disappear from the complete proposal and every delivered path must remain correct.",
+      "expect": ["reject weakening required correctness permissions validation or visual criteria", "consider only coherent path rule or data variations with valid complete interactions", "assign every remaining requirement without omission or duplicate ownership", "do not reduce estimates or mandatory acceptance merely to fit the cap", "retain real product verification and avoid mocked functionality as delivery evidence"]
+    },
+    {
+      "id": "internal-catalog-is-not-an-independent-product-feature",
+      "input": "A UI application's scope proposes a predefined category catalog as a separate Feature. It contains four income and eight expense categories and compatibility rules, but excludes every form, transaction and other consumer. The first transaction Feature will introduce category selection and saving. QA works through the application's screens; only internal queries and automated tests can currently demonstrate the catalog.",
+      "expect": ["require an actor action observable result and functional QA path in the catalog's existing fields", "propose incorporating the catalog and its rules into the first real transaction flow", "preserve all category names types and compatibility requirements", "do not promote shared internal code to a separate Feature solely because it is reused", "do not invent category management demonstration screens or public endpoints", "retain internal and automated tests as DEV support rather than Feature QA acceptance"]
+    },
+    {
+      "id": "standalone-feature-excludes-its-acceptance-flow",
+      "input": "A new-issue request without a scope catalog describes a Feature whose main flow lets a user select a category and save a record, while its exclusions place all screens and record operations in later Features. The proposed completion evidence is a passing test of an internal method.",
+      "expect": ["apply the functional acceptance rule to a standalone Feature as well as scope catalogs", "identify the contradiction between main flow acceptance and exclusions before requirement approval", "propose a coherent boundary with the real consuming delivery without discarding rules", "do not approve the Feature solely because internal tests pass", "use the existing requirement review without a new gate questionnaire or state file"]
+    },
+    {
+      "id": "future-consumer-creates-an-acceptance-cycle",
+      "input": "An approved historical Feature A delivers only an internal classification rule and blocks Feature B. B will introduce the only UI through which QA could check A's promised result. A's proposed QA calls internal methods now and defers all product acceptance until B exists. Both issues have confirmed IDs and native relations.",
+      "expect": ["identify circular acceptance even when the existing technical relation graph is acyclic", "return the boundary gap to requirement review before approving decomposition", "do not add B as a reverse blocker or declare A complete through internal checks", "preserve existing requirements IDs approvals and relations until a specific correction is authorized", "do not silently merge cancel rewrite or republish historical issues"]
+    },
+    {
+      "id": "transaction-with-category-has-a-functional-acceptance-path",
+      "input": "A Feature delivers a real transaction form with predefined categories, type changes, saving and minimal consultation of the saved classification. QA can select income or expense, see compatible categories, save and inspect the record. Authentication is a prior dependency that will be available at acceptance. The form does not exist yet but is included in this Feature; internal catalog code can be reused later by an assistant.",
+      "expect": ["accept the proposed functional boundary without requiring the form to be implemented before planning", "identify the actor form actions and observable saved result", "keep internal catalog preparation with its first consuming delivery", "preserve type-change validation and prior authentication dependency", "do not require implementing the future assistant or full transaction history just to prove this flow"]
+    },
+    {
+      "id": "real-cli-or-public-api-can-be-the-product-channel",
+      "input": "One product is a CLI whose approved Feature exports a report through its documented command. Another product is a public API whose approved Feature lets an authorized client submit and retrieve an order. QA can execute these real product flows and inspect their outputs. Neither product has a graphical UI, and no channel is being added solely to expose internal implementation.",
+      "expect": ["accept an observable flow through the actual CLI or public API when that is the product", "identify actor inputs actions and observable results", "do not require a graphical screen or create a demonstration UI", "distinguish real product behavior from direct internal-method calls or mocked execution", "keep automated implementation tests as supplementary evidence"]
+    },
+    {
+      "id": "visual-only-reference-and-shared-shell",
+      "input": "Approved UI criteria identify a visual-only design and one additional field. Existing authentication works but its shared shell is an unadapted starter theme.",
+      "expect": ["cover visual criteria alongside functional rules", "require a separate first visual foundation Feature", "return a business parent absorbing foundation work for boundary alignment", "decompose the foundation under its own parent and estimate its work there", "retain normalized source and screen/state locators in visual_references", "preserve the approved additional field within the design", "include comparison conditions for QA"]
+    },
+    {
+      "id": "visual-foundation-is-not-technical-preparation",
+      "input": "A separately approved visual foundation Feature covers brand assets, logo, colors, typography, shell and navigation on existing screens. QA can navigate those screens and compare their appearance with the approved reference before new transaction functionality exists. A transaction Feature consumes it. Their combined work could fit in one six-hour task.",
+      "expect": ["keep distinct Feature ownership even for small combined effort", "recognize navigation and comparison on existing screens as a real functional acceptance path", "prepare DEV and QA for the visual foundation", "name the visual supplier in business dependencies", "deliver the foundation before dependent business work", "do not import future business functionality into foundation acceptance", "do not infer implementation from publication"]
+    },
+    {
+      "id": "historical-design-without-visual-acceptance",
+      "input": "A historical approved parent merely says design is visual-only, while its proposed children cover fields and persistence without visual acceptance.",
+      "expect": ["identify missing visual acceptance as a requirement gap", "return exact correction and child impact for alignment", "preserve historical approved bytes until authorized", "do not silently approve functional-only coverage"]
+    },
+    {
+      "id": "human-readable-adaptation",
+      "input": "Inspection confirms existing login rejects a supported profile. The draft merely promises login for all profiles and combines missing fields, invalid credentials and inactive accounts into one error criterion.",
+      "expect": ["explain confirmed current limitation and intended change in delivery", "state permissions to preserve", "separate independently verifiable scenarios", "preserve every assigned condition", "avoid implementation recipe and internal category labels"]
+    },
+    {
+      "id": "editorial-review-of-final-task-description",
+      "input": "An unapproved proposal for a dashboard identity task contains 'Entrega: substituir a marca atual. Esta é a dona da paleta', 'Escopo: manter as operações existentes' and 'Dependências: pode iniciar agora; compartilhar componentes não é bloqueio de início'. Its final description copies these fragments as lowercase standalone paragraphs and imports a common block about every screen and sibling task. One acceptance paragraph mixes approved colors #F5F7F8 and #145C46, Georgia typography, viewports 360×800 and 1440×900, keyboard focus, existing error/loading states and permission preservation. This task owns dashboard identity and shared visual standards; desktop layout belongs to the already confirmed task 'Layout desktop e tablet' at https://tracker.example.test/issues/12, needed for final integration but not startup. A mobile supplier is known only by name, without a published ID. No new behavior, estimate or task split is requested.",
+      "expect": ["review the final formatted description before presenting the complete preview for approval", "use complete Portuguese sentences with capitalized paragraph and list-item openings while preserving literal values and identifiers", "replace ownership shorthand with the concrete visual outcome", "separate independently verifiable acceptance outcomes while retaining all approved colors typography viewports states permissions and keyboard conditions", "adapt the common block to dashboard identity without importing sibling screen or layout deliveries", "name each required supplier capability and task with the provided confirmed desktop link and no invented mobile ID or URL", "distinguish startup from integration needed for completion without explaining blocker mechanics", "retain requirement references and stable creation identity", "do not add a gate checklist file script schema or extra approval question", "preserve authorized text after approval and use the existing revision flow for later edits"]
+    },
+    {
+      "id": "standalone-task-relations",
+      "input": "A draft refers to delivery 1 and says shared code is not a start blocker, while integration is required to verify deactivation. The related child is not published yet.",
+      "expect": ["identify related task by name without invented remote ID", "distinguish start blocker from completion integration", "remove workflow commentary", "do not silently modify approved descriptions to add links during publication"]
+    },
+    {
+      "id": "qa-execution-focused-writing",
+      "input": "QA puts its estimate in the objective, tech lead approval policy under impacts, and remember-me restoration and expiration in one long journey.",
+      "expect": ["keep objective short and estimate in native field", "split journeys by verifiable behavior with required setup", "keep impacts about product behavior", "preserve full parent coverage including existing behavior", "keep workflow approval administration out of task description"]
+    },
+    {
+      "id": "installed-default-differs-from-assumption",
+      "input": "A proposal calls remembered access indefinite, but the installed dependency defines a finite duration and project overrides may change it.",
+      "expect": ["inspect installed version and project overrides", "cite actual value with unit and conditions", "distinguish inspected evidence from executed verification", "record unavailable effective configuration as uncertainty without requesting a product decision"]
+    },
+    {
+      "id": "partial-existing-behavior",
+      "input": "A requirement demands revocation on the next action in every connected device; inspection only identifies a soft-delete mechanism and a single-session logout test.",
+      "expect": ["follow relevant authentication paths before declaring existing coverage", "test presence does not prove untested scenarios", "confirmed missing behavior becomes adapt with a slice for the gap", "inconclusive evidence remains explicit uncertainty", "no DEV task solely because a test is absent"]
+    },
+    {
+      "id": "traceability-with-missing-acceptance-conditions",
+      "input": "A slice maps an accessibility criterion requiring desktop/mobile use, keyboard navigation and visible focus, but its description only promises accessible feedback.",
+      "expect": ["reject semantic coverage based solely on requirement IDs", "express assigned observable conditions in acceptance criteria before approval", "keep descriptions human-readable without prescribing implementation"]
+    },
+    {
+      "id": "qa-covers-existing-behavior",
+      "input": "A publication adds one DEV slice while logout and cross-device deactivation are confirmed existing behavior in the parent requirement.",
+      "expect": ["integrated QA includes existing logout and deactivation scenarios", "preserve approved device and session conditions", "no artificial DEV work for confirmed existing behavior"]
+    },
+    {
+      "id": "independent-profile-actions",
+      "input": "A profile Feature whose view and password-change behaviors can be verified independently.",
+      "expect": ["independent vertical slices", "no artificial layer task", "complete coverage"]
+    },
+    {
+      "id": "cross-feature-integration-owner",
+      "input": "Project, task, and time Features share an integration point owned by one approved Feature.",
+      "expect": ["one delivery owner", "specific blockers", "no duplicated integration"]
+    },
+    {
+      "id": "unsliced-external-feature",
+      "input": "A DEV slice cannot start without a capability owned by an external Feature that has no children yet.",
+      "expect": ["explicit provisional parent blocker", "blocking capability and reason", "later specific refinement"]
+    },
+    {
+      "id": "external-feature-now-sliced",
+      "input": "A previously provisional external Feature now has DEV children and the relevant graph contains other blocking edges.",
+      "expect": ["tech-lead-approved exact replacement", "complete-graph cycle rejection", "unrelated relations preserved"]
+    },
+    {
+      "id": "approved-api-delivery",
+      "input": "The Feature explicitly promises a consumable API.",
+      "expect": ["API marker after WEB", "API behavior is verifiable", "no scope expansion"]
+    },
+    {
+      "id": "internal-endpoint",
+      "input": "A WEB behavior needs an internal endpoint but the Feature does not promise an API product.",
+      "expect": ["no API marker", "endpoint remains inside the vertical behavior"]
+    },
+    {
+      "id": "unapproved-api-expansion",
+      "input": "The proposed slices add a consumable API although the approved parent promises only WEB behavior.",
+      "expect": ["material divergence", "exact parent correction and affected children", "no child publication before tech-lead decision and verified parent alignment", "fresh ordinary approvals after alignment"]
+    },
+    {
+      "id": "already-implemented",
+      "input": "Inspection proves every approved behavior already exists.",
+      "expect": ["coverage cites evidence", "empty DEV slice set", "versioned tech-lead confirmation", "QA-only handoff"]
+    },
+    {
+      "id": "existing-partial-child-set",
+      "input": "The parent has one reusable DEV child, one external child, and one uncovered behavior.",
+      "expect": ["all existing children presented", "explicit adopt or external decision", "only uncovered DEV work proposed", "stable adopted ID"]
+    },
+    {
+      "id": "small-feature",
+      "input": "All behavior forms one complete useful interaction with no smaller independently valuable outcome. Further splitting would separate the action from its necessary response or isolate architectural layers. Its estimate is under six hours after boundary review.",
+      "expect": ["one DEV slice is valid after reviewing granularity", "no artificial split", "do not infer adequate granularity from hours alone", "no fixed minimum task count"]
+    },
+    {
+      "id": "inherited-oversized-estimate",
+      "input": "The source document says the task is estimated at 17 hours. Inspection exposes separable user-visible delivery and recovery behaviors.",
+      "expect": ["ignore the inherited 17-hour estimate", "review separable goals and coherent non-overlapping boundaries before estimating", "obtain independent agent assessments of boundaries and effort without revealing the inherited value when agents are available", "calculate new estimates from approved behavior and code evidence", "do not preserve a multi-goal grouping solely because a new estimate is below six hours", "every DEV QA and Study estimate is at most six hours", "no estimate exception above the limit"]
+    },
+    {
+      "id": "blocking-technical-uncertainty",
+      "input": "A precise concurrency uncertainty prevents a complete vertical decomposition.",
+      "expect": ["bounded Study question", "attributed source-bound result", "new proposal revision", "ordinary approval repeated", "no invented DEV or QA children"]
+    },
+    {
+      "id": "editorial-requirement-revision",
+      "input": "The approved requirement has formatting, spelling, and wording changes but retains every observable behavior and rule.",
+      "expect": ["editorial classification based on meaning", "recorded byte/version change", "all tasks and coverage remain valid", "no re-slicing"]
+    },
+    {
+      "id": "localized-functional-revision",
+      "input": "One approved behavior changes after DEV and QA children have been published, while other behavior and dependencies remain valid.",
+      "expect": ["human-readable affected and unaffected inventory", "specific tech-lead approval", "stable unaffected remote IDs", "no whole-set recreation"]
+    },
+    {
+      "id": "revision-across-task-states",
+      "input": "A localized approved revision affects not-started, in-progress, and completed work and one DEV-to-QA blocker.",
+      "expect": ["fresh native status readback", "task-bound approval for in-progress mutation", "new child for completed history", "approved cancellation reason and replacements", "unrelated relations preserved"]
+    },
+    {
+      "id": "uncertain-revision-application",
+      "input": "Create, update, cancel, relation-add, or relation-remove returns an uncertain result while applying an approved revision.",
+      "expect": ["persisted intent", "readback before retry", "append-only observation", "no duplicate remote work", "final preservation proof"]
+    },
+    {
+      "id": "calibrated-reference",
+      "input": "An old issue says 17h without context. The lead supplies comparable local adaptations at 2h and corrects this proposal to 3h.",
+      "expect": ["distinguish inherited number, reference and explicit correction", "preserve old estimate", "record 3h as human correction, not independent calculation"]
+    },
+    {
+      "id": "registration-readback",
+      "input": "Registration saves records but all ways to inspect its result belong to a later history task. The proposed remedy absorbs a monthly list, ordering, full detail navigation and their independent loading and failure states into registration, calling them minimal confirmation. The bundle might fit under six hours.",
+      "expect": ["define minimum verification of the real saved outcome within registration and its stated prerequisites", "evaluate history ordering and full details as separate user goals rather than automatic confirmation", "retain every mandatory validation and persistence criterion", "do not replace real verification with a success message alone", "do not invent demonstration UI or direct internal QA calls", "apply the ceiling after coherent cuts without forcing a fixed number of DEV tasks"]
+    },
+    {
+      "id": "manual-heavy-ai",
+      "input": "Simple consumer UI is quick in this team. A first AI journey needs integration, persistence and extensive manual verification.",
+      "expect": ["allow higher effort for AI", "no uniform discount", "estimate concrete manual effort"]
+    },
+    {
+      "id": "shared-qa",
+      "input": "Thirty conditions share setup and journeys. Some require manual tests and others have reproducible automated evidence.",
+      "expect": ["preserve all coverage", "share execution where valid", "no fixed time per condition or DEV percentage", "declare preparation and retest assumptions"]
+    },
+    {
+      "id": "pending-provider",
+      "input": "Dashboard consumes calculations assigned to an unimplemented external task.",
+      "expect": ["estimate consumer only", "distinguish planned and implemented reuse", "state completion dependencies", "no completion with mocked data"]
+    },
+    {
+      "id": "different-team",
+      "input": "An unfamiliar team has no comparable calibration. After reuse review, a delivery still exceeds six hours.",
+      "expect": ["do not transfer local hours automatically", "declare assumptions", "split coherent behavior or request scope review", "never lower hours just to pass cap"]
+    },
+    {
+      "id": "mutual-completion",
+      "input": "Correction and confirmation can start separately but must integrate version checks to finish.",
+      "expect": ["state joint acceptance", "do not create native start-blocking cycle", "reconsider boundaries if neither result is demonstrable"]
+    },
+    {
+      "id": "changed-calibrated-scope",
+      "input": "A calibrated two-hour slice gains new behavior in a later approved revision.",
+      "expect": ["compare behavior and revision, not row position", "reassess changed work", "preserve previous reference context"]
+    }
+  ]
 }

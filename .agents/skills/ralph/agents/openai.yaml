@@ -1,6 +1,6 @@
 interface:
-  display_name: 'ralph'
-  short_description: 'Inicia e acompanha o ralph.sh com quatro gates'
-  default_prompt: 'Use $ralph para iniciar e acompanhar o ralph.sh na filha DEV, com Codex CLI ou OpenCode, pelos gates Dev, Validação, Testes e Commit, sem push.'
+  display_name: "ralph"
+  short_description: "Inicia e acompanha o ralph.sh com quatro gates"
+  default_prompt: "Use $ralph para iniciar e acompanhar o ralph.sh na filha DEV, com Codex CLI ou OpenCode, pelos gates Dev, Validação, Testes e Commit, sem push."
 policy:
   allow_implicit_invocation: true

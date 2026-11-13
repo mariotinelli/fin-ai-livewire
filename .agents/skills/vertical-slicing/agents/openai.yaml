@@ -1,6 +1,6 @@
 interface:
-  display_name: 'vertical-slicing'
-  short_description: 'Prepara fatias DEV com entregas verificáveis'
-  default_prompt: 'Use $vertical-slicing para transformar esta Feature aprovada e as evidências de código em fatias DEV verticais com estimativas, bloqueios, descrições claras e cobertura completa.'
+  display_name: "vertical-slicing"
+  short_description: "Prepara fatias DEV com entregas verificáveis"
+  default_prompt: "Use $vertical-slicing para transformar esta Feature aprovada e as evidências de código em fatias DEV verticais com estimativas, bloqueios, descrições claras e cobertura completa."
 policy:
   allow_implicit_invocation: true
