@@ -22,3 +22,7 @@ package-lock.json
 # Ignore markdown
 **/*.md
 **/*.mdx
+
+# Documentation and generated agent skills
+/docs/
+/.agents/
