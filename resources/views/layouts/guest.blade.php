@@ -42,7 +42,7 @@
         @if ($variant === 'centered')
             <div class="flex min-h-full items-center justify-center bg-primary p-4 sm:p-8">
                 <div class="flex w-full max-w-lg flex-col items-center gap-8">
-                    <x-ui.application-logo class="h-auto w-full max-w-xs sm:max-w-sm" />
+                    <x-ui.application-logo whiteHorizontal class="h-auto w-full max-w-xs sm:max-w-sm" />
 
                     <div class="w-full rounded-2xl border border-primary-content/20 bg-base-100 p-6 shadow-2xl sm:p-10">{{ $slot }}</div>
                 </div>
@@ -50,7 +50,7 @@
         @else
             <div class="grid min-h-full bg-base-100 lg:grid-cols-2">
                 <div class="flex min-h-52 items-center justify-center bg-primary p-8 sm:min-h-64 lg:min-h-full lg:p-12">
-                    <x-ui.application-logo class="h-auto w-full max-w-sm lg:max-w-xl" />
+                    <x-ui.application-logo whiteHorizontal class="h-auto w-full max-w-sm lg:max-w-xl" />
                 </div>
 
                 <div class="flex items-center justify-center bg-base-200 p-4 sm:p-8 lg:p-12">

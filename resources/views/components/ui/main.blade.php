@@ -1,6 +1,6 @@
 <main
     @class([
-        'inset-0 transition-all duration-300 ease-linear overflow-y-auto p-8 mx-auto',
+        'inset-0 transition-all duration-300 ease-linear overflow-y-auto p-4 sm:p-8 mx-auto',
         'h-[calc(100dvh-var(--dev-bar-height)-var(--navbar-height))]' => withEnvBar(),
         'h-[calc(100dvh-var(--navbar-height))]' => !withEnvBar()
     ])
