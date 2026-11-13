@@ -1,11 +1,11 @@
 interface:
-  display_name: "project-slices"
-  short_description: "Fatia Features ou escopos com retomada segura"
-  default_prompt: "Use $project-slices para processar esta Feature ou escopo aprovado pelo project-flow, apresentar a prévia completa de DEV e QA para minha aprovação e publicar somente o conteúdo autorizado no Redmine com retomada segura."
+  display_name: 'project-slices'
+  short_description: 'Fatia Features ou escopos com retomada segura'
+  default_prompt: 'Use $project-slices para processar esta Feature ou escopo aprovado pelo project-flow, apresentar a prévia completa de DEV e QA para minha aprovação e publicar somente o conteúdo autorizado no Redmine com retomada segura.'
 dependencies:
   tools:
-    - type: "mcp"
-      value: "redmine"
-      description: "Authenticated Feature checks and approved child publication"
+    - type: 'mcp'
+      value: 'redmine'
+      description: 'Authenticated Feature checks and approved child publication'
 policy:
   allow_implicit_invocation: true
