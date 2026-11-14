@@ -49,7 +49,9 @@
             return this.open && Alpine.store('uiModalStack').at(-1) === this.modalId;
         },
         activate() {
-            this.trigger = document.activeElement;
+            if (document.activeElement !== document.body) {
+                this.trigger = document.activeElement;
+            }
             Alpine.store('uiModalStack').push(this.modalId);
             this.focusInput();
         },
@@ -103,6 +105,9 @@
         }
     "
     @focusin.window="
+        if (!open && isEligible($event.target)) {
+            trigger = $event.target;
+        }
         if (isActive() && !$refs.modal.contains($event.target)) {
             focusInput();
         }
@@ -131,7 +136,7 @@
     ></div>
 
     <div x-show="open" class="fixed inset-0 z-15 w-screen overflow-y-auto overscroll-contain">
-        <div class="flex min-h-full min-w-0 items-center justify-center p-4 text-center">
+        <div class="flex min-h-full min-w-0 items-center justify-center p-4 pb-[max(1rem,env(safe-area-inset-bottom,0px))] text-center">
             <div
                 x-show="open"
                 x-ref="modal"
@@ -144,7 +149,7 @@
                 x-transition:leave-end="opacity-0 translate-y-0 scale-95"
                 @click.window.outside="clickAway && isActive() ? (open = false) : null"
                 @class([
-                    'w-full min-w-0 max-w-lg max-h-[calc(100dvh-2rem)] overflow-hidden wrap-anywhere bg-base-100 relative transform rounded-xl shadow-xl p-0
+                    'w-full min-w-0 max-w-lg max-h-[calc(100dvh-1rem-max(1rem,env(safe-area-inset-bottom,0px)))] overflow-hidden wrap-anywhere bg-base-100 relative transform rounded-xl shadow-xl p-0
                         pointer-events-auto transition-all flex flex-col items-start justify-start',
                     'max-w-2xl!'               => $lg,
                     'max-w-4xl!'               => $xl,

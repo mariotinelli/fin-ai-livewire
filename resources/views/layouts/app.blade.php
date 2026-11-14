@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" data-theme="remsoft" data-application-title="FinAI" class="overflow-y-hidden">
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
     @if (config('app.robots.blocking') === true)
@@ -31,6 +31,7 @@
         ])
         x-data="sidebarLayout()"
         @resize.window="resize()"
+        @focusin.window="if ($event.target !== document.body) focusedElement = $event.target;"
         :data-sidebar-expanded="asideOpen"
         @style(['--app-height: calc(100dvh - var(--dev-bar-height))' => withEnvBar(), '--app-height: 100dvh' => !withEnvBar()])
     >

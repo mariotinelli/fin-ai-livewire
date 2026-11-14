@@ -14,6 +14,7 @@ it('renders the sidebar with the visible groups for an administrator', function 
 
     livewire(Sidebar::class)
         ->assertSee('Dashboard')
+        ->assertSet('mobileItems', fn (array $items): bool => array_column($items, 'route') === ['admin.dashboard', 'admin.management.users.index', 'admin.management.roles.index'])
         ->assertSee('Gestão')
         ->assertSee('Usuários')
         ->assertSee('Perfis')
@@ -40,6 +41,7 @@ it('renders only the support menu for a support user', function (): void {
 
     livewire(Sidebar::class)
         ->assertSee('Suporte')
+        ->assertSet('mobileItems', fn (array $items): bool => array_column($items, 'route') === ['support.artisan-commands.index', 'support.system-error-alerts.index'])
         ->assertSee('Alertas de Erro')
         ->assertDontSee('Dashboard')
         ->assertSee('Comandos')
@@ -59,6 +61,7 @@ it('renders only the support menu for a support user', function (): void {
 it('does not expose menu groups to guests', function (): void {
     livewire(Sidebar::class)
         ->assertSet('groups', [])
+        ->assertSet('mobileItems', [])
         ->assertOk();
 });
 
@@ -67,9 +70,20 @@ it('does not render unauthorized items even when the browser remembers their gro
 
     livewire(Sidebar::class)
         ->assertSee('Dashboard')
+        ->assertSet('mobileItems', fn (array $items): bool => array_column($items, 'route') === ['admin.dashboard'])
         ->assertDontSee('admin.management.users.index')
         ->assertDontSee('sidebar-link-desktop-admin-management-users-index', false)
         ->assertDontSee('group-desktop-management', false)
         ->assertDontSee('group-mobile-management', false)
+        ->assertOk();
+});
+
+it('keeps the customer mobile destinations isolated from administrative and support menus', function (): void {
+    $this->actingAs(User::factory()->customer()->create());
+
+    livewire(Sidebar::class)
+        ->assertSet('mobileItems', fn (array $items): bool => array_column($items, 'route') === ['customer.dashboard'])
+        ->assertDontSee('Gestão')
+        ->assertDontSee('Suporte')
         ->assertOk();
 });

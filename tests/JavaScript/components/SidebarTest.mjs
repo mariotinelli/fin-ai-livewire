@@ -13,7 +13,7 @@ function storage(t, entries = []) {
     return values;
 }
 
-test('keeps desktop preference across tablet and mobile boundaries and closes the mobile overlay', (t) => {
+test('keeps desktop preference across tablet and mobile boundaries', (t) => {
     const values = new Map();
     globalThis.window = { innerWidth: 1440 };
     globalThis.localStorage = {
@@ -24,17 +24,16 @@ test('keeps desktop preference across tablet and mobile boundaries and closes th
         delete globalThis.window;
         delete globalThis.localStorage;
     });
-    const layout = sidebarLayout();
+    const layout = mount(sidebarLayout(), { $dispatch() {} }).component;
     layout.init();
     assert.equal(layout.asideOpen, true);
     layout.toggleSidebar();
     assert.equal(values.get('asideOpen'), 'false');
     for (const width of [1024, 768, 767, 768, 1024, 1025]) {
         window.innerWidth = width;
-        layout.mobileAsideOpen = true;
         layout.resize();
         assert.equal(layout.asideOpen, false);
-        assert.equal(layout.mobileAsideOpen, width < 768);
+        assert.equal(layout.mobile, width < 768);
     }
     layout.toggleSidebar();
     window.innerWidth = 1024;
@@ -66,7 +65,7 @@ test('allows opening and closing navigation without browser storage', (t) => {
         delete globalThis.window;
         delete globalThis.localStorage;
     });
-    const layout = sidebarLayout();
+    const layout = mount(sidebarLayout(), { $dispatch() {} }).component;
     layout.init();
     assert.equal(layout.asideOpen, true);
     layout.toggleSidebar();
@@ -148,7 +147,7 @@ test('restores scroll per user and viewport on initialization and visibility cha
     component.$el.scrollTop = 170;
     component.save();
     assert.equal(values.get('user-desktop'), '170');
-    watchers.get('mobileAsideOpen')();
+    watchers.get('mobile')();
     watchers.get('asideOpen')();
     assert.equal(component.$el.scrollTop, 170);
     const mobile = scroller('user-mobile').component;
@@ -181,4 +180,74 @@ test('ignores invalid scroll state and handles a page without an active link', (
         component.restore();
         assert.equal(component.$el.scrollTop, 0);
     }
+});
+
+test('moves focus to the matching destination when navigation changes mode', (t) => {
+    globalThis.window = { innerWidth: 767 };
+    const events = [];
+    let focusedDestination = null;
+    const source = {
+        href: '/users',
+        closest: () => ({}),
+        getClientRects: () => [],
+    };
+    const destination = {
+        href: '/users',
+        getClientRects: () => [{}],
+        focus: () => {
+            focusedDestination = 'users';
+        },
+    };
+    globalThis.document = {
+        activeElement: source,
+        querySelector: () => ({ querySelectorAll: () => [destination] }),
+        getElementById: () => ({
+            focus: () => {
+                focusedDestination = 'home';
+            },
+        }),
+    };
+    t.after(() => {
+        delete globalThis.window;
+        delete globalThis.document;
+    });
+    const { component } = mount(sidebarLayout(), { $dispatch: (event) => events.push(event) });
+
+    window.innerWidth = 768;
+    component.resize();
+    assert.equal(focusedDestination, 'users');
+    assert.deepEqual(events, ['navigation-mode-changed']);
+    component.resize();
+    assert.equal(events.length, 1);
+
+    source.href = '/destination-only-in-menu';
+    component.focusedElement = source;
+    document.body = {};
+    document.activeElement = document.body;
+    window.innerWidth = 767;
+    component.resize();
+    assert.equal(focusedDestination, 'home');
+});
+
+test('preserves focus in content and visible navigation but recovers focus from a closing menu', (t) => {
+    globalThis.window = { innerWidth: 1025 };
+    let focused = 0;
+    globalThis.document = {
+        querySelector: () => ({ querySelectorAll: () => [] }),
+        getElementById: () => ({ focus: () => focused++ }),
+    };
+    t.after(() => {
+        delete globalThis.window;
+        delete globalThis.document;
+    });
+    const { component } = mount(sidebarLayout());
+
+    component.restoreNavigationFocus({ closest: () => null });
+    component.restoreNavigationFocus({
+        closest: (selector) => (selector === '[data-ui-dropdown-panel]' ? null : {}),
+        getClientRects: () => [{}],
+    });
+    assert.equal(focused, 0);
+    component.restoreNavigationFocus({ closest: () => ({}), getClientRects: () => [{}] });
+    assert.equal(focused, 1);
 });
