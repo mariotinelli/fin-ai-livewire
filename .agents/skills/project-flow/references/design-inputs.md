@@ -10,4 +10,6 @@ Fundação abrange todas as telas existentes do sistema, inclusive autenticaçã
 
 Conserve fontes compartilhadas no escopo e links nos itens, levando critérios/adaptações até slicing, condições, task.md e planning.md. Captura sem comparação não demonstra conformidade.
 
+Caminhos de fontes ficam apenas nos documentos locais. Ao publicar, aplique [evidências no Redmine](published-evidence.md): anexar arquivos disponíveis, exibir imagens e usar referências remotas acessíveis, sem transportar caminhos do computador para a descrição.
+
 **Concluído quando:** fontes são legíveis, fronteiras visuais/funcionais e conflitos estão resolvidos ou explicitamente pendentes, e critérios observáveis podem chegar à implementação/QA.

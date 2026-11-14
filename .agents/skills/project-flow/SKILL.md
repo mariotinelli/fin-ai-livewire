@@ -37,6 +37,8 @@ Consolide resultado no documento ao terminar entrevista, sem histórico obrigat�
 
 ## 4. Publicar e conferir
 
+Para arquivos e links de evidência/design, siga [evidências publicadas](references/published-evidence.md): anexe os arquivos disponíveis e mostre imagens na descrição. Caminhos pessoais e links relativos ao repositório não podem substituir referências remotas acessíveis.
+
 Siga [preflight](references/redmine-preflight.md) e [publicação](references/redmine-publication.md). Resolva destino, versão aberta escolhida pelo usuário, classificação/tracker e convenção de título, consultando demandas semelhantes antes de criar. Apresente prévia completa com operações/campos e preserve status/conteúdo humano. Autorize o conteúdo apresentado uma vez; mudanças materiais exigem revisão.
 
 Publique pelo MCP, registre IDs e consulte resultados incertos antes de repetir. Consolide ID/URL, decisões, resultados e pendências no documento. Scope.md registra progresso e relações por item; publicação de requisito não é implementação.

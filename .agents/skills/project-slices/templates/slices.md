@@ -58,10 +58,14 @@ Inclua contexto específico e agrupamento somente quando ajudarem a leitura. Par
 
 Feature Redmine `<id>`; regras/critérios `<ids>`.
 
-Quando houver interface com design: `<ID e caminho normalizado da referência visual principal>`;
+Quando houver interface com design: `<ID e referência remota confirmada da fonte visual principal>`;
 `<telas/estados aplicáveis>`; `<adaptações aprovadas e origem da decisão>`.
 Os critérios visuais e a responsabilidade pela aparência compartilhada devem estar explícitos
 na entrega, no aceite e nas condições de teste correspondentes.
+
+Arquivos usados como evidência devem ser anexados e imagens apresentadas na descrição
+conforme [publicação de evidências](../../project-flow/references/published-evidence.md).
+Caminhos de origem ficam somente no documento local; a prévia remota usa anexos e links acessíveis.
 
 Inclua `Contexto técnico` antes das referências somente quando uma decisão aprovada exigir esse contexto; omita a seção nos demais casos. Aplique a [disciplina de escrita](../../vertical-slicing/references/task-writing.md) à descrição final formatada, depois de preencher o template e antes de apresentar a prévia para aprovação.
 
@@ -69,7 +73,7 @@ Inclua `Contexto técnico` antes das referências somente quando uma decisão ap
 
 Inclua a descrição QA completa, os campos Redmine derivados, relações, anexo e o tratamento de cada filha existente. Esta seção e as anteriores formam uma única prévia e recebem uma única decisão.
 
-Cada filha nova inclui no rodapé da descrição uma referência local estável: caminho deste slices.md e identificador da entrega na revisão, preservados em tentativas e conciliação.
+Cada filha nova inclui no rodapé uma identidade textual estável `Origem: project-slices:<rascunho>:<entrega>`, preservada em tentativas e conciliação. A correspondência com o caminho deste slices.md fica somente no documento local, sem link ou caminho local na descrição remota.
 
 ## Sequencing
 

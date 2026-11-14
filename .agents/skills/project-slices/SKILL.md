@@ -31,6 +31,8 @@ Prepare [condições e DOCX obrigatório](references/test-conditions.md), [Seque
 
 ## 3. Revisar e publicar
 
+Quando houver arquivos de evidência/design, siga [evidências publicadas](../project-flow/references/published-evidence.md), incluindo anexos e imagens na descrição na prévia do conjunto. Nunca publique caminhos do computador ou links relativos ao repositório como acesso à evidência.
+
 Siga [publicação](references/publication.md). Antes de apresentar a prévia, aplique a [revisão de escrita](../vertical-slicing/references/task-writing.md) às descrições finais formatadas, dentro desta mesma etapa. Peça uma decisão sobre o conjunto completo: pai/destino, filhas novas/adotadas/externas, campos, descrições completas, estimativas, relações, Sequencing e DOCX. Reutilize consentimento para o mesmo conteúdo, sem confirmação equivalente; mudanças materiais exigem nova revisão.
 
 Publique somente as operações autorizadas pelo MCP. Consulte IDs conhecidos e reconcilie resultados incertos antes de repetir. Preserve status do pai, conteúdo humano, relações e filhas alheias. Registre operações e pendências de modo legível no próprio slices.md, sem motor de estados.

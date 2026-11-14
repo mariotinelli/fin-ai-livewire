@@ -4,11 +4,13 @@ O caminho abaixo publica uma decomposição com QA. No ramo de Study isolada, ap
 
 ## Prévia e autorização
 
+Para arquivos de evidência/design nas filhas, aplique [publicação de evidências](../../project-flow/references/published-evidence.md): anexar arquivos disponíveis, mostrar imagens na descrição e usar links remotos para os demais. Inclua essas operações na prévia do conjunto; nunca use caminhos do computador ou links relativos ao repositório como evidências publicadas.
+
 Leia contexto/projeto/versão, pai, todas as filhas e relações pelo MCP. Descubra schemas, trackers, status inicial, campos e ferramentas necessários; não invente IDs. Preserve versão selecionada e convenções do pai. [Sequencing](sequencing.md) define o bloco; [adoção](existing-children.md) trata trabalho existente.
 
 A prévia completa em slices.md contém cada filha com título completo/prefixos, papel, estimativa, descrição autossuficiente, aceite, campos, destino, versão e relações, além de conteúdo humano preservado, DOCX e toda renumeração. QA usa o nome completo do pai e cobre o resultado integrado. Não use título/H1 repetido no corpo como substituto da descrição. Planejamento técnico pertence a plan-issue, não à tarefa funcional.
 
-Antes do primeiro create, atribua a cada intenção de filha nova uma referência local estável (caminho do slices.md e identificador da entrega nessa revisão) e inclua-a no rodapé da descrição apresentada. Preserve essa referência entre tentativas e depois do ID confirmado. Ela identifica uma intenção de criação, não uma máquina de estados ou aprovação por hash. Em histórico sem marcador, concilie pelas evidências existentes; ambiguidade impede retry.
+Antes do primeiro create, atribua a cada filha nova uma identidade textual estável, como `Origem: project-slices:<rascunho>:<entrega>`, usando os identificadores existentes da revisão e entrega, e inclua-a no rodapé da prévia. Guarde a correspondência com slices.md apenas localmente. Preserve essa identidade entre tentativas e depois do ID confirmado, sem publicar caminhos ou links locais. Ela identifica a intenção de criação, sem máquina de estados ou aprovação por hash. Marcadores antigos continuam válidos para conciliação, sem criação duplicada; sua alteração depende da prévia autorizada. Em histórico sem marcador, concilie pelas evidências existentes; ambiguidade impede retry.
 
 Peça uma decisão do responsável sobre esse conjunto. A decisão autoriza somente as mutações mostradas, sem confirmação equivalente extra. Mudança material requer nova prévia. Aprovação local nunca autoriza mudar status do pai.
 
@@ -23,6 +25,8 @@ Crie somente filhas realmente novas, registre o ID imediatamente e releia. ID j�
 Crie relações autorizadas entre IDs confirmados, conferindo direção e evitando duplicatas/ciclos. Não modifique relações tocando filha adotada salvo operação específica autorizada pelo fluxo de revisão; adoção comum é somente leitura. Para refinamento externo, leia [dependências](dependencies.md).
 
 Gere/verifique DOCX, faça upload e associe à QA prevista. Confira anexos já existentes antes de repetir associação; upload sem confirmação de associação não conclui a entrega. Resultado incerto permanece pendente. Não reenvie cegamente após timeout nem apague anexo antigo.
+
+Para outras evidências, siga a mesma confirmação de associação e confira a apresentação na descrição renderizada conforme a regra compartilhada. Preserve a convenção específica do DOCX e não duplique evidências já acessíveis no pai sem necessidade apresentada na prévia; use sua referência remota confirmada quando suficiente.
 
 **Concluído quando:** cada operação autorizada tem resultado confirmado ou permanece explicitamente pendente/incerto, sem nova criação para IDs conhecidos.
 

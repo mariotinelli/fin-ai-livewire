@@ -31,9 +31,11 @@ do escopo e dependências; testes internos apoiam DEV, sem substituir o aceite d
 
 ## Designs e evidências
 
-<!-- Quando houver design: IDs e caminhos locais normalizados, telas/estados aplicáveis,
+<!-- Quando houver design: IDs das fontes, telas/estados aplicáveis,
 referência visual principal e adaptações aprovadas com origem da decisão. Relacionar aos
-critérios visuais numerados em Critérios de aceite. Sem design, explicar a não aplicação. -->
+critérios visuais numerados em Critérios de aceite. Fontes locais ficam apenas no artefato
+local: ao publicar, anexar os arquivos e exibir as imagens com legenda na descrição,
+usando referências remotas confirmadas. Sem design, explicar a não aplicação. -->
 
 ## Dentro do escopo
 

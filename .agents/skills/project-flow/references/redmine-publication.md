@@ -14,9 +14,11 @@ Novos pais ficam sem Sequencing até project-slices reservar bloco. Se configura
 
 ## Apresentar uma prévia completa
 
-Mostre destino, versão, título/prefixos, classificação/tracker, categoria ou ausência, status inicial para criação, descrição completa e relações propostas. Inclua criação e posterior atualização de referência para o caminho definitivo na mesma decisão quando conteúdo/destino já estiverem definidos.
+Quando houver arquivos ou links de evidência/design, aplique [publicação de evidências](published-evidence.md). Inclua anexos, destino, legendas e apresentação na descrição na mesma prévia; caminhos locais são apenas fontes de envio, nunca evidências acessíveis no texto remoto.
 
-Antes do primeiro create, inclua na descrição da prévia uma referência local estável ao rascunho/requisito (caminho e identidade do item, reutilizados entre tentativas). Depois do ID confirmado, preserve essa referência de origem e acrescente o caminho definitivo autorizado. Isso permite conciliar uma criação sem ID retornado, sem ledger ou hash de aprovação. Histórico sem marcador exige evidências existentes suficientes; ambiguidade bloqueia nova criação.
+Mostre destino, versão, título/prefixos, classificação/tracker, categoria ou ausência, status inicial para criação, descrição completa e relações propostas. Inclua criação, referências remotas e materialização no caminho local definitivo na mesma decisão quando conteúdo/destino já estiverem definidos, sem colocar esse caminho na descrição remota.
+
+Antes do primeiro create, inclua na descrição da prévia uma identidade textual estável, como `Origem: project-flow:<rascunho>:<item>`, derivada dos identificadores já existentes do rascunho e item. Registre sua correspondência com o caminho apenas no documento local e reutilize a mesma identidade entre tentativas. Depois do ID confirmado, preserve essa origem e use ID/URL da issue nas referências remotas; o caminho definitivo permanece local. Isso permite conciliar uma criação sem ID retornado, sem publicar caminhos do computador, ledger ou hash de aprovação. Em histórico com marcador antigo, use-o para conciliar sem criar outra issue; alteração desse marcador deve fazer parte da prévia autorizada. Histórico sem marcador exige evidências existentes suficientes; ambiguidade bloqueia nova criação.
 
 O texto remoto deve permitir entender todo o requisito sem acesso à conversa. Preserve histórias, fluxos/exceções, regras, dados percebidos, limites, dependências e critérios com seus IDs. Não reduzir um critério a link nem repetir o H1/metadata local como substituto do conteúdo funcional.
 
@@ -32,8 +34,10 @@ Atualização comum inclui apenas descrição e versão autorizadas; omita statu
 
 Use MCP e leituras frescas imediatamente antes da mutação. Na seção Publicação do requisito, mantenha tabela com intenção autorizada, ID/URL, resultado e pendência. Preserve descrição anterior necessária à comparação e conteúdo exato de operações incertas, de forma proporcional, sem estado paralelo/ledger por microevento.
 
+Confirme anexos e publique imagens na descrição conforme [evidências](published-evidence.md). Converta referências funcionais a outras tarefas em IDs/URLs remotos. A identidade de conciliação não é um caminho nem um link para abrir arquivos locais.
+
 Após criar, registre ID e releia. Timeout exige busca pelo contexto, título e identidade local estável presente na descrição; confira campos/conteúdo. Um candidato compatível confirmado pode ser conciliado; ausência comprovada permite repetir, ambiguidade impede nova criação. ID conhecido ou criação confirmada nunca dispara outra criação. Resultados incertos de atualização/relação também exigem consulta.
 
-Conferir descrição funcional completa, versão, preservação de conteúdo humano/status/campos/relações e cada relação autorizada. Relação existente correta não precisa ser recriada. Não publicar comentários por rodada de entrevista. Atualizar caminho definitivo só após ID confirmado, mantendo fontes/links válidos.
+Conferir descrição funcional completa, versão, preservação de conteúdo humano/status/campos/relações e cada relação autorizada. Relação existente correta não precisa ser recriada. Não publicar comentários por rodada de entrevista. Atualizar o caminho definitivo no artefato local só após ID confirmado, mantendo fontes e referências remotas válidas.
 
 **Concluído quando:** conteúdo e relações autorizados estão relidos, documentos identificam ID/URL e resultados incertos permanecem explicitamente incompletos.

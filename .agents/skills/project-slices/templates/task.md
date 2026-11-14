@@ -4,6 +4,9 @@
 
 - Filha: <ID e URL confirmados>; papel: <DEV/QA/Study>.
 - Pai/requisito: <ID, URL e caminho canônico>.
+
+<!-- Caminho canônico é informação do artefato local. Na descrição Redmine, usar ID/URL
+confirmados e anexos; não copiar caminhos do computador ou links ao repositório. -->
 - Revisão do slicing: <referência>.
 - Sequencing: <número confirmado>.
 - Estimativa: <horas positivas até seis e fundamento>.
