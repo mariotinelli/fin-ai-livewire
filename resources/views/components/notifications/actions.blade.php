@@ -3,7 +3,8 @@
         id="mark-all-as-read"
         primary
         outline
-        xs
+        sm
+        class="h-auto min-h-11 max-w-full py-2 text-left whitespace-normal"
         label="Marcar todas como lidas"
         wire:click="markAllAsRead"
         :disabled="$this->unreadNotificationsCount === 0"
@@ -12,7 +13,8 @@
         id="delete-notifications"
         error
         outline
-        xs
+        sm
+        class="h-auto min-h-11 max-w-full py-2 text-left whitespace-normal"
         label="Limpar"
         wire:click="deleteAll"
         :disabled="count($this->notifications) === 0"

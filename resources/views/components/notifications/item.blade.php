@@ -6,21 +6,26 @@
     {{ $attributes->except('class') }}
     data-notification-id="{{ $notification->id }}"
     data-notification-viewed="{{ $notification->viewed_at !== null ? 'true' : 'false' }}"
-    @class([$notification->data['color'] ?? 'border-primary', 'border-l border-l-2' => is_null($notification->read_at)])
+    @class([
+        'min-w-0 [overflow-wrap:anywhere]',
+        $notification->data['color'] ?? 'border-primary',
+        'border-l-2' => is_null($notification->read_at)
+    ])
 >
-    <div class="items-center border-b border-base-300 bg-base-100 p-4">
-        <div class="w-full items-center">
-            <div class="mb-1 flex w-full justify-between">
-                <div>
-                    <div class="flex justify-between gap-3">
+    <div class="border-b border-base-300 bg-base-100 p-4 sm:p-6">
+        <div class="flex min-w-0 flex-col gap-3">
+            <div class="flex min-w-0 items-start justify-between gap-3">
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start gap-3">
                         @isset($notification->data['icon'])
                             <x-dynamic-component
                                 :component="'icons.' . $notification->data['icon']"
-                                class="z-50 h-6 w-6 text-base-content/50"
+                                class="size-6 shrink-0 text-primary"
+                                aria-hidden="true"
                             />
                         @endisset
 
-                        <p class="font-semibold">{{ $notification->data['title'] }}</p>
+                        <p class="min-w-0 pt-0.5 leading-relaxed font-semibold text-base-content">{{ $notification->data['title'] }}</p>
                     </div>
                 </div>
 
@@ -28,7 +33,7 @@
                     data-ui-loading-control
                     type="button"
                     id="{{ $idPrefix }}delete-notification-{{ $notification->id }}"
-                    class="cursor-pointer text-base-content/50"
+                    class="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-secondary hover:bg-base-200 hover:text-error focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-50"
                     aria-label="Excluir notificação"
                     wire:click="delete({{ Js::from($notification->id) }})"
                 >
@@ -37,7 +42,7 @@
                 </button>
             </div>
 
-            <div>
+            <div class="flex min-w-0 flex-col items-start gap-3">
                 @if ($notification->read_at === null)
                     <x-ui.button
                         xs
@@ -45,26 +50,26 @@
                         primary
                         id="{{ $idPrefix }}read-notification-{{ $notification->id }}"
                         wire:click="markAsRead({{ Js::from($notification->id) }})"
-                        class="mb-2"
+                        class="h-auto min-h-11 max-w-full py-2 text-left whitespace-normal"
                     >
                         Marcar como lida</x-ui.button
                     >
                 @else
-                    <span class="mb-2 block text-xs text-base-content/65">Lida</span>
+                    <span class="rounded-lg bg-accent px-3 py-1 text-xs font-medium text-accent-content">Lida</span>
                 @endif
-                <p class="mb-1 pl-9 text-sm text-base-content/65">
+                <p class="text-xs leading-relaxed text-secondary">
                     {{ $notification->created_at->translatedFormat('d \d\e F \d\e Y \à\s H:i') }}
                 </p>
 
                 @isset($notification->data['description'])
-                    <p class="mb-2 pl-9 text-base-content">{{ $notification->data['description'] }}</p>
+                    <p class="text-sm leading-relaxed text-base-content">{{ $notification->data['description'] }}</p>
                 @endisset
 
                 @isset($notification->data['details'])
-                    <div class="mt-2 space-y-2 pl-9 text-sm">
+                    <div class="flex w-full min-w-0 flex-col gap-3 rounded-lg bg-base-200 p-3 text-sm">
                         @foreach ($notification->data['details'] as $label => $content)
-                            <div class="flex space-x-1">
-                                <div class="text-sm text-base-content">{{ $label }}:</div>
+                            <div class="flex min-w-0 flex-col gap-1">
+                                <div class="text-secondary">{{ $label }}:</div>
                                 <div class="font-semibold text-base-content">{{ $content }}</div>
                             </div>
                         @endforeach
@@ -72,10 +77,10 @@
                 @endisset
 
                 @isset($notification->data['route'])
-                    <div class="my-2 pl-9">
+                    <div class="max-w-full">
                         <a
                             href="{{ $notification->data['route']['url'] }}"
-                            class="w-fit border-none bg-transparent text-sm font-bold text-primary underline hover:cursor-pointer"
+                            class="inline-flex min-h-11 max-w-full items-center rounded-lg py-2 text-sm font-semibold text-primary underline underline-offset-4 hover:text-accent-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
                         >
                             {{ $notification->data['route']['action'] }}
                         </a>

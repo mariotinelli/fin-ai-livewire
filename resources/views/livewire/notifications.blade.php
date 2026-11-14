@@ -33,14 +33,14 @@
     @teleport('body')
         <x-ui.sidepage title="Notificações" md :scrollable="false">
             <div x-data="notificationPanel()" class="flex h-full min-h-0 flex-col" data-notifications-panel>
-                <div class="shrink-0 border-b border-base-300 p-4">
-                    <div class="mb-4 flex items-center justify-between">
-                        <h1 class="text-lg font-semibold">Notificações</h1>
+                <div class="shrink-0 border-b border-base-300 bg-base-200 p-4 sm:p-6">
+                    <div class="mb-4 flex items-center justify-between gap-3">
+                        <h1 class="font-display text-2xl text-base-content">Notificações</h1>
                         <button
                             data-ui-no-loading
                             type="button"
                             id="close-notifications"
-                            class="cursor-pointer"
+                            class="flex size-11 shrink-0 cursor-pointer items-center justify-center rounded-lg text-secondary hover:bg-accent hover:text-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary disabled:cursor-wait disabled:opacity-50"
                             aria-label="Fechar notificações"
                             x-bind:disabled="!canClose()"
                             @click="requestClose()"
@@ -57,9 +57,14 @@
 
                 <div class="min-h-0 flex-1 overflow-y-auto overscroll-contain" data-notifications-list :aria-busy="loading">
                     <x-notifications.loading />
-                    <div x-cloak x-show="loadError" role="status" class="p-6 text-center text-sm">
+                    <div
+                        x-cloak
+                        x-show="loadError"
+                        role="status"
+                        class="m-4 rounded-2xl border border-error/30 bg-error/5 p-6 text-center text-sm text-error"
+                    >
                         <p>Não foi possível carregar as notificações.</p>
-                        <x-ui.button link primary sm class="mt-2" @click="load()" x-bind:data-ui-button-loading="loading">
+                        <x-ui.button link primary sm class="mt-3 min-h-11" @click="load()" x-bind:data-ui-button-loading="loading">
                             Tentar novamente</x-ui.button
                         >
                     </div>
@@ -89,11 +94,12 @@
             <x-slot:footer>
                 <div class="flex w-full flex-col gap-3">
                     @if ($sidepageOpen && $notificationsLoaded && $this->notifications->hasPages())
-                        <nav aria-label="Paginação de notificações" class="flex items-center justify-between gap-3">
+                        <nav aria-label="Paginação de notificações" class="flex flex-wrap items-center justify-between gap-2">
                             <x-ui.button
                                 primary
                                 outline
                                 sm
+                                class="min-h-11"
                                 label="Anterior"
                                 wire:click="previousPage('notificationsPage')"
                                 :disabled="$this->notifications->onFirstPage()"
@@ -103,6 +109,7 @@
                                 primary
                                 outline
                                 sm
+                                class="min-h-11"
                                 label="Próxima"
                                 wire:click="nextPage('notificationsPage')"
                                 :disabled="!$this->notifications->hasMorePages()"
@@ -112,6 +119,7 @@
                     <div class="flex justify-end">
                         <x-ui.button
                             id="notification-history-link"
+                            class="h-auto min-h-11 w-full py-2 whitespace-normal"
                             :href="route(user()->type->notificationHistoryRouteName())"
                             primary
                             outline
