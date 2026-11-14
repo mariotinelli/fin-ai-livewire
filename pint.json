@@ -1,5 +1,13 @@
 {
     "preset": "psr12",
+    "exclude": [
+        "app/Livewire/Exclude",
+        "app/Http/Controllers/Exclude",
+        "resources/views/livewire/exclude",
+        "tests/Browser/Screenshots",
+        "public/build",
+        "public/storage"
+    ],
     "rules": {
         "no_blank_lines_after_phpdoc": true,
         "group_import": false,

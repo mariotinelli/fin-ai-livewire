@@ -7,6 +7,14 @@ includes:
 parameters:
     tmpDir: storage/framework/cache/phpstan
 
+    excludePaths:
+        analyseAndScan:
+            - app/Livewire/Exclude (?)
+            - app/Http/Controllers/Exclude (?)
+            - public/build (?)
+            - public/storage (?)
+            - tests/Browser/Screenshots (?)
+
     paths:
         - app/
         - database/
