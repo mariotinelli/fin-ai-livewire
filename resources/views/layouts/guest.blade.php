@@ -18,46 +18,36 @@
     <title>{{ config('app.name', 'Laravel') }}</title>
     <link rel="icon" href="{{ asset('assets/favicon.png') }}" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Sora:wght@100..800&display=swap" rel="stylesheet" />
-
     @stack('styles')
     @vite('resources/css/app.css')
 </head>
 
-<body class="bg-base-200 font-sans text-base-content antialiased">
-    <x-dev.bar />
+<body class="flex h-dvh flex-col bg-base-200 font-sans text-base-content antialiased">
+    <div
+        class="[&>div]:h-auto! [&>div]:max-h-none! [&>div]:min-h-(--dev-bar-height) [&>div>div]:min-w-0 [&>div>div]:max-w-full [&>div>div]:overflow-x-auto shrink-0"
+    >
+        <x-dev.bar />
+    </div>
     <x-ui.toast />
     <x-ui.loading />
     <x-ui.alert-modal />
 
-    <main
-        @class([
-            'overflow-y-auto transition-all duration-300 ease-linear',
-            'h-[calc(100dvh-var(--dev-bar-height))]' => withEnvBar(),
-            'h-dvh' => !withEnvBar()
-        ])
-    >
-        @if ($variant === 'centered')
-            <div class="flex min-h-full items-center justify-center bg-primary p-4 sm:p-8">
-                <div class="flex w-full max-w-lg flex-col items-center gap-8">
-                    <x-ui.application-logo whiteHorizontal class="h-auto w-full max-w-xs sm:max-w-sm" />
+    <main class="min-h-0 flex-1 overflow-y-auto bg-base-200">
+        <div
+            class="flex min-h-full flex-col items-center justify-center gap-6 px-4 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] sm:gap-8 sm:px-8 sm:py-12"
+        >
+            <x-ui.application-logo class="h-auto w-36 shrink-0" />
 
-                    <div class="w-full rounded-2xl border border-primary-content/20 bg-base-100 p-6 shadow-2xl sm:p-10">{{ $slot }}</div>
-                </div>
+            <div
+                @class([
+                    'w-full min-w-0 rounded-2xl border border-base-300 bg-base-100 p-6 shadow-panel sm:p-8 [&_button]:min-h-11 [&_.btn]:min-h-11 [&_.btn]:h-auto [&_.btn]:whitespace-normal [&_.btn]:py-3 [&_input]:border-base-300 [&_input[aria-invalid=true]]:border-error',
+                    'max-w-lg' => $variant === 'centered',
+                    'max-w-md' => $variant !== 'centered'
+                ])
+            >
+                {{ $slot }}
             </div>
-        @else
-            <div class="grid min-h-full bg-base-100 lg:grid-cols-2">
-                <div class="flex min-h-52 items-center justify-center bg-primary p-8 sm:min-h-64 lg:min-h-full lg:p-12">
-                    <x-ui.application-logo whiteHorizontal class="h-auto w-full max-w-sm lg:max-w-xl" />
-                </div>
-
-                <div class="flex items-center justify-center bg-base-200 p-4 sm:p-8 lg:p-12">
-                    <div class="w-full max-w-md rounded-2xl border border-base-300 bg-base-100 p-6 shadow-xl sm:p-10">{{ $slot }}</div>
-                </div>
-            </div>
-        @endif
+        </div>
     </main>
 
     @vite('resources/js/app.js')

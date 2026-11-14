@@ -1,8 +1,8 @@
 <div class="flex flex-col gap-8">
-    <div class="flex flex-col gap-2 text-center">
-        <p class="text-sm font-semibold tracking-widest text-primary uppercase">{{ $areaTitle }}</p>
-        <h1 class="text-3xl font-bold text-base-content">Entrar</h1>
-        <p class="text-sm text-base-content/75">Informe suas credenciais para acessar o sistema.</p>
+    <div class="flex flex-col gap-2">
+        <p class="text-sm font-semibold text-primary">{{ $areaTitle }}</p>
+        <h1 class="font-display text-3xl leading-tight text-base-content">Entrar</h1>
+        <p class="text-sm leading-relaxed text-secondary">Informe suas credenciais para acessar o sistema.</p>
     </div>
 
     <form wire:submit="login" class="flex flex-col gap-5">
@@ -16,6 +16,6 @@
             <x-ui.button link :href="route('password.forgot', ['context' => $context])" sm> Esqueceu sua senha? </x-ui.button>
         </div>
 
-        <x-ui.button primary block uppercase type="submit" loading="login"> Entrar </x-ui.button>
+        <x-ui.button primary block type="submit" loading="login"> Entrar </x-ui.button>
     </form>
 </div>
