@@ -23,6 +23,9 @@ return RectorConfig::configure()
     ])
     ->withSkip([
         __DIR__ . '/bootstrap/cache',
+        __DIR__ . '/app/Livewire/Exclude',
+        __DIR__ . '/app/Http/Controllers/Exclude',
+        __DIR__ . '/tests/Browser/Screenshots',
         ChainExpectCallsRector::class,
         ConvertAssertToExpectRector::class,
         ThrowWithPreviousExceptionRector::class,
