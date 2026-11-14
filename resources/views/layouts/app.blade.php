@@ -25,7 +25,7 @@
     <div
         x-cloak
         @class([
-            'finai-app bg-base-200 text-base-content',
+            'finai-app bg-base-200 text-base-content md:grid md:h-(--app-height) md:grid-cols-[var(--closed-sidebar-width)_minmax(0,1fr)] md:bg-base-100 min-[64.0625rem]:data-[sidebar-expanded=true]:grid-cols-[var(--open-sidebar-width)_minmax(0,1fr)] [@media(1025px<=width<=1200px)]:[--open-sidebar-width:13rem]',
             'min-h-[calc(100dvh-var(--dev-bar-height))]' => withEnvBar(),
             'min-h-dvh' => !withEnvBar()
         ])
@@ -36,7 +36,9 @@
     >
         <livewire:sidebar />
 
-        <div class="finai-workspace">
+        <div
+            class="finai-workspace flex h-(--app-height) min-w-0 flex-col md:my-2 md:mr-2 md:h-[calc(var(--app-height)-1rem)] md:rounded-box md:border md:border-base-300 md:bg-base-200"
+        >
             <x-ui.navbar />
             <x-ui.main> {{ $slot }} </x-ui.main>
         </div>

@@ -1,5 +1,10 @@
 <div class="finai-navigation">
-    <aside id="desktop-sidebar-panel" class="finai-sidebar hidden md:flex" aria-label="Menu lateral">
+    <aside
+        id="desktop-sidebar-panel"
+        class="finai-sidebar hidden md:flex md:h-(--app-height) md:flex-col md:gap-8 md:pt-[calc(1.5rem+env(safe-area-inset-top,0px))] md:pr-0 md:pb-[calc(1rem+env(safe-area-inset-bottom,0px))] md:pl-[env(safe-area-inset-left,0px)]"
+        :class="{ 'min-[64.0625rem]:gap-4': !asideOpen }"
+        aria-label="Menu lateral"
+    >
         <div class="flex shrink-0 items-center justify-between gap-2" :class="asideOpen ? 'px-4' : 'justify-center'">
             <a
                 id="home-link"

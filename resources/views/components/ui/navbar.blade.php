@@ -28,8 +28,9 @@
                     white
                     sm
                     circle
+                    :with-loading="false"
                     aria-label="Abrir menu da conta"
-                    class="border-base-300! bg-base-200! text-primary!"
+                    class="border-base-300! bg-base-200! text-primary! md:min-h-12 md:min-w-12"
                 >
                     <span class="p-0" x-text="initials">{{ user()->initials }}</span>
                 </x-ui.button>

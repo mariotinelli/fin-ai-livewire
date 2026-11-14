@@ -2,59 +2,6 @@
 @import './daisyui/custom.css';
 @import './themes.css';
 
-.finai-workspace {
-    display: flex;
-    min-width: 0;
-    height: var(--app-height);
-    flex-direction: column;
-}
-
-@media (min-width: 768px) {
-    .finai-app {
-        display: grid;
-        grid-template-columns: var(--closed-sidebar-width) minmax(0, 1fr);
-        height: var(--app-height);
-        background: var(--color-base-100);
-    }
-
-    .finai-sidebar {
-        height: var(--app-height);
-        flex-direction: column;
-        gap: 2rem;
-        padding: calc(1.5rem + env(safe-area-inset-top, 0px)) 0 calc(1rem + env(safe-area-inset-bottom, 0px)) env(safe-area-inset-left, 0px);
-    }
-
-    .finai-workspace {
-        height: calc(var(--app-height) - 1rem);
-        margin: 0.5rem 0.5rem 0.5rem 0;
-        border: 1px solid var(--color-base-300);
-        border-radius: 1rem;
-        background: var(--color-base-200);
-    }
-
-    .finai-topbar #open-user-menu,
-    .finai-topbar #open-notifications {
-        min-width: 3rem;
-        min-height: 3rem;
-    }
-}
-
-@media (min-width: 1025px) {
-    .finai-app[data-sidebar-expanded='true'] {
-        grid-template-columns: var(--open-sidebar-width) minmax(0, 1fr);
-    }
-
-    .finai-app:not([data-sidebar-expanded='true']) .finai-sidebar {
-        gap: 1rem;
-    }
-}
-
-@media (min-width: 1025px) and (max-width: 1200px) {
-    .finai-app {
-        --open-sidebar-width: 13rem;
-    }
-}
-
 .ui-button-busy {
     position: relative;
     cursor: wait;
