@@ -6,18 +6,14 @@
     "
     class="finai-topbar z-10 flex h-(--navbar-height) shrink-0 items-center justify-between border-b border-base-300 bg-base-100 px-4 sm:px-8 md:justify-end md:rounded-t-box md:bg-transparent min-[90rem]:px-12"
 >
-    <button
-        id="toggle-sidebar"
-        type="button"
-        class="flex min-h-11 min-w-11 items-center justify-center rounded-field text-secondary md:hidden"
-        aria-label="Abrir menu lateral"
-        aria-controls="mobile-sidebar-panel"
-        x-bind:aria-expanded="mobileAsideOpen ? 'true' : 'false'"
-        @click="mobileAsideOpen = !mobileAsideOpen"
+    <a
+        id="mobile-home-link"
+        href="{{ route('dashboard') }}"
+        aria-label="FinAI — início"
+        class="flex min-h-11 items-center rounded-lg md:hidden"
     >
-        <x-icons.bars-3 class="h-6 w-6 cursor-pointer text-secondary" aria-hidden="true" />
-    </button>
-
+        <x-ui.application-logo class="h-10 w-30" />
+    </a>
     <div class="flex items-center gap-4">
         <livewire:notifications />
 
@@ -30,7 +26,7 @@
                     circle
                     :with-loading="false"
                     aria-label="Abrir menu da conta"
-                    class="border-base-300! bg-base-200! text-primary! md:min-h-12 md:min-w-12"
+                    class="min-h-11 min-w-11 border-base-300! bg-base-200! text-primary! md:min-h-12 md:min-w-12"
                 >
                     <span class="p-0" x-text="initials">{{ user()->initials }}</span>
                 </x-ui.button>

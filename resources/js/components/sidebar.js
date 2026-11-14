@@ -2,7 +2,8 @@ export function sidebarLayout() {
     return {
         desktopOpen: true,
         desktop: window.innerWidth >= 1025,
-        mobileAsideOpen: false,
+        mobile: window.innerWidth < 768,
+        focusedElement: null,
         get asideOpen() {
             return this.desktop && this.desktopOpen;
         },
@@ -14,11 +15,31 @@ export function sidebarLayout() {
             }
         },
         resize() {
+            const changed = this.mobile !== window.innerWidth < 768 || this.desktop !== window.innerWidth >= 1025;
+            const active = globalThis.document?.activeElement;
+            const focused = active === globalThis.document?.body ? this.focusedElement : active;
             this.desktop = window.innerWidth >= 1025;
-            if (window.innerWidth >= 768) this.mobileAsideOpen = false;
+            this.mobile = window.innerWidth < 768;
+            if (changed) {
+                this.$dispatch('navigation-mode-changed');
+                this.restoreNavigationFocus(focused);
+            }
+        },
+        restoreNavigationFocus(focused) {
+            if (!focused?.closest('#desktop-sidebar-panel, #mobile-navigation, #mobile-home-link')) return;
+            this.$nextTick(() => {
+                if (focused.getClientRects().length && !focused.closest('[data-ui-dropdown-panel]')) return;
+                const navigation = document.querySelector(this.mobile ? '#mobile-navigation' : '#desktop-sidebar-panel');
+                const links = [...(navigation?.querySelectorAll('a[href]') ?? [])];
+                const destination = links.find((link) => link.href === focused.href && link.getClientRects().length);
+                const fallback = document.getElementById(this.mobile ? 'mobile-home-link' : 'home-link');
+                (destination ?? fallback)?.focus({ preventScroll: true });
+            });
         },
         toggleSidebar() {
+            const focused = globalThis.document?.activeElement;
             this.desktopOpen = !this.desktopOpen;
+            this.restoreNavigationFocus(focused);
             try {
                 localStorage.setItem('asideOpen', String(this.desktopOpen));
             } catch {
@@ -66,7 +87,7 @@ export function sidebarGroup(key, open = true) {
 export function sidebarContext(key) {
     return {
         init() {
-            this.$watch('mobileAsideOpen', () => this.restore());
+            this.$watch('mobile', () => this.restore());
             this.$watch('asideOpen', () => this.restore());
             this.restore();
         },

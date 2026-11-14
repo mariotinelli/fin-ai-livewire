@@ -52,74 +52,62 @@
         </nav>
     </aside>
 
-    {{-- Mobile sidebar --}}
-    <div>
-        <div
-            class="relative z-30 bg-base-200 md:hidden"
-            x-data="{ asideOpen: true }"
-            @keydown.window.escape="mobileAsideOpen = false"
-            x-show="mobileAsideOpen"
-            aria-label="Menu lateral"
-            role="dialog"
-            x-ref="dialog"
-            aria-modal="true"
-        >
-            <div class="fixed inset-0 z-15 overflow-hidden">
-                <div class="absolute inset-0 overflow-hidden">
-                    <div class="pointer-events-none fixed inset-y-0 left-0 flex max-w-full pr-10 sm:pr-16">
-                        <div
-                            id="mobile-sidebar-panel"
-                            x-show="mobileAsideOpen"
-                            x-transition:enter="transform transition ease-in-out duration-300"
-                            x-transition:enter-start="-translate-x-full"
-                            x-transition:enter-end="translate-x-0"
-                            x-transition:leave="transform transition ease-in-out duration-300"
-                            x-transition:leave-start="translate-x-0"
-                            x-transition:leave-end="-translate-x-full"
-                            @click.away="mobileAsideOpen = false"
-                            class="pointer-events-auto w-screen max-w-(--mobile-sidebar-width)"
+    <nav
+        id="mobile-navigation"
+        aria-label="Navegação principal no celular"
+        class="fixed inset-x-0 bottom-0 z-10 grid h-[calc(3.5rem+env(safe-area-inset-bottom,0px))] auto-cols-fr grid-flow-col items-center gap-2 border-t border-base-300 bg-base-100 pt-1 pr-[max(1rem,env(safe-area-inset-right,0px))] pb-[calc(.25rem+env(safe-area-inset-bottom,0px))] pl-[max(1rem,env(safe-area-inset-left,0px))] shadow-lg md:hidden"
+    >
+        @foreach ($this->mobileItems as $item)
+            <a
+                wire:navigate
+                href="{{ route($item->route) }}"
+                aria-label="{{ $item->name }}"
+                @if (request()->routeIs($item->route) || ($item->prefix && request()->routeIs($item->prefix . '.*')))
+                    aria-current="page"
+                @endif
+                class="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-secondary hover:bg-accent hover:text-primary aria-[current=page]:bg-accent aria-[current=page]:text-primary"
+            >
+                <x-dynamic-component :component="'icons.' . $item->icon" class="size-6" aria-hidden="true" />
+            </a>
+        @endforeach
+        @if ($this->groups)
+            <div class="flex justify-center">
+                <x-ui.dropdown id="mobile-destinations" top end width="w-80">
+                    <x-slot name="trigger">
+                        <button
+                            type="button"
+                            aria-label="Todos os destinos"
+                            class="flex min-h-11 min-w-11 items-center justify-center rounded-lg text-secondary hover:bg-accent hover:text-primary aria-expanded:bg-accent aria-expanded:text-primary"
                         >
-                            <div class="flex h-full flex-col divide-y divide-base-300 bg-base-100 shadow-xl">
-                                <div
-                                    class="relative flex h-(--navbar-height) items-center justify-between border-b border-base-300 bg-base-100 px-8 sm:px-6"
+                            <x-icons.bars-3 class="size-6" aria-hidden="true" />
+                        </button>
+                    </x-slot>
+                    <x-slot name="header">
+                        Navegação
+                    </x-slot>
+                    @foreach ($this->groups as $group)
+                        <div role="group" aria-label="{{ $group->label ?? 'Principal' }}" class="p-2">
+                            @if ($group->label)
+                                <div class="px-3 py-2 text-sm font-semibold text-secondary">{{ $group->label }}</div>
+                            @endif
+                            @foreach ($group->items as $item)
+                                <a
+                                    wire:navigate
+                                    role="menuitem"
+                                    href="{{ route($item->route) }}"
+                                    @if (request()->routeIs($item->route) || ($item->prefix && request()->routeIs($item->prefix . '.*')))
+                                        aria-current="page"
+                                    @endif
+                                    class="flex min-h-11 items-center gap-3 rounded-lg px-3 py-2 text-secondary hover:bg-accent hover:text-primary aria-[current=page]:bg-accent aria-[current=page]:text-primary"
                                 >
-                                    <x-ui.application-logo class="block h-9 w-auto" />
-
-                                    <button
-                                        type="button"
-                                        class="absolute top-2 -right-8"
-                                        aria-label="Fechar menu lateral"
-                                        @click="mobileAsideOpen = false"
-                                    >
-                                        <x-icons.x-mark class="z-50 h-6 w-6 cursor-pointer text-base-100" aria-hidden="true" />
-                                    </button>
-                                </div>
-
-                                <div
-                                    x-data="sidebarContext(@js('sidebar-scroll-' . auth()->id() . '-mobile'))"
-                                    @scroll.passive="save()"
-                                    @resize.window="restore()"
-                                    data-sidebar-scroll="mobile"
-                                    class="h-0 flex-1 space-y-6 overflow-x-hidden overflow-y-auto py-3"
-                                >
-                                    @include('livewire.partials.sidebar-groups', ['sidebarMode' => 'mobile'])
-                                </div>
-                            </div>
+                                    <x-dynamic-component :component="'icons.' . $item->icon" class="size-6 shrink-0" aria-hidden="true" />
+                                    <span class="min-w-0 wrap-anywhere">{{ $item->name }}</span>
+                                </a>
+                            @endforeach
                         </div>
-                    </div>
-                </div>
+                    @endforeach
+                </x-ui.dropdown>
             </div>
-
-            <div
-                x-show="mobileAsideOpen"
-                class="fixed inset-0 bg-base-content/65"
-                x-transition:enter="transition-opacity ease-linear duration-300"
-                x-transition:enter-start="opacity-0"
-                x-transition:enter-end="opacity-100"
-                x-transition:leave="transition-opacity ease-linear duration-300"
-                x-transition:leave-start="opacity-100"
-                x-transition:leave-end="opacity-0"
-            ></div>
-        </div>
-    </div>
+        @endif
+    </nav>
 </div>

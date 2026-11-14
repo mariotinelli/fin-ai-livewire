@@ -31,6 +31,7 @@
     @keydown="keydown($event)"
     @keydown.escape.window="keydown($event)"
     @click.outside="if (open) close();"
+    @navigation-mode-changed.window="close(Boolean(triggerElement?.getClientRects().length))"
     @if ($hover)
         @mouseenter="openPanel(false, false)"
         @mouseleave="if (!$el.contains($event.relatedTarget)) close(false);"

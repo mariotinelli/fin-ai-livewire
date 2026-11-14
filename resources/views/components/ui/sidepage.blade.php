@@ -112,7 +112,10 @@
                                 </div>
                             @endif
                         </div>
-                        <div x-show="!opening" class="flex h-full min-w-0 flex-col divide-y divide-base-300 bg-base-100 shadow-xl">
+                        <div
+                            x-show="!opening"
+                            class="flex h-full min-w-0 flex-col divide-y divide-base-300 bg-base-100 pb-[env(safe-area-inset-bottom,0px)] shadow-xl"
+                        >
                             @if ($header)
                                 <div class="min-h-(--navbar-height) bg-primary px-4 py-6 sm:px-6">
                                     <div class="flex items-center justify-between">
