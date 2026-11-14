@@ -4,20 +4,12 @@
         name = $event.detail.name;
         initials = $event.detail.initials;
     "
-    @class([
-        'z-10 flex h-(--navbar-height) items-center justify-between border-b border-base-300 bg-base-100 px-4 sm:px-8 sticky',
-        'top-(--dev-bar-height)' => withEnvBar(),
-        'top-0' => !withEnvBar()
-    ])
+    class="finai-topbar z-10 flex h-(--navbar-height) shrink-0 items-center justify-between border-b border-base-300 bg-base-100 px-4 sm:px-8 md:justify-end md:rounded-t-box md:bg-transparent min-[90rem]:px-12"
 >
-    <a id="home-link" href="{{ route('dashboard') }}" class="hidden lg:block">
-        <x-ui.application-logo class="block h-10 w-auto" />
-    </a>
-
     <button
         id="toggle-sidebar"
         type="button"
-        class="flex min-h-11 min-w-11 items-center justify-center rounded-field text-secondary lg:hidden"
+        class="flex min-h-11 min-w-11 items-center justify-center rounded-field text-secondary md:hidden"
         aria-label="Abrir menu lateral"
         aria-controls="mobile-sidebar-panel"
         x-bind:aria-expanded="mobileAsideOpen ? 'true' : 'false'"
@@ -31,7 +23,15 @@
 
         <x-ui.dropdown end bottom>
             <x-slot name="trigger">
-                <x-ui.button id="open-user-menu" white sm circle aria-label="Abrir menu da conta" class="border-base-300! bg-base-200! text-primary!">
+                <x-ui.button
+                    id="open-user-menu"
+                    white
+                    sm
+                    circle
+                    :with-loading="false"
+                    aria-label="Abrir menu da conta"
+                    class="border-base-300! bg-base-200! text-primary! md:min-h-12 md:min-w-12"
+                >
                     <span class="p-0" x-text="initials">{{ user()->initials }}</span>
                 </x-ui.button>
             </x-slot>

@@ -9,6 +9,10 @@ use Rector\CodeQuality\Rector\Catch_\ThrowWithPreviousExceptionRector;
 use Rector\Config\RectorConfig;
 
 return RectorConfig::configure()
+    ->withCache(
+        cacheDirectory: __DIR__ . '/storage/framework/cache/rector',
+        containerCacheDirectory: __DIR__ . '/storage/framework/cache',
+    )
     ->withPaths([
         __DIR__ . '/app',
         __DIR__ . '/bootstrap',

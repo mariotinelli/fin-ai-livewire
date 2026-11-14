@@ -7,7 +7,7 @@
             aria-label="Abrir notificações"
             wire:loading.attr="disabled"
             wire:target="loadNotifications"
-            class="relative flex h-11 w-11 items-center justify-center rounded-field cursor-pointer text-secondary hover:bg-accent hover:text-primary disabled:cursor-wait"
+            class="relative flex h-11 w-11 cursor-pointer items-center justify-center rounded-field text-secondary hover:bg-accent hover:text-primary disabled:cursor-wait md:min-h-12 md:min-w-12"
         >
             <span wire:loading.remove wire:target="loadNotifications">
                 <x-icons.bell class="h-7 w-7" aria-hidden="true" />

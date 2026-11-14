@@ -3,7 +3,7 @@ import notificationPanel from './components/notification-panel.js';
 import checkboxSelect from './components/checkbox-select.js';
 import * as Quantity from './components/quantity.js';
 import { initializePageTitle } from './components/page-title.js';
-import { sidebarGroup, sidebarContext } from './components/sidebar.js';
+import { sidebarGroup, sidebarContext, sidebarLayout } from './components/sidebar.js';
 import sidepage from './components/sidepage.js';
 import alertModal from './components/alert-modal.js';
 import dropdown from './components/dropdown.js';
@@ -48,12 +48,9 @@ Alpine.data('alertModal', alertModal);
 Alpine.data('sidepage', sidepage);
 Alpine.data('sidebarGroup', sidebarGroup);
 Alpine.data('sidebarContext', sidebarContext);
+Alpine.data('sidebarLayout', sidebarLayout);
 Alpine.plugin(mask);
 Alpine.plugin(collapse);
-
-if (localStorage.getItem('asideOpen') === null) {
-    localStorage.setItem('asideOpen', 'true');
-}
 
 initializeButtonLoading(document, window);
 

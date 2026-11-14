@@ -1,3 +1,33 @@
+export function sidebarLayout() {
+    return {
+        desktopOpen: true,
+        desktop: window.innerWidth >= 1025,
+        mobileAsideOpen: false,
+        get asideOpen() {
+            return this.desktop && this.desktopOpen;
+        },
+        init() {
+            try {
+                this.desktopOpen = localStorage.getItem('asideOpen') !== 'false';
+            } catch {
+                // Keep navigation available when storage is unavailable.
+            }
+        },
+        resize() {
+            this.desktop = window.innerWidth >= 1025;
+            if (window.innerWidth >= 768) this.mobileAsideOpen = false;
+        },
+        toggleSidebar() {
+            this.desktopOpen = !this.desktopOpen;
+            try {
+                localStorage.setItem('asideOpen', String(this.desktopOpen));
+            } catch {
+                // The current session can still toggle the sidebar.
+            }
+        },
+    };
+}
+
 function read(key) {
     try {
         return sessionStorage.getItem(key);

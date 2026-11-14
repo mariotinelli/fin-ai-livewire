@@ -5,6 +5,8 @@ includes:
     - vendor/pestphp/pest-plugin-phpstan/extension.neon
 
 parameters:
+    tmpDir: storage/framework/cache/phpstan
+
     paths:
         - app/
         - database/
