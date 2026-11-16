@@ -1,7 +1,7 @@
 @props(['group', 'groupKey', 'groupId'])
 
-<div class="flex items-center justify-between bg-base-200" x-bind:class="{ 'border-b': open }">
-    <div class="flex min-w-0 items-center gap-2 px-4 py-3" @click.stop>
+<div class="flex items-center justify-between gap-2 bg-accent/50" x-bind:class="{ 'border-b': open }">
+    <div class="flex min-w-0 flex-wrap items-center gap-2 px-4 py-3" @click.stop>
         <x-ui.input.checkbox
             :id="$groupId . '-select'"
             name="permissions-{{ $groupKey }}"
@@ -23,7 +23,7 @@
         id="{{ $groupId }}-toggle"
         type="button"
         data-toggle-permissions-group
-        class="flex min-h-12 flex-1 cursor-pointer items-center justify-end self-stretch px-4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
+        class="flex min-h-12 min-w-12 flex-1 shrink-0 cursor-pointer items-center justify-end self-stretch px-4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-primary"
         aria-controls="{{ $groupId }}-content"
         aria-expanded="false"
         aria-label="{{ 'Expandir grupo ' . $group->label }}"

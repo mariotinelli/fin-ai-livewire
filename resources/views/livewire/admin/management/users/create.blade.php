@@ -1,5 +1,5 @@
 <div>
-    <x-ui.button id="create-user-button" primary wire:click="loadUser" icon="plus"> Novo Usuário </x-ui.button>
+    <x-ui.button id="create-user-button" primary class="min-h-11" wire:click="loadUser" icon="plus"> Novo Usuário </x-ui.button>
 
     <x-ui.modal id="create-user-modal" xl :clickAway="false" divided>
         <x-slot name="title">
@@ -15,7 +15,7 @@
                 <x-ui.input id="create-user-name" required label="Nome" placeholder="Nome do usuário" wire:model="user.name" />
             </div>
 
-            <div class="flex w-full gap-6">
+            <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
                 <div class="min-w-0 flex-1">
                     <x-ui.input
                         id="create-user-email"

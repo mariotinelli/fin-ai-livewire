@@ -7,7 +7,7 @@
 
 <x-ui.tooltip :label="$tooltip">
     <x-ui.button
-        {{ $attributes->class(['table-action']) }}
+        {{ $attributes->class(['table-action min-h-11 min-w-11']) }}
         :$icon
         :href="$disabled ? false : $href"
         :$navigate

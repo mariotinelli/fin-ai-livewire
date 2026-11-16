@@ -27,7 +27,7 @@
     scope="{{ $resolvedScope }}"
     @if ($ariaSort) aria-sort="{{ $ariaSort }}" @endif
     @if ($colspan) colspan="{{ $colspan }}" @endif
-    {{ $attributes->class(['text-xs px-7 py-2.5'])->only('class') }}
+    {{ $attributes->class(['text-xs px-4 sm:px-6 py-3'])->only('class') }}
 >
     @if ($isSortable)
         <button
@@ -35,16 +35,19 @@
             type="button"
             wire:click="sortBy(@js($name))"
             aria-label="{{ $sortAriaLabel }}"
-            @class(['group flex h-6 w-full cursor-pointer items-center gap-1 text-base-content', 'uppercase' => $upperCase])
+            @class([
+                'group flex min-h-11 w-full cursor-pointer items-center gap-2 rounded-lg text-secondary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus',
+                'uppercase' => $upperCase
+            ])
             {{ $attributes->except('class') }}
         >
             <span
                 @class([
-                    'tracking-widest',
+                    'tracking-wide',
                     'whitespace-nowrap' => $inline,
                     'text-left' => $textAlign === 'left',
                     'w-full text-center' => $textAlign === 'center',
-                    'text-right' => $textAlign === 'right'
+                    'w-full text-right' => $textAlign === 'right'
                 ])
             >
                 {{ $slot }}
@@ -64,11 +67,11 @@
         <div @class(['group flex h-6 items-center gap-1 text-base-content', 'uppercase' => $upperCase]) {{ $attributes->except('class') }}>
             <span
                 @class([
-                    'tracking-widest',
+                    'tracking-wide',
                     'whitespace-nowrap' => $inline,
                     'text-left' => $textAlign === 'left',
                     'w-full text-center' => $textAlign === 'center',
-                    'text-right' => $textAlign === 'right'
+                    'w-full text-right' => $textAlign === 'right'
                 ])
             >
                 {{ $slot }}

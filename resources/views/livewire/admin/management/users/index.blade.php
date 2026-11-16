@@ -31,15 +31,15 @@
             <x-ui.table.th name="email">E-mail</x-ui.table.th>
             <x-ui.table.th name="role_id">Perfil</x-ui.table.th>
             <x-ui.table.th name="deleted_at">Status</x-ui.table.th>
-            <x-ui.table.th>Ações</x-ui.table.th>
+            <x-ui.table.th text-align="right">Ações</x-ui.table.th>
         </x-slot>
 
         <x-slot name="body">
             @forelse ($this->users as $user)
                 <x-ui.table.tr wire:key="user-{{ $user->id }}">
-                    <x-ui.table.td>{{ $user->name }}</x-ui.table.td>
-                    <x-ui.table.td>{{ $user->email }}</x-ui.table.td>
-                    <x-ui.table.td>{{ $user->role->name }}</x-ui.table.td>
+                    <x-ui.table.td :label="$user->name" class="font-semibold" />
+                    <x-ui.table.td :label="$user->email" />
+                    <x-ui.table.td :label="$user->role->name" />
                     <x-ui.table.td>
                         @if ($user->trashed())
                             <x-ui.badge error>Inativo</x-ui.badge>
@@ -48,7 +48,7 @@
                         @endif
                     </x-ui.table.td>
                     <x-ui.table.td>
-                        <div class="flex items-center">
+                        <div class="flex items-center justify-end gap-1">
                             @can('resendInvitation', $user)
                                 <x-ui.table.action
                                     id="resend-user-invitation-button-{{ $user->id }}"

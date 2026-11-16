@@ -9,11 +9,13 @@
 
 <div
     id="{{ $instanceId }}"
+    class="@container"
     data-permissions-list
     x-data="{ selectedPermissions: @entangle($model), totalPermissions: 0, checkedAll: false }"
 >
     <x-ui.card
         divided
+        class="rounded-2xl! border border-base-300 sm:shadow-none"
         :header="$header ?? 'Permissões'"
         :description="$description ?? 'Selecione as permissões que deseja atribuir a este perfil.'"
     >
@@ -22,6 +24,7 @@
                 x-show="!checkedAll"
                 id="{{ $instanceId }}-select-all"
                 data-select-all-permissions
+                class="min-h-11"
                 primary
                 xs
                 outline
@@ -36,6 +39,7 @@
                 x-show="checkedAll"
                 id="{{ $instanceId }}-unmark-all"
                 data-unmark-all-permissions
+                class="min-h-11"
                 primary
                 xs
                 outline
@@ -57,7 +61,7 @@
                     id="{{ $groupId }}"
                     wire:key="{{ $groupId }}"
                     data-permissions-group
-                    class="overflow-hidden rounded-lg border"
+                    class="overflow-hidden rounded-2xl border border-base-300"
                     x-ref="group"
                     x-data="{
                         open: false,

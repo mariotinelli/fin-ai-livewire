@@ -10,7 +10,7 @@
     };
 @endphp
 
-<td {{ $attributes->class(['py-3 text-sm text-base-content px-7 whitespace-nowrap']) }}>
+<td {{ $attributes->class(['py-4 text-sm text-base-content px-4 sm:px-6 whitespace-nowrap']) }}>
     @if ($label !== null)
         <span
             @if ($limited) data-table-cell-text data-tip="{{ $label }}" @endif

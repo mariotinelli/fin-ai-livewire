@@ -13,7 +13,7 @@
                 <x-ui.input id="update-user-name" required label="Nome" placeholder="Nome do usuário" wire:model="user.name" />
             </div>
 
-            <div class="flex w-full gap-6">
+            <div class="grid w-full grid-cols-1 gap-6 sm:grid-cols-2">
                 <div class="min-w-0 flex-1">
                     <x-ui.input
                         id="update-user-email"
