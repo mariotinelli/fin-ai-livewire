@@ -15,11 +15,19 @@
         @endcan
     </x-slot>
 
-    <div class="space-y-4">
-        <x-ui.card divided header="Resumo técnico" description="Dados principais do alerta e da última ocorrência.">
-            <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-                <x-ui.details.card title="Status" :value="$this->systemErrorAlert->status->label()" />
-                <x-ui.details.card title="Severidade" :value="$this->systemErrorAlert->severity->label()" />
+    <div class="grid min-w-0 gap-4 sm:gap-6">
+        <x-ui.card divided header="Resumo técnico" heading-level="h2" class="min-w-0 rounded-2xl border border-base-300 sm:rounded-2xl!">
+            <dl class="mb-6 flex flex-wrap gap-x-8 gap-y-4 rounded-lg bg-base-200 p-4">
+                <div>
+                    <dt class="mb-1 text-sm text-secondary">Status</dt>
+                    <dd><x-ui.badge :color="$this->systemErrorAlert->status->color()">{{ $this->systemErrorAlert->status->label() }}</x-ui.badge></dd>
+                </div>
+                <div>
+                    <dt class="mb-1 text-sm text-secondary">Severidade</dt>
+                    <dd><x-ui.badge :color="$this->systemErrorAlert->severity->color()">{{ $this->systemErrorAlert->severity->label() }}</x-ui.badge></dd>
+                </div>
+            </dl>
+            <div class="grid min-w-0 gap-x-8 gap-y-4 sm:grid-cols-2">
                 <x-ui.details.card title="Ambiente" :value="$this->systemErrorAlert->environment" />
                 <x-ui.details.card title="Ocorrências" :value="(string) $this->systemErrorAlert->occurrences" />
                 <x-ui.details.card title="Primeira ocorrência" :value="$this->systemErrorAlert->first_seen_at?->format('d/m/Y H:i:s')" />
@@ -39,20 +47,22 @@
             </div>
         </x-ui.card>
 
-        <x-ui.card divided header="Mensagem da exceção">
-            <p class="text-sm whitespace-pre-wrap text-base-content">{{ $this->systemErrorAlert->message }}</p>
+        <x-ui.card divided header="Mensagem da exceção" heading-level="h2" class="min-w-0 rounded-2xl border border-base-300 sm:rounded-2xl!">
+            <p class="text-sm leading-relaxed wrap-anywhere whitespace-pre-wrap text-base-content">{{ $this->systemErrorAlert->message }}</p>
         </x-ui.card>
 
-        <x-ui.card divided header="Contexto sanitizado">
+        <x-ui.card divided header="Contexto sanitizado" heading-level="h2" class="min-w-0 rounded-2xl border border-base-300 sm:rounded-2xl!">
             <pre
-                class="max-h-80 overflow-auto rounded bg-neutral p-4 text-xs text-neutral-content"
+                tabindex="0" role="region" aria-label="Contexto sanitizado"
+                class="max-h-80 overflow-auto rounded-lg bg-base-content p-4 font-mono text-sm leading-6 text-base-100 focus-visible:outline-2 focus-visible:outline-focus"
                 >{{ json_encode($this->systemErrorAlert->context ?? [], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE) }}</pre
             >
         </x-ui.card>
 
-        <x-ui.card divided header="Stack trace completo">
+        <x-ui.card divided header="Stack trace completo" heading-level="h2" class="min-w-0 rounded-2xl border border-base-300 sm:rounded-2xl!">
             <pre
-                class="max-h-[32rem] overflow-auto rounded bg-neutral p-4 text-xs text-neutral-content"
+                tabindex="0" role="region" aria-label="Stack trace completo"
+                class="max-h-[32rem] overflow-auto rounded-lg bg-base-content p-4 font-mono text-sm leading-6 text-base-100 focus-visible:outline-2 focus-visible:outline-focus"
                 >{{ $this->systemErrorAlert->trace }}</pre
             >
         </x-ui.card>

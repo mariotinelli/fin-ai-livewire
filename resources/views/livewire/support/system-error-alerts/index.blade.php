@@ -16,7 +16,7 @@
             <x-ui.table.th name="status">Status</x-ui.table.th>
             <x-ui.table.th name="occurrences">Ocorrências</x-ui.table.th>
             <x-ui.table.th name="request_method">Requisição</x-ui.table.th>
-            <x-ui.table.th></x-ui.table.th>
+            <x-ui.table.th text-align="right">Ações</x-ui.table.th>
         </x-slot>
 
         <x-slot name="body">
@@ -24,8 +24,8 @@
                 <x-ui.table.tr>
                     <x-ui.table.td>{{ $alert->last_seen_at?->format('d/m/Y H:i:s') }}</x-ui.table.td>
                     <x-ui.table.td>
-                        <div class="font-medium">{{ $alert->exception_class }}</div>
-                        <div class="max-w-80 truncate text-xs text-base-content/75">{{ $alert->message }}</div>
+                        <div class="max-w-80 truncate font-mono text-sm font-semibold" title="{{ $alert->exception_class }}">{{ $alert->exception_class }}</div>
+                        <div class="mt-1 max-w-80 truncate text-sm text-secondary">{{ $alert->message }}</div>
                     </x-ui.table.td>
                     <x-ui.table.td>{{ $alert->environment }}</x-ui.table.td>
                     <x-ui.table.td>
@@ -48,7 +48,7 @@
                             id="show-system-error-alert-{{ $alert->id }}"
                             tooltip="Visualizar"
                             icon="eye"
-                            class="text-info"
+                            class="text-primary"
                             href="{{ route('support.system-error-alerts.show', $alert) }}"
                         />
                     </x-ui.table.td>
