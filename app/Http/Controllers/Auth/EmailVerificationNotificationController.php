@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\VerificationPublicationFailed;
 use App\Http\Controllers\Controller;
 use App\Support\Auth\IntendedDestination;
 use Illuminate\Http\RedirectResponse;
@@ -17,8 +18,14 @@ class EmailVerificationNotificationController extends Controller
             return redirect()->to($destination->pull(authenticatedUser($request)->type));
         }
 
-        authenticatedUser($request)->sendEmailVerificationNotification();
+        try {
+            authenticatedUser($request)->sendEmailVerificationNotification();
+        } catch (VerificationPublicationFailed $verificationPublicationFailed) {
+            report($verificationPublicationFailed);
 
-        return back()->with('status', 'verification-link-sent');
+            return to_route('verification.notice')->with('status', 'verification-link-failed');
+        }
+
+        return to_route('verification.notice')->with('status', 'verification-link-sent');
     }
 }

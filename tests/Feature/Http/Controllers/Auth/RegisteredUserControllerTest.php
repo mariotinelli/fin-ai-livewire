@@ -7,6 +7,7 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Http;
@@ -25,16 +26,16 @@ it('returns the public registration view', function (): void {
 it('registers and authenticates a customer through the reusable create user action', function (): void {
     Event::fake([Registered::class]);
 
-    $response = post('/register', [
+    $response = post(route('register'), [
         'name'                  => 'Cliente Exemplo',
-        'email'                 => 'cliente@example.com',
+        'email'                 => ' Cliente@Example.com ',
         'password'              => 'CustomerSecure@123456',
         'password_confirmation' => 'CustomerSecure@123456',
     ]);
 
     $customer = User::query()->where('email', 'cliente@example.com')->firstOrFail();
 
-    $response->assertRedirect('/cliente/dashboard');
+    $response->assertRedirect(route('verification.notice'));
 
     expect($customer->type)->toBe(TypeUsers::Customer)
         ->and(Hash::check('CustomerSecure@123456', $customer->password))->toBeTrue()
@@ -44,7 +45,7 @@ it('registers and authenticates a customer through the reusable create user acti
 });
 
 it('validates public registration data', function (): void {
-    post('/register', [
+    post(route('register'), [
         'name'                  => '',
         'email'                 => 'invalid-email',
         'password'              => 'weak',
@@ -54,10 +55,22 @@ it('validates public registration data', function (): void {
     expect(User::query()->count())->toBe(0);
 });
 
+it('keeps the new account signed in and recoverable when verification cannot be queued', function (): void {
+    $this->mock(Dispatcher::class)->shouldReceive('send')->once()->andThrow(new RuntimeException('Queue unavailable'));
+    post(route('register'), [
+        'name'     => 'Cliente Exemplo', 'email' => 'cliente@example.com',
+        'password' => 'CustomerSecure@123456', 'password_confirmation' => 'CustomerSecure@123456',
+    ])->assertRedirect(route('verification.notice'))->assertSessionHas('status', 'verification-link-failed');
+    $customer = User::query()->sole();
+    $this->assertAuthenticatedAs($customer);
+    expect($customer->hasVerifiedEmail())->toBeFalse();
+    $this->get(route('verification.notice'))->assertSee('Não foi possível solicitar o envio')->assertSee('Solicitar novo link');
+});
+
 it('ignores supplied privileges during public registration', function (int | string $type): void {
     $role = Role::factory()->create();
 
-    post('/register', [
+    post(route('register'), [
         'name'                  => 'Public Customer',
         'email'                 => 'public@example.com',
         'password'              => 'CustomerSecure@123456',
@@ -65,7 +78,7 @@ it('ignores supplied privileges during public registration', function (int | str
         'type'                  => $type,
         'role_id'               => $role->id,
         'invitation'            => true,
-    ])->assertRedirect('/cliente/dashboard');
+    ])->assertRedirect(route('verification.notice'));
 
     $user = User::query()->where('email', 'public@example.com')->sole();
     expect($user->type)->toBe(TypeUsers::Customer);
@@ -73,7 +86,7 @@ it('ignores supplied privileges during public registration', function (int | str
 })->with([TypeUsers::Admin->value, TypeUsers::User->value, TypeUsers::SupportRemSoft->value, 'invalid']);
 
 it('rejects invalid registration passwords without creating an account', function (?string $password): void {
-    post('/register', [
+    post(route('register'), [
         'name'                  => 'Policy User',
         'email'                 => 'policy@example.com',
         'password'              => $password,
@@ -97,9 +110,9 @@ it('rejects duplicate registration emails without changing the existing account'
     $user             = User::factory()->create(['email' => 'duplicate@example.com']);
     $originalPassword = $user->password;
 
-    post('/register', [
+    post(route('register'), [
         'name'                  => 'Another User',
-        'email'                 => 'duplicate@example.com',
+        'email'                 => ' DUPLICATE@example.com ',
         'password'              => 'CustomerSecure@123456',
         'password_confirmation' => 'CustomerSecure@123456',
     ])->assertSessionHasErrors('email');
@@ -110,7 +123,7 @@ it('rejects duplicate registration emails without changing the existing account'
 });
 
 it('rejects registration names shorter than three characters', function (): void {
-    post('/register', [
+    post(route('register'), [
         'name'                  => 'Ab',
         'email'                 => 'short-name@example.com',
         'password'              => 'CustomerSecure@123456',
@@ -125,12 +138,12 @@ it('blocks registration floods before creating accounts and allows retry after t
     Event::fake([Registered::class]);
 
     foreach (range(1, 3) as $attempt) {
-        post('/register', [])->assertSessionHasErrors('email');
+        post(route('register'), [])->assertSessionHasErrors('email');
     }
 
-    post('/register', [])->assertTooManyRequests()->assertHeader('Retry-After');
+    post(route('register'), [])->assertTooManyRequests()->assertHeader('Retry-After')->assertSee('Limite de cadastros');
     $this->assertDatabaseCount('users', 0);
     Event::assertNotDispatched(Registered::class);
     $this->travel(1)->hours();
-    post('/register', [])->assertSessionHasErrors('email');
+    post(route('register'), [])->assertSessionHasErrors('email');
 });

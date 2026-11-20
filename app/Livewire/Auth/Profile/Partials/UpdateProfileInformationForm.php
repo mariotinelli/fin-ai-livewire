@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Livewire\Auth\Profile\Partials;
 
 use App\Actions\Users\UpdateOwnProfile;
+use App\Exceptions\VerificationPublicationFailed;
 use App\Traits\Components\WithToast;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\RateLimiter;
@@ -55,10 +56,19 @@ class UpdateProfileInformationForm extends Component
             throw ValidationException::withMessages(['email' => 'Limite de alterações de e-mail atingido. Tente novamente mais tarde.']);
         }
 
-        $user = $updateOwnProfile->handle(
-            user: authenticatedUser(),
-            profileData: ['name' => $this->name, 'email' => $this->email],
-        );
+        try {
+            $user = $updateOwnProfile->handle(
+                user: authenticatedUser(),
+                profileData: ['name' => $this->name, 'email' => $this->email],
+            );
+        } catch (VerificationPublicationFailed $verificationPublicationFailed) {
+            report($verificationPublicationFailed);
+            authenticatedUser()->refresh();
+            $this->addError('email', 'Perfil atualizado. Não foi possível solicitar o envio do link. Acesse a confirmação para tentar novamente.');
+            $this->dispatch('profile::updated', name: authenticatedUser()->name, initials: authenticatedUser()->initials);
+
+            return;
+        }
 
         Auth::setUser($user);
 

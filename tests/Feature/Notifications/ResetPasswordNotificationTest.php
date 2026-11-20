@@ -17,6 +17,15 @@ use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Queue;
 
+it('keeps the personal recovery channel in the emailed link', function (): void {
+    $user         = User::factory()->customer()->create();
+    $token        = Password::createToken($user);
+    $notification = new ResetPasswordNotification($token, $user->email);
+    expect($notification->toMail($user)->actionUrl)->toBe(route('password.reset', [
+        'token' => $token, 'email' => $user->email, 'context' => 'customer',
+    ]));
+});
+
 it('queues the native email with middleware and after commit', function (): void {
     $user  = User::factory()->create(['email_verified_at' => null]);
     $token = Password::createToken($user);

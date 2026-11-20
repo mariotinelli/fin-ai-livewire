@@ -44,4 +44,17 @@ class ResetPasswordNotification extends ResetPassword implements ShouldQueue, Sh
 
         return $recipient instanceof User && Password::tokenExists($recipient, $this->token);
     }
+
+    protected function resetUrl(mixed $notifiable): string
+    {
+        if (!$notifiable instanceof User || static::$createUrlCallback !== null) {
+            return parent::resetUrl($notifiable);
+        }
+
+        return route('password.reset', [
+            'token'   => $this->token,
+            'email'   => $notifiable->getEmailForPasswordReset(),
+            'context' => str($notifiable->type->loginRouteName())->before('.login')->value(),
+        ]);
+    }
 }

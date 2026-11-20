@@ -14,7 +14,7 @@ use function Pest\Laravel\get;
 
 it('renders the admin login and redirects the legacy login URL', function (): void {
     get('/admin/login')->assertSuccessful();
-    get('/login')->assertRedirect('/admin/login');
+    get('/login')->assertRedirect('/cliente/login');
 });
 
 it('keeps management navigation and direct access aligned with view permissions', function (string $routeName, UserPermissions | RolePermissions $permission): void {

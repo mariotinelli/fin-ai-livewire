@@ -12,16 +12,16 @@ use App\Livewire\Auth\ResetPassword;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function (): void {
-    Route::get('register', [RegisteredUserController::class, 'create'])
+    Route::get('cliente/cadastro', [RegisteredUserController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store'])->middleware('throttle:registration');
+    Route::post('cliente/cadastro', [RegisteredUserController::class, 'store'])->middleware('throttle:registration')->name('register.store');
 
     Route::livewire('esqueci-minha-senha', ForgotPassword::class)->name('password.forgot');
     Route::livewire('nova-senha/{token}', ResetPassword::class)->name('password.reset');
 });
 
-Route::redirect('/login', '/admin/login');
+Route::redirect('/login', '/cliente/login');
 
 Route::middleware('auth')->group(function (): void {
     Route::get('verify-email', EmailVerificationPromptController::class)

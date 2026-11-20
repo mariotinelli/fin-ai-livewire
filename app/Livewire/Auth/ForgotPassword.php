@@ -43,10 +43,11 @@ class ForgotPassword extends Component
 
     public function sendResetLink(): void
     {
+        $this->email = mb_strtolower(trim($this->email));
         $this->validate();
 
         $prefix    = 'password-recovery:' . app()->environment();
-        $recipient = hash_hmac('sha256', mb_strtolower(trim($this->email)), config()->string('app.key'));
+        $recipient = hash_hmac('sha256', $this->email, config()->string('app.key'));
 
         if (RateLimiter::increment($prefix . ':ip:' . request()->ip(), 60) > 5
             || RateLimiter::increment($prefix . ':recipient:' . $recipient, 3600) > 3) {

@@ -43,6 +43,8 @@ abstract class BaseLogin extends Component
 
     public function login(IntendedDestination $destination): RedirectResponse | LivewireRedirector
     {
+        $this->email = mb_strtolower(trim($this->email));
+
         /** @var array{email: string, password: string} $data */
         $data = $this->validate();
 
@@ -63,6 +65,20 @@ abstract class BaseLogin extends Component
         RateLimiter::clear($this->throttleKey());
 
         session()->regenerate();
+
+        $verificationUrl  = session()->pull('verification.url');
+        $priorDestination = session()->pull('verification.destination');
+
+        if (is_string($verificationUrl) && $verificationUrl === session()->get('url.intended')
+            && str_starts_with($verificationUrl, route('verification.notice') . '/')) {
+            session()->put('url.intended', $priorDestination);
+
+            return redirect()->to($verificationUrl);
+        }
+
+        if ($this->areaType() === TypeUsers::Customer && !authenticatedUser()->hasVerifiedEmail()) {
+            return redirect()->route('verification.notice');
+        }
 
         return redirect()->to($destination->pull($this->areaType()));
     }

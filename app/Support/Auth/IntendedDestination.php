@@ -42,6 +42,15 @@ class IntendedDestination
             return false;
         }
 
+        if ($type === TypeUsers::Customer) {
+            return in_array($path, [
+                route('customer.dashboard', absolute: false),
+                route('profile.edit', absolute: false),
+                route('customer.profile.edit', absolute: false),
+                route('customer.notifications.history', absolute: false),
+            ], true);
+        }
+
         return $path === $prefix || str_starts_with($path, $prefix . '/');
     }
 }

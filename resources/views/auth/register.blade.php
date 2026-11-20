@@ -4,7 +4,13 @@
         <h1 class="font-display text-3xl leading-tight text-base-content">Criar conta</h1>
     </div>
 
-    <form method="POST" action="{{ route('register') }}" class="flex flex-col gap-5">
+    @isset($retryAfter)
+        <div class="mb-6">
+            <x-ui.alert warning :title="'Limite de cadastros atingido. Tente novamente em ' . $retryAfter . ' segundos.'" />
+        </div>
+    @endisset
+
+    <form method="POST" action="{{ route('register.store') }}" class="flex flex-col gap-5">
         @csrf
 
         <div>

@@ -12,7 +12,7 @@ Route::prefix('cliente')->as('customer.')->group(function (): void {
     Route::livewire('login', Login::class)->middleware('guest')->name('login');
 
     Route::middleware(['auth', EnsureUserCanAccessCustomerArea::class])->group(function (): void {
-        Route::view('dashboard', 'dashboard')->name('dashboard');
+        Route::view('dashboard', 'dashboard')->middleware('verified')->name('dashboard');
         Route::livewire('meu-perfil', EditProfile::class)->name('profile.edit');
         Route::livewire('notificacoes', History::class)->name('notifications.history');
     });

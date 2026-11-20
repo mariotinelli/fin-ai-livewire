@@ -9,7 +9,9 @@ use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response as LaravelResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -20,11 +22,26 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->redirectGuestsTo(fn (Request $request): string => route(match (true) {
-            $request->is('suporte', 'suporte/*') => 'support.login',
-            $request->is('cliente', 'cliente/*') => 'customer.login',
-            default                              => 'admin.login',
-        }));
+        $middleware->redirectGuestsTo(function (Request $request): string {
+            if ($request->routeIs('verification.verify')) {
+                $intended = $request->session()->get('url.intended');
+
+                if ($intended !== $request->session()->get('verification.url')) {
+                    $request->session()->put('verification.destination', $intended);
+                }
+
+                $request->session()->put('verification.url', $request->fullUrl());
+                $owner = $request->hasValidSignature() ? User::query()->whereKey($request->route('id'))->first() : null;
+
+                return route($owner?->type->loginRouteName() ?? 'customer.login');
+            }
+
+            return route(match (true) {
+                $request->is('suporte', 'suporte/*')                                        => 'support.login',
+                $request->is('cliente', 'cliente/*', 'dashboard', 'perfil', 'verify-email') => 'customer.login',
+                default                                                                     => 'admin.login',
+            });
+        });
 
         $middleware->redirectUsersTo(function (Request $request): string {
             $user = $request->user();
@@ -34,6 +51,25 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->dontReportDuplicates();
+
+        $exceptions->render(function (HttpExceptionInterface $exception, Request $request): ?LaravelResponse {
+            if ($request->expectsJson()) {
+                return null;
+            }
+
+            if ($exception->getStatusCode() === 429 && ($request->routeIs('verification.send') || $request->routeIs('register.store'))) {
+                $headers = $exception->getHeaders();
+                $view    = $request->routeIs('verification.send') ? 'auth.verify-email' : 'auth.register';
+
+                return response()->view($view, ['retryAfter' => $headers['Retry-After']], 429, $headers);
+            }
+
+            if ($request->routeIs('verification.verify') && $exception->getStatusCode() === 403) {
+                return response()->view('auth.verify-email', ['invalidLink' => true], 403);
+            }
+
+            return null;
+        });
 
         $exceptions->shouldRenderJsonWhen(
             fn (Request $request, Throwable $throwable): bool => $request->is('api/*') || $request->expectsJson()

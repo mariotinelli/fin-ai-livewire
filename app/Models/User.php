@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Casts\Datetime;
 use App\Enums\TypeUsers;
+use App\Exceptions\VerificationPublicationFailed;
 use App\Notifications\ResetPasswordNotification;
 use App\Notifications\VerifyEmailNotification;
 use App\Observers\UserObserver;
@@ -72,7 +73,11 @@ class User extends Authenticatable implements MustVerifyEmail, Auditable
 
     public function sendEmailVerificationNotification(): void
     {
-        $this->notify(new VerifyEmailNotification());
+        try {
+            $this->notify(new VerifyEmailNotification());
+        } catch (\Exception $exception) {
+            throw new VerificationPublicationFailed(previous: $exception);
+        }
     }
 
     protected function casts(): array

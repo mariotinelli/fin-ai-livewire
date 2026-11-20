@@ -41,6 +41,7 @@
             <div
                 @class([
                     'w-full min-w-0 rounded-2xl border border-base-300 bg-base-100 p-6 shadow-panel sm:p-8 [&_button]:min-h-11 [&_.btn]:min-h-11 [&_.btn]:h-auto [&_.btn]:whitespace-normal [&_.btn]:py-3 [&_input]:border-base-300 [&_input[aria-invalid=true]]:border-error',
+                    '[&_.btn-primary[aria-busy=true]]:bg-primary! [&_.btn-primary[aria-busy=true]]:text-primary-content! [&_.btn-primary[aria-busy=true]]:opacity-100!',
                     'max-w-lg' => $variant === 'centered',
                     'max-w-md' => $variant !== 'centered'
                 ])
