@@ -15,23 +15,19 @@
                 <x-ui.table.th name="created_at">Criado em</x-ui.table.th>
                 <x-ui.table.th name="updated_at">Atualizado em</x-ui.table.th>
                 <x-ui.table.th name="users_count">Total de usuários</x-ui.table.th>
-                <x-ui.table.th>Ações</x-ui.table.th>
+                <x-ui.table.th text-align="right">Ações</x-ui.table.th>
             </x-slot>
 
             <x-slot name="body">
                 @forelse ($this->roles as $role)
                     <x-ui.table.tr wire:key="role-{{ $role->id }}">
-                        <x-ui.table.td>{{ $role->name }}</x-ui.table.td>
-                        <x-ui.table.td>
-                            <span data-tip="{{ $role->description }}" @class(['tooltip' => str($role->description)->length() > 20])>
-                                {{ str($role->description ?? '-')->limit(20) }}
-                            </span>
-                        </x-ui.table.td>
+                        <x-ui.table.td :label="$role->name" class="font-semibold" />
+                        <x-ui.table.td :label="$role->description ?? '-'" />
                         <x-ui.table.td>{{ $role->created_at->format('d/m/Y H:i') }}</x-ui.table.td>
                         <x-ui.table.td>{{ $role->updated_at->format('d/m/Y H:i') }}</x-ui.table.td>
                         <x-ui.table.td>{{ $role->users_count }}</x-ui.table.td>
                         <x-ui.table.td>
-                            <div class="flex items-center">
+                            <div class="flex items-center justify-end gap-1">
                                 @can(RolePermissions::Edit)
                                     <x-ui.table.action
                                         id="edit-role-button-{{ $role->id }}"

@@ -1,6 +1,6 @@
-<nav data-ui-pagination aria-label="Paginação" class="mt-4 w-full items-center justify-between sm:flex">
-    <div class="mb-2 flex flex-row justify-center md:mb-0 md:justify-start">
-        <div class="relative h-10">
+<nav data-ui-pagination aria-label="Paginação" class="flex w-full min-w-0 flex-wrap items-center justify-between gap-4">
+    <div class="flex items-center gap-3">
+        <div class="relative">
             <label for="per-page" class="sr-only">Itens por página</label>
             <select
                 id="per-page"
@@ -9,21 +9,19 @@
                 wire:loading.attr="disabled"
                 wire:target="perPage"
                 aria-label="Itens por página"
-                class="block rounded border py-1 pr-2 pl-1 leading-tight text-base-content focus:border-primary focus:bg-base-100 focus:outline-hidden"
+                class="block min-h-11 rounded-lg border border-base-300 bg-base-100 px-3 text-sm text-base-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
             >
                 @foreach ($perPageValues as $value)
                     <option value="{{ $value }}">{{ $value }}</option>
                 @endforeach
             </select>
         </div>
-
-        <div class="hidden w-full pl-4 sm:block md:block lg:block" style="padding-top: 6px"></div>
     </div>
 
-    <div class="w-full items-center justify-end sm:flex sm:flex-1">
+    <div class="flex w-full min-w-0 flex-wrap items-center justify-between gap-4 sm:w-auto sm:flex-1 sm:justify-end">
         @if ($recordCount === 'full')
             <div>
-                <div class="text-md mr-2 text-center leading-5 text-base-content sm:text-right" aria-live="polite">
+                <div class="text-sm leading-5 text-secondary" aria-live="polite">
                     Mostrando
                     <span class="firstItem font-semibold">{{ $paginator->firstItem() }}</span>
                     até
@@ -56,14 +54,14 @@
         @if ($paginator->hasPages() && $recordCount != 'min')
             @php($pageName = method_exists($paginator, 'getPageName') ? $paginator->getPageName() : 'page')
             <div class="items-center justify-between sm:flex">
-                <ul class="mt-2 flex list-none justify-center sm:mt-0 md:flex-none md:justify-end" role="list">
+                <ul class="flex list-none flex-wrap items-center justify-end gap-1" role="list">
                     @if (!$paginator->onFirstPage())
                         <li>
                             <button
                                 data-ui-loading-control
                                 type="button"
                                 id="first-page"
-                                class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary px-2 py-1 pt-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                 wire:click="gotoPage(1, @js($pageName))"
                                 aria-label="Ir para a primeira página"
                             >
@@ -77,7 +75,7 @@
                                 data-ui-loading-control
                                 type="button"
                                 id="previous-page"
-                                class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary px-2 py-1 pt-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                 wire:click="previousPage(@js($pageName))"
                                 aria-label="Ir para a página anterior"
                             >
@@ -108,7 +106,7 @@
                                 disabled
                                 aria-label="Primeira página, navegação anterior desabilitada"
                                 aria-disabled="true"
-                                class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 px-2 py-1 pt-2 text-center text-base-content/50"
+                                class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                             >
                                 <x-icons.chevron-double-left class="h-4 w-4" />
                             </button>
@@ -121,7 +119,7 @@
                                 disabled
                                 aria-label="Página anterior indisponível"
                                 aria-disabled="true"
-                                class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 px-2 py-1 pt-2 text-center text-base-content/50"
+                                class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -158,7 +156,7 @@
                                 @if ($page == $paginator->currentPage())
                                     <li>
                                         <span
-                                            class="m-1 inline-flex cursor-pointer items-center justify-center rounded-sm border-1 border-base-content/30 px-2 py-1 text-center"
+                                            class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-primary bg-primary p-2 text-center font-semibold text-primary-content"
                                             aria-current="page"
                                             aria-label="Página {{ $page }}, atual"
                                         >
@@ -174,7 +172,7 @@
                                             data-ui-loading-control
                                             type="button"
                                             id="go-to-page-{{ $page }}"
-                                            class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary px-2 py-1 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                            class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                             wire:click="gotoPage({{ $page }}, @js($pageName))"
                                             aria-label="Ir para a página {{ $page }}"
                                         >
@@ -209,7 +207,7 @@
                                     data-ui-loading-control
                                     type="button"
                                     id="endassets"
-                                    class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary px-2 py-1 pt-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                    class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                     wire:click="nextPage(@js($pageName))"
                                     aria-label="Ir para a próxima página"
                                 >
@@ -241,7 +239,7 @@
                                 data-ui-loading-control
                                 type="button"
                                 id="last-page"
-                                class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary px-2 py-1 pt-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                 wire:click="gotoPage({{ $paginator->lastPage() }}, @js($pageName))"
                                 aria-label="Ir para a última página"
                             >
@@ -257,7 +255,7 @@
                                 disabled
                                 aria-label="Próxima página indisponível"
                                 aria-disabled="true"
-                                class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 px-2 py-1 pt-2 text-center text-base-content/50"
+                                class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
@@ -284,7 +282,7 @@
                                 disabled
                                 aria-label="Última página, navegação seguinte desabilitada"
                                 aria-disabled="true"
-                                class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 px-2 py-1 pt-2 text-center text-base-content/50"
+                                class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                             >
                                 <x-icons.chevron-double-right class="h-4 w-4" />
                             </button>
@@ -297,7 +295,7 @@
         @if ($paginator->hasPages() && $recordCount == 'min')
             <div>
                 <div class="items-center justify-between sm:flex">
-                    <ul class="mt-2 flex list-none justify-center sm:mt-0 md:flex-none md:justify-end" role="list">
+                    <ul class="flex list-none flex-wrap items-center justify-end gap-1" role="list">
                         <li>
                             {{-- Previous Page Link Disabled --}}
                             @if ($paginator->onFirstPage())
@@ -306,7 +304,7 @@
                                     disabled
                                     aria-label="Primeira página, navegação anterior desabilitada"
                                     aria-disabled="true"
-                                    class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 p-2 text-center text-base-content/50"
+                                    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                                 >
                                     <x-icons.chevron-double-left class="h-4 w-4" />
                                 </button>
@@ -318,7 +316,7 @@
                                         id="set-page-{{ $paginator->previousCursor()->encode() }}"
                                         wire:click="setPage(@js($paginator->previousCursor()->encode()), @js($paginator->getCursorName()))"
                                         aria-label="Ir para a página anterior"
-                                        class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary p-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                        class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                     >
                                         <x-icons.chevron-double-left class="h-4 w-4" />
                                         <span
@@ -334,7 +332,7 @@
                                         id="previous-page-{{ $paginator->getPageName() }}"
                                         wire:click="previousPage(@js($paginator->getPageName()))"
                                         aria-label="Ir para a página anterior"
-                                        class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary p-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                        class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                     >
                                         <x-icons.chevron-double-left class="h-4 w-4" />
                                         <span
@@ -357,7 +355,7 @@
                                         id="set-page-{{ $paginator->nextCursor()->encode() }}"
                                         wire:click="setPage(@js($paginator->nextCursor()->encode()), @js($paginator->getCursorName()))"
                                         aria-label="Ir para a próxima página"
-                                        class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary p-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                        class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                     >
                                         <x-icons.chevron-double-right class="h-4 w-4" />
                                         <span
@@ -373,7 +371,7 @@
                                         id="next-page-{{ $paginator->getPageName() }}"
                                         wire:click="nextPage(@js($paginator->getPageName()))"
                                         aria-label="Ir para a próxima página"
-                                        class="m-1 cursor-pointer rounded-sm border-1 border-base-content/30 bg-primary p-2 text-center text-primary-content hover:border-base-content/60 hover:bg-primary/80"
+                                        class="inline-flex min-h-11 min-w-11 cursor-pointer items-center justify-center rounded-lg border border-base-300 bg-base-100 p-2 text-center text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                     >
                                         <x-icons.chevron-double-right class="h-4 w-4" />
                                         <span
@@ -389,7 +387,7 @@
                                     disabled
                                     aria-label="Última página, navegação seguinte desabilitada"
                                     aria-disabled="true"
-                                    class="m-1 rounded-sm border-1 border-base-content/30 bg-base-300 p-2 text-center text-base-content/50"
+                                    class="inline-flex min-h-11 min-w-11 items-center justify-center rounded-lg border border-base-300 bg-base-200 p-2 text-center text-base-content/50"
                                 >
                                     <x-icons.chevron-double-right class="h-4 w-4" />
                                 </button>

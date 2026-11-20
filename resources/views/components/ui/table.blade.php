@@ -36,20 +36,20 @@
 <div
     x-data="tableTooltips"
     data-table-tooltips
-    {{ $attributes->merge(['class' => 'mx-auto rounded-lg w-full bg-base-100 border border-base-300']) }}
+    {{ $attributes->merge(['class' => 'mx-auto min-w-0 max-w-full rounded-2xl w-full bg-base-100 border border-base-300']) }}
 >
     @error('filters')
         <x-ui.input.error :message="$message" />
     @enderror
 
     @if ($filtersHeader || $search || $filtersDropdown)
-        <div @class(['p-4 flex items-end gap-3 justify-end', 'px-8!' => $filtersDropdown])>
+        <div class="flex min-w-0 flex-wrap items-end justify-between gap-4 p-4 sm:p-6">
             @if ($filtersHeader)
                 <div class="flex h-full items-end">{{ $filtersHeader }}</div>
             @endif
 
             @if ($search || $filtersDropdown || $toggleOnlyTrashed)
-                <div @class(['flex items-center gap-3', 'min-w-0 w-full sm:w-auto' => $draftFilters])>
+                <div class="ml-auto flex w-full min-w-0 items-center gap-3 sm:max-w-md">
                     @if ($toggleOnlyTrashed)
                         <x-ui.input.toggle inline label-right label="Mostrar apenas desativados" wire:model.live="toggleOnlyTrashed" />
                     @endif
@@ -64,7 +64,8 @@
                                 type="search"
                                 placeholder="Buscar itens na tabela"
                                 wire:model.live.debounce.400ms="search"
-                                :class="$draftFilters ? 'min-w-0 sm:min-w-64' : 'min-w-64'"
+                                parent-class="min-w-0 flex-1"
+                                class="min-w-0"
                                 aria-label="Buscar itens na tabela"
                             >
                                 <x-slot name="prefix">
@@ -98,7 +99,7 @@
                                     <button
                                         id="open-filters"
                                         type="button"
-                                        class="relative"
+                                        class="relative flex size-11 items-center justify-center rounded-lg border border-base-300 text-primary hover:bg-accent focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus"
                                         aria-label="Abrir filtros, {{ $activeFilters }} filtros ativos"
                                         @if ($draftFilters)
                                             aria-haspopup="dialog"
@@ -106,9 +107,9 @@
                                             x-bind:aria-expanded="open"
                                         @endif
                                     >
-                                        <x-ui.badge primary circle sm class="absolute -top-3 -right-4"> {{ $activeFilters }} </x-ui.badge>
+                                        <x-ui.badge primary circle sm class="absolute -top-2 -right-2"> {{ $activeFilters }} </x-ui.badge>
 
-                                        <x-icons.funnel class="h-5 w-5 cursor-pointer text-base-content/50" aria-hidden="true" />
+                                        <x-icons.funnel class="size-5" aria-hidden="true" />
                                     </button>
                                 </x-slot>
 
@@ -178,8 +179,11 @@
     @endif
 
     <div
+        tabindex="0"
+        role="region"
+        aria-label="Resultados da tabela, role horizontalmente para acessar todas as colunas"
         @class([
-            '-mx-4 sm:mx-0 overflow-x-auto border-b border-base-300',
+            'max-w-full overflow-x-auto border-b border-base-300 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-focus',
             'sm:rounded-t-lg' => !$search && !$filtersHeader && !$filtersDropdown,
             'border-t' => $search || $filtersHeader || $filtersDropdown,
             'max-h-[40rem] border-b-0 sm:rounded-b-lg' => !$pagination || !($records instanceof AbstractPaginator)
@@ -211,7 +215,7 @@
     </div>
 
     @if ($pagination && $records instanceof AbstractPaginator)
-        <div class="flex items-center justify-between px-4 pt-2 pb-4">
+        <div class="min-w-0 p-4 sm:px-6">
             <nav aria-label="Paginação" class="w-full">
                 {{ $records->links('components.ui.pagination', ['recordCount' => 'full', 'perPageValues' => $this->perPageValues]) }}
             </nav>

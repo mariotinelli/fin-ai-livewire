@@ -149,7 +149,7 @@
                 x-transition:leave-end="opacity-0 translate-y-0 scale-95"
                 @click.window.outside="clickAway && isActive() ? (open = false) : null"
                 @class([
-                    'w-full min-w-0 max-w-lg max-h-[calc(100dvh-1rem-max(1rem,env(safe-area-inset-bottom,0px)))] overflow-hidden wrap-anywhere bg-base-100 relative transform rounded-xl shadow-xl p-0
+                    'w-full min-w-0 max-w-lg max-h-[calc(100dvh-1rem-max(1rem,env(safe-area-inset-bottom,0px)))] overflow-hidden wrap-anywhere bg-base-100 relative transform rounded-2xl border border-base-300 shadow-panel p-0
                         pointer-events-auto transition-all flex flex-col items-start justify-start',
                     'max-w-2xl!'               => $lg,
                     'max-w-4xl!'               => $xl,
@@ -160,7 +160,7 @@
             >
                 @if ($closeButton)
                     <button
-                        class="absolute top-1 right-1 border-none bg-transparent p-2 shadow-none hover:cursor-pointer"
+                        class="absolute top-1 right-1 flex size-11 items-center justify-center rounded-lg border-none bg-transparent p-2 shadow-none hover:cursor-pointer hover:bg-accent focus-visible:outline-2 focus-visible:outline-focus"
                         type="button"
                         @click="open = false"
                     >
@@ -182,7 +182,7 @@
                     'text-right'   => $headerAlign === 'right',
                 ])
                 >
-                    <h2 id="{{ $id ?: md5($title) }}-title" class="w-full min-w-0 text-lg leading-6 font-semibold text-base-content">
+                    <h2 id="{{ $id ?: md5($title) }}-title" class="w-full min-w-0 font-display text-2xl leading-tight text-base-content">
                         {{ $title }}
                     </h2>
                     <p class="w-full min-w-0 text-sm text-base-content/75">{{ $description }}</p>
@@ -198,11 +198,11 @@
                     <div class="w-full min-w-0">{{ $slot }}</div>
                 </div>
 
-                <div data-modal-footer class="max-h-[40dvh] w-full min-w-0 shrink-0 overflow-y-auto overscroll-contain rounded-b-xl">
+                <div data-modal-footer class="max-h-[40dvh] w-full min-w-0 shrink-0 overflow-y-auto overscroll-contain rounded-b-2xl">
                     @if ($footer)
                         {{ $footer }}
                     @else
-                        <div class="flex w-full items-center justify-end gap-2 bg-base-200 p-3">
+                        <div class="flex w-full flex-wrap items-center justify-end gap-3 bg-base-200 p-4 sm:px-6">
                             <x-ui.button
                                 :id="$id . '-cancel-button'"
                                 label="Cancelar"

@@ -1,5 +1,5 @@
 <div>
-    <x-ui.button id="create-role-button" primary wire:click="loadRole" icon="plus"> Novo Perfil </x-ui.button>
+    <x-ui.button id="create-role-button" primary class="min-h-11" wire:click="loadRole" icon="plus"> Novo Perfil </x-ui.button>
 
     <x-ui.modal id="create-role-modal" xl3 :clickAway="false" divided scrollable>
         <x-slot name="title">
@@ -10,8 +10,8 @@
             Preencha os campos abaixo para cadastrar um novo perfil no sistema.
         </x-slot>
 
-        <fieldset class="w-full space-y-6" aria-label="Dados do perfil" wire:loading.attr="disabled" wire:target="save">
-            <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        <fieldset class="flex w-full min-w-0 flex-col gap-8" aria-label="Dados do perfil" wire:loading.attr="disabled" wire:target="save">
+            <div class="grid grid-cols-1 gap-6 rounded-2xl border border-base-300 bg-base-200/50 p-4 sm:grid-cols-2 sm:p-6">
                 <x-ui.input id="create-role-name" required label="Nome" placeholder="Nome do perfil" wire:model="role.name" />
 
                 <x-ui.input.select-search
