@@ -16,6 +16,7 @@ use Illuminate\Queue\Attributes\FailOnTimeout;
 use Illuminate\Queue\Attributes\Queue;
 use Illuminate\Queue\Attributes\Timeout;
 use Illuminate\Queue\Attributes\Tries;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Validation\ValidationException;
@@ -65,7 +66,7 @@ class ExecuteArtisanCommandJob implements ShouldQueue
             $allowedIps = config('artisan-executor.allowed_ips');
 
             if ($execution->user === null || !Gate::forUser($execution->user)->allows('create', CommandExecution::class)
-                || !is_array($allowedIps) || $execution->ip_address === null || !in_array($execution->ip_address, $allowedIps, true)) {
+                || (!App::environment('local') && (!is_array($allowedIps) || $execution->ip_address === null || !in_array($execution->ip_address, $allowedIps, true)))) {
                 throw ValidationException::withMessages(['commandInput' => 'Execução não autorizada.']);
             }
 

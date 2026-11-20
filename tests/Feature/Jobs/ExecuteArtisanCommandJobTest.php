@@ -19,6 +19,43 @@ beforeEach(function (): void {
     config()->set('artisan-executor.allowed_ips', ['127.0.0.1']);
 });
 
+it('executes allowed local commands without an authorized IP', function (?string $ip): void {
+    app()->detectEnvironment(fn (): string => 'local');
+    config()->set('artisan-executor.allowed_ips', []);
+    config()->set('artisan-executor.php_binary', 'php');
+    $execution = CommandExecution::factory()->for(User::factory()->state(['type' => TypeUsers::SupportRemSoft]), 'user')->create([
+        'command'    => 'about',
+        'ip_address' => $ip,
+    ]);
+    Process::fake();
+
+    ExecuteArtisanCommandJob::dispatchSync(commandExecutionId: $execution->id);
+
+    expect($execution->refresh()->status)->toBe(CommandExecutionStatuses::Success);
+    Process::assertRan(fn (PendingProcess $process): bool => $process->command === ['php', 'artisan', 'about', '--no-interaction', '--no-ansi']);
+})->with([null, '192.0.2.50']);
+
+it('still checks user and command authorization locally', function (string $restriction): void {
+    app()->detectEnvironment(fn (): string => 'local');
+    config()->set('artisan-executor.allowed_ips', []);
+    $execution = CommandExecution::factory()->for(User::factory()->state(['type' => TypeUsers::SupportRemSoft]), 'user')->create([
+        'command'    => 'about',
+        'ip_address' => '192.0.2.50',
+    ]);
+    Process::fake();
+
+    match ($restriction) {
+        'user'         => $execution->user->update(['type' => TypeUsers::Customer]),
+        'deleted user' => $execution->update(['user_id' => null]),
+        'command'      => config()->set('artisan-executor.commands_by_environment', []),
+    };
+
+    ExecuteArtisanCommandJob::dispatchSync(commandExecutionId: $execution->id);
+
+    expect($execution->refresh()->status)->toBe(CommandExecutionStatuses::Error);
+    Process::assertNothingRan();
+})->with(['user', 'deleted user', 'command']);
+
 it('publishes a bounded job with one attempt and definitive failure on timeout', function (): void {
     $execution = CommandExecution::factory()->for(User::factory()->state(['type' => TypeUsers::SupportRemSoft]), 'user')->create();
     $queue     = new DatabaseQueue(DB::connection(), 'jobs', 'rsp30-executor');

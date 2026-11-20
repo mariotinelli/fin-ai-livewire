@@ -6,6 +6,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Symfony\Component\HttpFoundation\Response;
 
 class RestrictByIp
@@ -13,6 +14,10 @@ class RestrictByIp
     /** @param Closure(Request): Response $next */
     public function handle(Request $request, Closure $next): Response
     {
+        if (App::environment('local')) {
+            return $next($request);
+        }
+
         $allowedIps = config('artisan-executor.allowed_ips', []);
 
         $clientIp = $request->ip();

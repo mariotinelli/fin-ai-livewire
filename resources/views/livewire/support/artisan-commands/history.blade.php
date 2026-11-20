@@ -1,4 +1,5 @@
-<div class="mt-6">
+<div class="mt-6 min-w-0 space-y-4">
+    <h2 class="font-display text-2xl text-base-content">Histórico de execuções</h2>
     @error('commandInput')
         <x-ui.input.error :message="$message" />
     @enderror
@@ -15,7 +16,7 @@
             <x-ui.table.th name="ip_address">IP</x-ui.table.th>
             <x-ui.table.th name="duration_ms">Duração</x-ui.table.th>
             <x-ui.table.th name="executed_at">Executado em</x-ui.table.th>
-            <x-ui.table.th></x-ui.table.th>
+            <x-ui.table.th text-align="right">Ações</x-ui.table.th>
         </x-slot>
 
         <x-slot name="body">
@@ -27,7 +28,7 @@
                             type="button"
                             id="open-command-output-{{ $execution->id }}"
                             wire:click="openOutput({{ $execution->id }})"
-                            class="max-w-104 truncate text-left text-sm font-medium text-info hover:underline"
+                            class="max-w-64 truncate rounded-sm text-left font-mono text-sm font-medium text-primary hover:underline focus-visible:outline-2 focus-visible:outline-focus sm:max-w-104"
                             title="{{ $execution->command }}"
                         >
                             {{ $execution->command }}
@@ -102,9 +103,9 @@
             {{ $this->selectedExecution?->command ?? 'Selecione um registro para visualizar o console.' }}
         </x-slot>
 
-        <div class="space-y-4">
+        <div class="w-full min-w-0 space-y-4">
             @if ($this->selectedExecution)
-                <div class="grid gap-2 text-sm text-base-content/75 md:grid-cols-2">
+                <div class="grid gap-x-6 gap-y-2 rounded-lg bg-base-200 p-4 text-sm wrap-anywhere text-base-content sm:grid-cols-2">
                     <p><strong>Status:</strong> {{ $this->selectedExecution->status->label() }}</p>
                     <p>
                         <strong>Duração:</strong>
@@ -114,9 +115,10 @@
                     <p><strong>IP:</strong> {{ $this->selectedExecution->ip_address ?? 'N/A' }}</p>
                 </div>
 
-                <div class="overflow-auto rounded-lg border border-neutral bg-neutral p-4 text-xs leading-5 text-accent">
-                    <pre class="font-mono whitespace-pre-wrap">{{ $this->selectedExecution->output ?: 'Sem saída registrada.' }}</pre>
-                </div>
+                <pre
+                    tabindex="0" role="region" aria-label="Saída do comando"
+                    class="max-h-96 overflow-auto rounded-lg bg-base-content p-4 font-mono text-sm leading-6 text-base-100 focus-visible:outline-2 focus-visible:outline-focus"
+                >{{ filled($this->selectedExecution->output) ? $this->selectedExecution->output : 'Sem saída registrada.' }}</pre>
             @else
                 <p class="text-sm text-base-content/65">Nenhum comando selecionado.</p>
             @endif
