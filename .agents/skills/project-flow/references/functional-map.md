@@ -24,12 +24,16 @@ Preencha o bloco `map-data` com:
 
 Escreva em português e use os nomes do próprio produto. Antes de cada desenho explique quem começa, por quê, o que precisa decidir e como percebe o resultado. Use raias para distribuir as ações entre pessoas e sistemas. Complete o capítulo com um exemplo concreto antes de começar o próximo. Para uma API ou CLI, descreva o pedido ou comando, os dados recebidos, a resposta ou saída e a retomada após falha. Notas de desenvolvimento, commits, tarefas de QA e andamento da implementação pertencem às suas fontes técnicas.
 
+Use o azul RemSoft `#1988CC` nos destaques de todos os projetos, com raias claras contínuas e caixas que crescem com o texto. Quando a jornada for longa, deixe-a continuar na próxima página. Preserve o tamanho das letras, o espaço entre passos e as proporções das setas do modelo.
+
+O PDF mostra o comportamento, a situação e os exemplos. Para registrar referências, use `journey.sources` (lista de textos) e `journey.evidence` (nota opcional): o modelo permite consultá-las no HTML e as oculta ao imprimir. Reserve caminhos de arquivos, commits, testes inspecionados e instruções de manutenção para essas notas ou para o requisito. Mantenha no PDF os links funcionais das mudanças e os links de navegação.
+
 **Concluído quando** a equipe consegue identificar cada jornada pelo índice e percorrê-la sem conhecer a conversa do agente.
 
 ## Gerar e conferir o PDF
 
 Na raiz do projeto, execute `remsoft skills:render-map`. Para uma fonte em outro caminho, use `remsoft skills:render-map "caminho/fonte.html" --output="caminho/mapa.pdf"`. Em uma instalação de desenvolvimento, use o mesmo launcher do RemSoft que preparou as skills. O comando usa o navegador validado pelo `remsoft init` e grava primeiro um PDF temporário.
 
-Se já houver uma edição válida e a fonte precisar de reparo, exporte a candidata com `--output` para um PDF temporário ao lado do original. Abra o PDF real. Siga o índice, confira a ordem dos capítulos, os nomes, acentos, texto selecionável, setas, exemplos e legibilidade das raias, inclusive nas que atravessam páginas. Somente depois dessa conferência aplique a edição no destino previsto, preservando revisões citadas. Uma renderização inválida mantém a edição anterior. Se o navegador estiver ausente, preserve a fonte para retomada e informe o requisito indicado pelo comando. Registre a referência ao mapa no documento local de escopo ou requisito. A primeira geração é local e independe do Redmine.
+Se já houver uma edição válida e a fonte precisar de reparo, exporte a candidata com `--output` para um PDF temporário ao lado do original. Abra o PDF real. Siga o índice, confira a ordem dos capítulos, os nomes, acentos, texto selecionável, setas, exemplos e legibilidade das raias, inclusive nas que atravessam páginas. Somente depois dessa conferência aplique a edição no destino previsto, preservando revisões citadas. Uma renderização inválida mantém a edição anterior. Se o navegador estiver ausente, preserve a fonte para retomada e informe o requisito indicado pelo comando. Quando houver escopo ou requisito, registre nele a referência ao mapa. A primeira geração é local e independe do Redmine.
 
 **Concluído quando** a fonte editável e o PDF estão acessíveis, a navegação e o conteúdo foram conferidos ou o impedimento específico foi registrado.

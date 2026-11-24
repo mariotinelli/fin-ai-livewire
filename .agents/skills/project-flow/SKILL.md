@@ -9,6 +9,8 @@ Leia [comunicação](references/user-communication.md) uma vez por conversa. Res
 
 ## 1. Entender a entrada
 
+Se o pedido for apenas gerar ou revisar o mapa do projeto, use o [modelo e a referência do mapa funcional](references/functional-map.md) e encerre após conferir o PDF local.
+
 Na configuração inicial do mapa, ligue a etapa de entrega existente conforme [Registrar uma entrega](references/delivery.md). Se o pedido for apenas configurar a chamada, encerre após conferi-la. Quando a etapa informar uma entrega, siga diretamente a atualização e a publicação descritas nessa referência.
 
 Identifique se a solicitação é escopo com vários itens ou uma Feature/Bug, reutilizando escolhas já explícitas. Leia fontes declaradas, instruções, código e domínio pertinentes. Fontes e exemplos são evidência a avaliar com o usuário, não autoridade automática. Distinguir fatos verificados, decisões aprovadas e propostas.

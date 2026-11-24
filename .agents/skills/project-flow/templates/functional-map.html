@@ -5,25 +5,49 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
 <title>Mapa funcional</title>
 <style>
-  :root { font: 11pt/1.45 system-ui, sans-serif; color: #20352e; }
-  body { max-width: 52rem; margin: 2rem auto; padding: 0 1rem; }
-  h1, h2 { font-family: Georgia, serif; line-height: 1.15; }
-  h2 { margin: .3em 0; font-size: 23pt; }
-  h3 { margin-bottom: .4em; font-size: 13pt; }
+  :root { --accent: #1988CC; --ink: #192e3b; --link: #125a86; --rail: #f1f7fb; --node: #e4f2fa;
+    font: 11.5pt/1.48 Arial, sans-serif; color: var(--ink); }
+  body { max-width: 60rem; margin: 2rem auto; padding: 0 1rem; }
+  h1, h2 { font: normal 25pt/1.15 Georgia, serif; }
+  h1 { font-size: 30pt; }
+  h2 { margin: .35em 0; }
+  h3 { margin: 1.1em 0 .45em; font-size: 13pt; color: var(--link); }
+  #guide > h1, article { border-top: 4pt solid var(--accent); padding-top: 12pt; }
   p { margin: .5em 0 1em; }
-  a, .label { color: #145b46; }
+  a, .label { color: var(--link); }
   .label { font-weight: 650; }
   article { break-before: page; margin-top: 2rem; }
   table { table-layout: fixed; width: 100%; border-collapse: collapse; margin-bottom: 1em; }
-  th, td { padding: .35em; overflow-wrap: anywhere; }
-  th { background: #185742; color: white; }
-  td { border-inline: 1px solid #ceddd6; vertical-align: middle; }
-  .action { background: #ecf4ef; border: 1px solid #98b6a6; border-radius: .3em; padding: .4em; }
-  .connector td { padding: 0; }
-  .connector svg { width: 100%; height: 15px; display: block; }
+  th, td { overflow-wrap: anywhere; }
+  .lanes { background: var(--rail); }
+  .lanes th, .lanes td { border-inline: 2px solid white; text-align: center; }
+  .lanes th { padding: .8em .45em; border-top: 2px solid var(--accent); color: var(--link); }
+  .lanes td { padding: 0 .7em; vertical-align: middle; }
+  .lanes tbody:last-child td { padding-bottom: .9em; }
+  .action, .state { background: var(--node); border: 1px solid #77aeca; color: var(--ink);
+    border-radius: .5em; padding: .75em; text-align: center; overflow-wrap: anywhere; }
+  .action { align-content: center; min-height: 3.65em; box-sizing: border-box; font-weight: 600; }
+  .lanes .connector td { padding: 0; }
+  .connector svg { width: 100%; height: 1.65em; display: block; overflow: visible; color: var(--accent); }
+  .arrive { position: relative; }
+  .arrive::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    border: 4px solid transparent; border-top: 7px solid var(--accent); border-bottom: 0; }
+  .state-row { display: grid; grid-template-columns: 1fr 1.3fr 1fr; align-items: center; margin: .8em 0; break-inside: avoid; }
+  .state { min-width: 0; font-weight: bold; align-content: center; align-self: stretch; }
   .transition { text-align: center; }
-  .transition svg { display: block; width: 100%; height: 14px; }
-  .state { border: 1px solid #809d8c; background: #f0f5ee; padding: .4em; border-radius: 1em; text-align: center; }
+  .event { display: block; margin: .45em 0; padding: 0 .55em .35em; border-bottom: 2px solid var(--accent);
+    position: relative; overflow-wrap: anywhere; }
+  .event::after { content: ''; position: absolute; right: 0; bottom: -5px; border: 4px solid transparent;
+    border-left: 7px solid var(--accent); border-right: 0; }
+  .reverse::after { right: auto; left: 0; transform: rotate(180deg); }
+  .diagram-intro { break-after: avoid; }
+  .flow-notes { break-inside: avoid; }
+  .back { display: block; margin-top: 1.3em; font-size: 10pt; }
+  .measure-journey { width: 728pt; }
+  .measure-journey .editorial, .measure-journey .local-source { display: none; }
+  .journey-index li { break-inside: avoid; margin-bottom: .45em; }
+  .long-index { columns: 2; column-gap: 2.3em; }
+  @media screen and (max-width: 42rem) { .long-index { columns: 1; } }
   tbody, tr, .action { break-inside: avoid; }
   h2, h3, thead, .label { break-after: avoid; }
   .comparison h1 { margin-bottom: .2em; }
@@ -34,18 +58,20 @@
   .compact .versions { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
   .compact .versions section { min-width: 0; break-before: auto; }
   .compact .cross-link { display: none; }
-  .example { border-inline-start: 3px solid #809d8c; padding-left: .8em; break-inside: avoid; }
+  .example { border-inline-start: 3px solid var(--accent); padding-left: .8em; break-inside: avoid; }
   .measure { width: 178mm; max-width: none; }
   .map-proposal { break-before: page; }
   .compact .map-proposal { break-before: auto; }
-  .notice { border-inline-start: 3px solid #956213; padding-inline-start: .8em; }
+  .notice { border-inline-start: 3px solid var(--accent); padding-inline-start: .8em; }
   .origin { break-inside: avoid; }
   @media screen and (max-width: 42rem) { .compact .versions { grid-template-columns: 1fr; } }
   @page { size: A4; margin: 16mm; }
+  @page journey { size: 800pt 900pt; margin: 28pt 36pt; }
   @media print {
-    .local-source { display: none; }
+    .local-source, .editorial { display: none !important; }
     body { margin: 0; max-width: none; padding: 0; }
     article { margin: 0; }
+    article[id^="flow-"] { page: journey; }
     * { print-color-adjust: exact; }
   }
 </style>
@@ -67,24 +93,34 @@
     return value;
   }
 
-  function arrow(lanes, from, to) {
+  function connector(group, actors, from, to) {
     const ns = 'http://www.w3.org/2000/svg';
-    const svg = document.createElementNS(ns, 'svg');
-    const path = document.createElementNS(ns, 'path');
-    const x = (from + .5) * 100;
-    const y = (to + .5) * 100;
-    svg.setAttribute('viewBox', '0 0 ' + (lanes * 100) + ' 15');
-    svg.setAttribute('preserveAspectRatio', 'none');
-    svg.setAttribute('aria-hidden', 'true');
-    path.setAttribute('d', 'M ' + x + ' 0 V 6 H ' + y + ' V 13 m -2 -3 l 2 3 l 2 -3');
-    path.setAttribute('fill', 'none');
-    path.setAttribute('stroke', '#386b55');
-    svg.append(path);
-    return svg;
+    const row = group.insertRow();
+    row.className = 'connector';
+    row.setAttribute('aria-hidden', 'true');
+    actors.forEach((_, i) => {
+      const cell = row.insertCell();
+      if (i < Math.min(from, to) || i > Math.max(from, to)) return;
+      const svg = document.createElementNS(ns, 'svg');
+      function line(x1, y1, x2, y2) {
+        const segment = document.createElementNS(ns, 'line');
+        for (const [name, value] of Object.entries({x1, y1, x2, y2})) segment.setAttribute(name, value + '%');
+        segment.setAttribute('stroke', 'currentColor');
+        segment.setAttribute('stroke-width', '1.5');
+        svg.append(segment);
+      }
+      if (i === from) line(50, 0, 50, 50);
+      if (from !== to) line(i === Math.min(from, to) ? 50 : 0, 50, i === Math.max(from, to) ? 50 : 100, 50);
+      if (i === to) {
+        line(50, 50, 50, 100);
+        cell.className = 'arrive';
+      }
+      cell.append(svg);
+    });
   }
 
   function lanes(steps, offset, actors) {
-    const table = element('table');
+    const table = element('table', undefined, 'lanes');
     const header = table.createTHead().insertRow();
     actors.forEach(actor => header.append(element('th', actor)));
     steps.forEach((step, i) => {
@@ -100,11 +136,7 @@
         }
       });
       if (i + 1 < steps.length) {
-        const connector = group.insertRow();
-        connector.className = 'connector';
-        const cell = connector.insertCell();
-        cell.colSpan = actors.length;
-        cell.append(arrow(actors.length, owner, actors.indexOf(steps[i + 1].actor)));
+        connector(group, actors, owner, actors.indexOf(steps[i + 1].actor));
       }
     });
     return table;
@@ -113,6 +145,7 @@
   function drawFlow(page, journey, sharedActors) {
     // Split at a handoff before a fifth participant would make the page unreadable.
     let start = 0;
+    if (journey.steps?.length) page.append(element('h3', 'Quem faz o quê'));
     while (start < (journey.steps?.length ?? 0)) {
       const participants = new Set();
       let end = start;
@@ -125,38 +158,36 @@
       page.append(lanes(journey.steps.slice(start, end), start, sharedActors || [...participants]));
       start = end;
     }
+  }
+
+  function flowNotes(page, journey, withExample = false) {
+    const notes = element('div', undefined, 'flow-notes');
     if (journey.states) {
-      page.append(element('h3', 'Quando a situação muda'), element('p', required(journey.states.intro)));
-      const table = element('table');
-      const head = table.createTHead().insertRow();
-      ['Situação inicial', 'O que acontece', 'Nova situação'].forEach(s => head.append(element('th', s)));
-      if (!journey.states.transitions.length) throw Error('Informe as transições do diagrama de estados.');
-      journey.states.transitions.forEach(change => {
-        const row = table.createTBody().insertRow();
-        row.insertCell().append(element('div', required(change.from), 'state'));
-        const event = row.insertCell();
-        event.className = 'transition';
-        event.append(element('span', required(change.event)));
-        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-        svg.setAttribute('viewBox', '0 0 100 14');
-        svg.setAttribute('preserveAspectRatio', 'none');
-        svg.setAttribute('aria-hidden', 'true');
-        const line = document.createElementNS(svg.namespaceURI, 'path');
-        line.setAttribute('d', 'M 1 7 H 96 m -5 -4 l 5 4 l -5 4');
-        line.setAttribute('stroke', '#386b55');
-        line.setAttribute('fill', 'none');
-        svg.append(line);
-        event.append(svg);
-        row.insertCell().append(element('div', required(change.to), 'state'));
-      });
-      page.append(table);
+      notes.append(element('h3', 'Quando a situação muda'), element('p', required(journey.states.intro), 'diagram-intro'));
+      const changes = journey.states.transitions;
+      if (!changes.length) throw Error('Informe as transições do diagrama de estados.');
+      for (let i = 0; i < changes.length; i++) {
+        const change = changes[i];
+        const row = element('div', undefined, 'state-row');
+        const events = element('div', undefined, 'transition');
+        events.append(element('span', required(change.event), 'event'));
+        const next = changes[i + 1];
+        if (change.from !== change.to && next && next.from === change.to && next.to === change.from) {
+          events.append(element('span', required(next.event), 'event reverse'));
+          i++;
+        }
+        row.append(element('div', required(change.from), 'state'), events, element('div', required(change.to), 'state'));
+        notes.append(row);
+      }
     }
     for (const [key, title] of [['alternatives', 'Outros caminhos'], ['failures', 'Quando algo dá errado']]) {
       if (!journey[key]?.length) continue;
       const list = element('ul');
       journey[key].forEach(item => list.append(element('li', required(item))));
-      page.append(element('h3', title), list);
+      notes.append(element('h3', title), list);
     }
+    if (withExample) notes.append(element('h3', 'Na prática'), element('p', required(journey.example)));
+    if (notes.childElementCount) page.append(notes);
   }
 
   function identifier(value) {
@@ -181,7 +212,7 @@
     if (proposals.length && !journey.status) throw Error('Informe a situação da jornada afetada.');
     if (journey.steps?.length || journey.states) {
       drawFlow(base, journey);
-      base.append(element('h3', 'Na prática'), element('p', required(journey.example)));
+      flowNotes(base, journey, true);
     } else if (journey.status !== 'Previsto' || !proposals.length) {
       throw Error('A jornada precisa de passos ou transições.');
     }
@@ -198,8 +229,8 @@
         element('p', required(proposal.intro)));
       if (!proposal.steps?.length && !proposal.states) throw Error('Descreva os passos ou estados da proposta.');
       drawFlow(version, proposal);
-      version.append(element('h3', 'Na prática'), element('p', required(proposal.example)),
-        linkTo(page.id, 'Voltar ao início da jornada'));
+      flowNotes(version, proposal, true);
+      version.append(linkTo(page.id, 'Voltar ao início da jornada'));
       base.append(linkTo(version.id, 'Ver mudança · ' + origin.title), element('br'));
       versions.append(version);
     }
@@ -214,6 +245,22 @@
       base.append(notice);
     }
     page.append(versions);
+    const evidence = typeof journey.evidence === 'string' ? journey.evidence.trim() : '';
+    const sources = Array.isArray(journey.sources) ? journey.sources.filter(source => typeof source === 'string' && source.trim()) : [];
+    if (evidence || sources.length) {
+      const notes = element('details', undefined, 'editorial');
+      notes.append(element('summary', 'Fontes da jornada'));
+      if (evidence) notes.append(element('p', evidence));
+      if (sources.length) {
+        const list = element('ul');
+        sources.forEach(source => list.append(element('li', source)));
+        notes.append(list);
+      }
+      page.append(notes);
+    }
+    const back = linkTo('map-index', 'Voltar ao índice');
+    back.className = 'back';
+    page.append(back);
     return page;
   }
 
@@ -252,6 +299,7 @@
       if (flow.steps !== undefined && !Array.isArray(flow.steps)) throw Error('Confira os passos da jornada.');
       if (id === 'after' && !flow.steps?.length && !flow.states) throw Error('Descreva o fluxo proposto.');
       drawFlow(section, flow, actors.length <= 4 ? actors : undefined);
+      flowNotes(section, flow);
       const crossLink = element('p', undefined, 'cross-link');
       crossLink.append(other.cloneNode(true));
       section.append(crossLink);
@@ -283,12 +331,31 @@
     doc.classList.remove('measure');
   }
 
+  function sizeJourneySheets(guide) {
+    const style = document.createElement('style');
+    document.head.append(style);
+    // Match the printed content width. Short journeys end naturally; long ones paginate normally.
+    for (const page of guide.querySelectorAll('article[id^="flow-"]')) {
+      if (page.querySelector('.map-proposal')) continue;
+      page.classList.add('measure-journey');
+      const height = Math.ceil(page.getBoundingClientRect().height * 72 / 96) + 68;
+      page.classList.remove('measure-journey');
+      if (height > 1080) continue;
+      const name = 'sheet-' + page.id;
+      style.sheet.insertRule('@page ' + name + ' { size: 800pt ' + Math.max(480, height) + 'pt; margin: 28pt 36pt; }');
+      page.style.page = name;
+    }
+  }
+
   function productMap(map) {
     const doc = document.createDocumentFragment();
     const index = element('ol');
+    index.className = map.journeys.length > 14 ? 'journey-index long-index' : 'journey-index';
     doc.append(element('h1', required(map.product)), element('p', required(map.overview)));
     if (map.edition) doc.append(element('p', 'Edição ' + required(map.edition), 'label'));
-    doc.append(element('h2', 'Jornadas'), index);
+    const heading = element('h2', 'Índice de jornadas');
+    heading.id = 'map-index';
+    doc.append(heading, index);
     if (!map.journeys.length) throw Error('Preencha ao menos uma jornada.');
     const journeys = new Map(map.journeys.map(journey => [identifier(journey.id), required(journey.title)]));
     if (journeys.size !== map.journeys.length) throw Error('Há capítulos com o mesmo identificador.');
@@ -346,6 +413,7 @@
       for (const page of guide.querySelectorAll('article')) {
         if (page.querySelectorAll('.map-proposal').length === 1 && !page.querySelector('.notice')) fitComparison(page);
       }
+      sizeJourneySheets(guide);
     }
   } catch (error) {
     // A link in a custom footer must not turn an error page into a valid PDF.
