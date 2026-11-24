@@ -18,4 +18,8 @@
 
         <x-ui.button primary block type="submit" loading="login"> Entrar </x-ui.button>
     </form>
+
+    @if ($context === 'customer')
+        <x-ui.button link :href="route('register')">Criar conta</x-ui.button>
+    @endif
 </div>

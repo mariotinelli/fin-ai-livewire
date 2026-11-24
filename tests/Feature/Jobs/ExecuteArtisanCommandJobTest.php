@@ -23,6 +23,7 @@ it('executes allowed local commands without an authorized IP', function (?string
     app()->detectEnvironment(fn (): string => 'local');
     config()->set('artisan-executor.allowed_ips', []);
     config()->set('artisan-executor.php_binary', 'php');
+
     $execution = CommandExecution::factory()->for(User::factory()->state(['type' => TypeUsers::SupportRemSoft]), 'user')->create([
         'command'    => 'about',
         'ip_address' => $ip,

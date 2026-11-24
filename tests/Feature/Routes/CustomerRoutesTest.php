@@ -4,15 +4,30 @@ declare(strict_types = 1);
 
 use App\Enums\TypeUsers;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Livewire\Livewire;
 
 use function Pest\Laravel\actingAs;
 use function Pest\Laravel\get;
 
+it('offers registration and recovery from the public entry', function (): void {
+    get('/')->assertRedirect(route('customer.login'));
+    get(route('customer.login'))->assertOk()->assertSee(route('register'))
+        ->assertSee(route('password.forgot', ['context' => 'customer']));
+});
+
 it('redirects customer area guests to the customer login', function (string $route): void {
     get(route($route))->assertRedirect(route('customer.login'));
 })->with(['customer.dashboard', 'customer.profile.edit']);
+
+it('requires verification for financial access restored from a remember cookie', function (): void {
+    $user = User::factory()->customer()->create(['email_verified_at' => null]);
+    $this->withCookie(Auth::guard()->getRecallerName(), implode('|', [$user->id, $user->getRememberToken(), $user->password]))
+        ->get(route('customer.dashboard'))->assertRedirect(route('verification.notice'));
+    expect(Auth::viaRemember())->toBeTrue();
+    $this->get(route('customer.profile.edit'))->assertOk();
+});
 
 it('isolates customer pages and contextual legacy destinations', function (): void {
     actingAs(User::factory()->customer()->create());

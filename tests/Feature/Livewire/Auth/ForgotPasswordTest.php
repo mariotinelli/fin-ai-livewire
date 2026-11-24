@@ -39,7 +39,7 @@ it('flashes status when password reset link is sent', function (): void {
         ->andReturn(Password::RESET_LINK_SENT);
 
     livewire(ForgotPassword::class)
-        ->set('email', $user->email)
+        ->set('email', ' ' . mb_strtoupper($user->email) . ' ')
         ->call('sendResetLink')
         ->assertHasNoErrors()
         ->assertSee(__(Password::RESET_LINK_SENT));

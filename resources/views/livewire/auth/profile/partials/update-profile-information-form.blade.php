@@ -24,6 +24,9 @@
                         wire:model="email"
                         placeholder="Digite seu e-mail"
                     />
+                    @if (!authenticatedUser()->hasVerifiedEmail())
+                        <x-ui.button link :href="route('verification.notice')">Confirmar meu e-mail</x-ui.button>
+                    @endif
                 </div>
             </x-slot>
 

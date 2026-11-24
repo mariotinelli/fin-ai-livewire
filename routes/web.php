@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', fn () => to_route(user()?->type->initialRouteName() ?? 'dashboard'))->name('home');
+Route::get('/', fn () => to_route(user()?->type->initialRouteName() ?? 'customer.login'))->name('home');
 
 Route::get('/dashboard', fn () => to_route(authenticatedUser()->type->initialRouteName()))->middleware(['auth'])->name('dashboard');
 

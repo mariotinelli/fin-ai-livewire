@@ -6,6 +6,7 @@ use App\Enums\TypeUsers;
 use App\Livewire\Auth\Profile\Partials\UpdateProfileInformationForm;
 use App\Models\User;
 use App\Notifications\VerifyEmailNotification as VerifyEmail;
+use Illuminate\Contracts\Notifications\Dispatcher;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
@@ -70,6 +71,15 @@ it('refuses profile updates when the account was deactivated after opening the f
     Notification::assertNothingSent();
 });
 
+it('shows how to confirm the saved address when publication fails after the profile commit', function (): void {
+    $user = User::factory()->customer()->create();
+    actingAs($user);
+    $this->mock(Dispatcher::class)->shouldReceive('send')->once()->andThrow(new RuntimeException('Queue unavailable'));
+    livewire(UpdateProfileInformationForm::class)->set('email', 'changed@example.com')->call('save')
+        ->assertHasErrors('email')->assertSee('Perfil atualizado.')->assertSee(route('verification.notice'));
+    expect($user->refresh()->email)->toBe('changed@example.com')->and($user->hasVerifiedEmail())->toBeFalse();
+});
+
 it('preserves verification without notifying when the email is unchanged', function (?string $verifiedAt): void {
     Notification::fake();
     $user = User::factory()->create(['email_verified_at' => $verifiedAt === null ? null : Carbon::parse($verifiedAt)]);
@@ -104,7 +114,7 @@ it('rejects invalid email changes without invalidating verification or notifying
 
 it('verifies the new address and rejects the old link while keeping auth-only routes accessible', function (): void {
     Notification::fake();
-    $user    = User::factory()->create(['email_verified_at' => null]);
+    $user    = User::factory()->customer()->create(['email_verified_at' => null]);
     $oldLink = URL::temporarySignedRoute('verification.verify', now()->addMinutes(60), [
         'id'   => $user->id,
         'hash' => sha1($user->email),
@@ -118,7 +128,7 @@ it('verifies the new address and rejects the old link while keeping auth-only ro
 
     $this->get($oldLink)->assertForbidden();
     expect($user->fresh()->hasVerifiedEmail())->toBeFalse();
-    $this->get(route($user->type->initialRouteName()))->assertOk();
+    $this->get(route($user->type->initialRouteName()))->assertRedirect(route('verification.notice'));
     $this->get(route($user->type->profileRouteName()))->assertOk();
 
     Notification::assertSentTo($user, VerifyEmail::class, function (VerifyEmail $notification, array $channels, User $notifiable): bool {

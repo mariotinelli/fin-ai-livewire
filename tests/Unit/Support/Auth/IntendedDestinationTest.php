@@ -23,6 +23,7 @@ it('rejects unsafe or foreign customer destinations', function (string $path): v
     expect(session()->has('url.intended'))->toBeFalse();
 })->with([
     '/admin/dashboard', '/suporte/meu-perfil', '/cliente-other/page',
+    '/cliente/pagina-inexistente', '/cliente/login', '/cliente/cadastro',
     'https://external.example/cliente/dashboard', '//external.example/cliente/dashboard',
     '/cliente/../admin/dashboard', '/cliente/%2e%2e/admin/dashboard',
     '/cliente/%252e%252e/admin/dashboard', '/cliente/%5c../admin/dashboard',
