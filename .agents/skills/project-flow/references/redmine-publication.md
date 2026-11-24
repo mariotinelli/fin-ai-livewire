@@ -14,6 +14,8 @@ Novos pais ficam sem Sequencing até project-slices reservar bloco. Se configura
 
 ## Apresentar uma prévia completa
 
+Para o requisito completo de uma Feature ou Bug, inclua na descrição da prévia o resumo funcional revisado (“Como funciona hoje”, “O que muda” e “Como vai funcionar”) e a apresentação dos [dois PDFs da tarefa](pdf-publication.md). As URLs definitivas vêm da releitura dos anexos.
+
 Quando houver arquivos ou links de evidência/design, aplique [publicação de evidências](published-evidence.md). Inclua anexos, destino, legendas e apresentação na descrição na mesma prévia; caminhos locais são apenas fontes de envio, nunca evidências acessíveis no texto remoto.
 
 Mostre destino, versão, título/prefixos, classificação/tracker, categoria ou ausência, status inicial para criação, descrição completa e relações propostas. Inclua criação, referências remotas e materialização no caminho local definitivo na mesma decisão quando conteúdo/destino já estiverem definidos, sem colocar esse caminho na descrição remota.

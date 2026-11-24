@@ -41,6 +41,11 @@ Inclua contexto específico e agrupamento somente quando ajudarem a leitura. Par
 
 <contexto funcional comprovado, quando relevante; mudança esperada e comportamento a preservar>
 
+<!-- Localize a jornada e o passo desta filha. Descreva o ator, o antes/depois e o resultado sob responsabilidade dela.
+Em QA, explicite o que distingue os resultados e identifique os critérios e CTs correspondentes.
+Depois do contexto, coloque os links diretos da comparação e do mapa do pai com suas revisões.
+Quando necessário, inclua na prévia o desenho próprio, a filha que o recebe e seu link a confirmar. -->
+
 #### Escopo e limites
 
 <fronteiras necessárias para esclarecer a responsabilidade desta tarefa>

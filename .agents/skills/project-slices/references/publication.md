@@ -4,6 +4,8 @@ O caminho abaixo publica uma decomposição com QA. No ramo de Study isolada, ap
 
 ## Prévia e autorização
 
+Inclua em cada descrição o [trecho do fluxo da filha](task-flow.md) e os dois links diretos para os anexos confirmados do pai. Mostre na mesma prévia os recortes que exigirem PDF próprio, com revisão e destino. A QA conserva o DOCX previsto para suas condições de teste.
+
 Para arquivos de evidência/design nas filhas, aplique [publicação de evidências](../../project-flow/references/published-evidence.md): anexar arquivos disponíveis, mostrar imagens na descrição e usar links remotos para os demais. Inclua essas operações na prévia do conjunto; nunca use caminhos do computador ou links relativos ao repositório como evidências publicadas.
 
 Leia contexto/projeto/versão, pai, todas as filhas e relações pelo MCP. Descubra schemas, trackers, status inicial, campos e ferramentas necessários; não invente IDs. Preserve versão selecionada e convenções do pai. [Sequencing](sequencing.md) define o bloco; [adoção](existing-children.md) trata trabalho existente.
@@ -31,6 +33,8 @@ Para outras evidências, siga a mesma confirmação de associação e confira a 
 **Concluído quando:** cada operação autorizada tem resultado confirmado ou permanece explicitamente pendente/incerto, sem nova criação para IDs conhecidos.
 
 ## Conferência e artefatos
+
+Confira o passo descrito na filha, a comparação e o mapa nas revisões do pai e, quando houver, o PDF complementar associado à própria filha. Materialize o recorte e os links conferidos junto da identidade da tarefa.
 
 Releia todas as filhas gerenciadas, relações, pai, bloco completo e anexos QA. Compare descrições/campos/estimativas com a prévia e confirme preservação de status, texto humano, filhas externas e relações não afetadas. Divergência material volta à revisão; não declare sucesso com resposta truncada/página faltante.
 

@@ -1,7 +1,7 @@
 interface:
   display_name: "project-flow"
-  short_description: "Define escopo, Feature ou Bug com fontes"
-  default_prompt: "Use $project-flow para definir ou retomar este escopo, Feature ou Bug com base nas fontes, concluir os itens aprovados e reconciliar issues e relações no Redmine sem duplicar operações."
+  short_description: "Define requisitos e atualiza o mapa em PDF na entrega"
+  default_prompt: "Use $project-flow para definir ou retomar o requisito, publicar o conteúdo aprovado ou registrar uma entrega no mapa do projeto."
 dependencies:
   tools:
     - type: "mcp"

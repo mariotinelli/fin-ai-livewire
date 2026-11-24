@@ -1,0 +1,357 @@
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'">
+<title>Mapa funcional</title>
+<style>
+  :root { font: 11pt/1.45 system-ui, sans-serif; color: #20352e; }
+  body { max-width: 52rem; margin: 2rem auto; padding: 0 1rem; }
+  h1, h2 { font-family: Georgia, serif; line-height: 1.15; }
+  h2 { margin: .3em 0; font-size: 23pt; }
+  h3 { margin-bottom: .4em; font-size: 13pt; }
+  p { margin: .5em 0 1em; }
+  a, .label { color: #145b46; }
+  .label { font-weight: 650; }
+  article { break-before: page; margin-top: 2rem; }
+  table { table-layout: fixed; width: 100%; border-collapse: collapse; margin-bottom: 1em; }
+  th, td { padding: .35em; overflow-wrap: anywhere; }
+  th { background: #185742; color: white; }
+  td { border-inline: 1px solid #ceddd6; vertical-align: middle; }
+  .action { background: #ecf4ef; border: 1px solid #98b6a6; border-radius: .3em; padding: .4em; }
+  .connector td { padding: 0; }
+  .connector svg { width: 100%; height: 15px; display: block; }
+  .transition { text-align: center; }
+  .transition svg { display: block; width: 100%; height: 14px; }
+  .state { border: 1px solid #809d8c; background: #f0f5ee; padding: .4em; border-radius: 1em; text-align: center; }
+  tbody, tr, .action { break-inside: avoid; }
+  h2, h3, thead, .label { break-after: avoid; }
+  .comparison h1 { margin-bottom: .2em; }
+  .comparison h2 { font-size: 17pt; }
+  .comparison nav { display: flex; gap: 1.5em; margin: 1em 0; }
+  .comparison section > p:first-of-type { break-after: avoid; }
+  .comparison section + section { break-before: page; }
+  .compact .versions { display: grid; grid-template-columns: 1fr 1fr; gap: 6mm; }
+  .compact .versions section { min-width: 0; break-before: auto; }
+  .compact .cross-link { display: none; }
+  .example { border-inline-start: 3px solid #809d8c; padding-left: .8em; break-inside: avoid; }
+  .measure { width: 178mm; max-width: none; }
+  .map-proposal { break-before: page; }
+  .compact .map-proposal { break-before: auto; }
+  .notice { border-inline-start: 3px solid #956213; padding-inline-start: .8em; }
+  .origin { break-inside: avoid; }
+  @media screen and (max-width: 42rem) { .compact .versions { grid-template-columns: 1fr; } }
+  @page { size: A4; margin: 16mm; }
+  @media print {
+    .local-source { display: none; }
+    body { margin: 0; max-width: none; padding: 0; }
+    article { margin: 0; }
+    * { print-color-adjust: exact; }
+  }
+</style>
+<main id="guide"></main>
+<!-- Edite o conteúdo deste bloco. Represente < dentro dos textos como \u003c. -->
+<script type="application/json" id="map-data">
+{"product":"","overview":"","journeys":[]}
+</script>
+<script>
+  function element(tag, text, className) {
+    const node = document.createElement(tag);
+    if (text !== undefined) node.textContent = text;
+    if (className) node.className = className;
+    return node;
+  }
+
+  function required(value) {
+    if (typeof value !== 'string' || !value.trim()) throw Error('Há um texto obrigatório vazio.');
+    return value;
+  }
+
+  function arrow(lanes, from, to) {
+    const ns = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(ns, 'svg');
+    const path = document.createElementNS(ns, 'path');
+    const x = (from + .5) * 100;
+    const y = (to + .5) * 100;
+    svg.setAttribute('viewBox', '0 0 ' + (lanes * 100) + ' 15');
+    svg.setAttribute('preserveAspectRatio', 'none');
+    svg.setAttribute('aria-hidden', 'true');
+    path.setAttribute('d', 'M ' + x + ' 0 V 6 H ' + y + ' V 13 m -2 -3 l 2 3 l 2 -3');
+    path.setAttribute('fill', 'none');
+    path.setAttribute('stroke', '#386b55');
+    svg.append(path);
+    return svg;
+  }
+
+  function lanes(steps, offset, actors) {
+    const table = element('table');
+    const header = table.createTHead().insertRow();
+    actors.forEach(actor => header.append(element('th', actor)));
+    steps.forEach((step, i) => {
+      const group = table.createTBody();
+      const row = group.insertRow();
+      const owner = actors.indexOf(step.actor);
+      actors.forEach((actor, j) => {
+        const cell = row.insertCell();
+        if (j === owner) {
+          const action = element('div', (offset + i + 1) + '. ' + required(step.action), 'action');
+          if (step.label) action.prepend(element('strong', required(step.label) + ' · '));
+          cell.append(action);
+        }
+      });
+      if (i + 1 < steps.length) {
+        const connector = group.insertRow();
+        connector.className = 'connector';
+        const cell = connector.insertCell();
+        cell.colSpan = actors.length;
+        cell.append(arrow(actors.length, owner, actors.indexOf(steps[i + 1].actor)));
+      }
+    });
+    return table;
+  }
+
+  function drawFlow(page, journey, sharedActors) {
+    // Split at a handoff before a fifth participant would make the page unreadable.
+    let start = 0;
+    while (start < (journey.steps?.length ?? 0)) {
+      const participants = new Set();
+      let end = start;
+      while (end < journey.steps.length) {
+        const actor = required(journey.steps[end].actor);
+        if (participants.size === 4 && !participants.has(actor)) break;
+        participants.add(actor);
+        end++;
+      }
+      page.append(lanes(journey.steps.slice(start, end), start, sharedActors || [...participants]));
+      start = end;
+    }
+    if (journey.states) {
+      page.append(element('h3', 'Quando a situação muda'), element('p', required(journey.states.intro)));
+      const table = element('table');
+      const head = table.createTHead().insertRow();
+      ['Situação inicial', 'O que acontece', 'Nova situação'].forEach(s => head.append(element('th', s)));
+      if (!journey.states.transitions.length) throw Error('Informe as transições do diagrama de estados.');
+      journey.states.transitions.forEach(change => {
+        const row = table.createTBody().insertRow();
+        row.insertCell().append(element('div', required(change.from), 'state'));
+        const event = row.insertCell();
+        event.className = 'transition';
+        event.append(element('span', required(change.event)));
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('viewBox', '0 0 100 14');
+        svg.setAttribute('preserveAspectRatio', 'none');
+        svg.setAttribute('aria-hidden', 'true');
+        const line = document.createElementNS(svg.namespaceURI, 'path');
+        line.setAttribute('d', 'M 1 7 H 96 m -5 -4 l 5 4 l -5 4');
+        line.setAttribute('stroke', '#386b55');
+        line.setAttribute('fill', 'none');
+        svg.append(line);
+        event.append(svg);
+        row.insertCell().append(element('div', required(change.to), 'state'));
+      });
+      page.append(table);
+    }
+    for (const [key, title] of [['alternatives', 'Outros caminhos'], ['failures', 'Quando algo dá errado']]) {
+      if (!journey[key]?.length) continue;
+      const list = element('ul');
+      journey[key].forEach(item => list.append(element('li', required(item))));
+      page.append(element('h3', title), list);
+    }
+  }
+
+  function identifier(value) {
+    if (!/^[a-z][a-z0-9-]*$/.test(required(value))) throw Error('Identificador inválido.');
+    return value;
+  }
+
+  function chapter(journey, origins, journeys) {
+    const page = element('article');
+    page.id = 'flow-' + identifier(journey.id);
+    if (journey.status && !['Em uso', 'Previsto', 'A confirmar'].includes(journey.status)) throw Error('Situação da jornada inválida.');
+    page.append(element('h2', required(journey.title)));
+    for (const id of journey.related || []) {
+      if (!journeys.has(id)) throw Error('Jornada relacionada ausente.');
+      page.append(linkTo('flow-' + id, 'Ver também · ' + journeys.get(id)), element('br'));
+    }
+    const versions = element('div', undefined, 'versions');
+    const base = element('section');
+    if (journey.status) base.append(element('p', journey.status, 'label'));
+    base.append(element('p', required(journey.intro)));
+    const proposals = journey.proposals ?? [];
+    if (proposals.length && !journey.status) throw Error('Informe a situação da jornada afetada.');
+    if (journey.steps?.length || journey.states) {
+      drawFlow(base, journey);
+      base.append(element('h3', 'Na prática'), element('p', required(journey.example)));
+    } else if (journey.status !== 'Previsto' || !proposals.length) {
+      throw Error('A jornada precisa de passos ou transições.');
+    }
+    versions.append(base);
+    const seen = new Set();
+    for (const proposal of proposals) {
+      const origin = origins.get(proposal.origin);
+      if (!origin || seen.has(origin.item)) throw Error('Origem ausente ou repetida na mesma jornada.');
+      seen.add(required(origin.item));
+      const version = element('section', undefined, 'map-proposal');
+      version.id = 'proposal-' + journey.id + '.' + identifier(proposal.origin);
+      version.append(element('p', 'Mudança proposta · ' + journey.title, 'label'), element('h3', required(origin.title)),
+        linkTo('origin-' + proposal.origin, 'Abrir requisito · ' + required(origin.revision)),
+        element('p', required(proposal.intro)));
+      if (!proposal.steps?.length && !proposal.states) throw Error('Descreva os passos ou estados da proposta.');
+      drawFlow(version, proposal);
+      version.append(element('h3', 'Na prática'), element('p', required(proposal.example)),
+        linkTo(page.id, 'Voltar ao início da jornada'));
+      base.append(linkTo(version.id, 'Ver mudança · ' + origin.title), element('br'));
+      versions.append(version);
+    }
+    for (const conflict of journey.conflicts || []) {
+      const notice = element('aside', undefined, 'notice');
+      notice.append(element('h3', 'A decidir'), element('p', required(conflict.reason)));
+      if (!conflict.origins?.length) throw Error('Identifique os requisitos envolvidos.');
+      for (const key of conflict.origins) {
+        if (!origins.has(key)) throw Error('Requisito do aviso ausente.');
+        notice.append(linkTo('origin-' + key, origins.get(key).title), element('br'));
+      }
+      base.append(notice);
+    }
+    page.append(versions);
+    return page;
+  }
+
+  function linkTo(id, text) {
+    const link = element('a', text);
+    link.href = '#' + id;
+    return link;
+  }
+
+  function remoteLink(url, text) {
+    const remote = new URL(required(url));
+    if (!['https:', 'http:'].includes(remote.protocol) || remote.username || remote.password) throw Error('Link remoto inválido.');
+    const link = element('a', text);
+    link.href = remote.href;
+    return link;
+  }
+
+  function comparison(data) {
+    const doc = element('div', undefined, 'comparison');
+    doc.append(element('h1', required(data.title)));
+    if (data.revision) doc.append(element('p', required(data.revision), 'label'));
+    doc.append(element('p', required(data.intro)),
+      element('h2', 'O que muda'), element('p', required(data.change)));
+    const nav = element('nav');
+    const beforeLink = linkTo('before', 'Ver fluxo anterior');
+    const afterLink = linkTo('after', 'Ver fluxo proposto');
+    nav.append(beforeLink, afterLink);
+    const versions = element('div', undefined, 'versions');
+    const actors = [...new Set([...(data.before.steps ?? []), ...(data.after.steps ?? [])].map(step => required(step.actor)))];
+    for (const [id, title, other] of [['before', 'Como funciona hoje', afterLink], ['after', 'Como vai funcionar', beforeLink]]) {
+      const flow = data[id];
+      const section = element('section');
+      section.id = id;
+      section.append(element('h2', title), element('p', required(flow.intro)));
+      if (id === 'before') required(flow.source);
+      if (flow.steps !== undefined && !Array.isArray(flow.steps)) throw Error('Confira os passos da jornada.');
+      if (id === 'after' && !flow.steps?.length && !flow.states) throw Error('Descreva o fluxo proposto.');
+      drawFlow(section, flow, actors.length <= 4 ? actors : undefined);
+      const crossLink = element('p', undefined, 'cross-link');
+      crossLink.append(other.cloneNode(true));
+      section.append(crossLink);
+      versions.append(section);
+    }
+    const example = element('div', undefined, 'example');
+    example.append(element('h3', 'Na prática'), element('p', required(data.example)));
+    doc.append(nav, versions, example);
+    if (data.parentDocuments !== undefined) {
+      required(data.revision);
+      const flow = remoteLink(data.parentDocuments.comparison, 'Abrir o fluxo completo da mudança');
+      const map = remoteLink(data.parentDocuments.map, 'Abrir o mapa do projeto');
+      if (flow.href === map.href) throw Error('Confira os dois anexos do requisito.');
+      const links = element('p');
+      links.append(flow, ' · ', map);
+      doc.append(links);
+    }
+    document.title = data.title;
+    return doc;
+  }
+
+  function fitComparison(doc) {
+    if (doc.querySelector('.transition') || [...doc.querySelectorAll('thead tr')].some(row => row.cells.length > 2)) return;
+    doc.classList.add('compact', 'measure');
+    // Measure at A4 print width. Leave room for differences in the printer's font metrics.
+    if (doc.getBoundingClientRect().height > 245 * 96 / 25.4 || doc.scrollWidth > doc.clientWidth) {
+      doc.classList.remove('compact');
+    }
+    doc.classList.remove('measure');
+  }
+
+  function productMap(map) {
+    const doc = document.createDocumentFragment();
+    const index = element('ol');
+    doc.append(element('h1', required(map.product)), element('p', required(map.overview)));
+    if (map.edition) doc.append(element('p', 'Edição ' + required(map.edition), 'label'));
+    doc.append(element('h2', 'Jornadas'), index);
+    if (!map.journeys.length) throw Error('Preencha ao menos uma jornada.');
+    const journeys = new Map(map.journeys.map(journey => [identifier(journey.id), required(journey.title)]));
+    if (journeys.size !== map.journeys.length) throw Error('Há capítulos com o mesmo identificador.');
+    const origins = new Map(Object.entries(map.requirements ?? {}));
+    for (const journey of map.journeys) {
+      const page = chapter(journey, origins, journeys);
+      const link = element('a', journey.title);
+      link.setAttribute('href', '#' + page.id);
+      const entry = element('li');
+      entry.append(link);
+      const count = journey.proposals?.length ?? 0;
+      if (count) entry.append(' · ' + count + (count === 1 ? ' mudança proposta' : ' mudanças propostas'));
+      if (journey.conflicts?.length) entry.append(' · A decidir');
+      index.append(entry);
+      doc.append(page);
+    }
+    if (origins.size) {
+      const references = element('article');
+      references.id = 'requirements';
+      references.append(element('h2', 'Requisitos das mudanças'));
+      const entry = element('li');
+      entry.append(linkTo(references.id, 'Requisitos das mudanças'));
+      index.append(entry);
+      for (const [id, origin] of origins) {
+        const source = element('section', undefined, 'origin');
+        source.id = 'origin-' + identifier(id);
+        source.append(element('h3', required(origin.title)), element('p', required(origin.revision) + ' · ' + required(origin.item)));
+        const path = required(origin.path);
+        if (new URL(path, 'https://local.invalid/').origin !== 'https://local.invalid'
+            || /^[a-z][a-z0-9+.-]*:/i.test(path) || path.startsWith('/') || path.includes('\\')
+            || path !== path.trim() || /[\r\n\t]/.test(path)) throw Error('Use um caminho relativo para o requisito.');
+        const local = element('a', 'Abrir requisito local', 'local-source');
+        local.setAttribute('href', path);
+        source.append(local);
+        if (origin.url) {
+          source.append(element('p'), remoteLink(origin.url, 'Abrir tarefa · ' + origin.title));
+        }
+        references.append(source);
+      }
+      doc.append(references);
+    }
+    document.title = map.product + ' — Mapa funcional';
+    return doc;
+  }
+
+  try {
+    const data = JSON.parse(document.getElementById('map-data').textContent);
+    const guide = document.getElementById('guide');
+    if (data.kind === 'comparison') {
+      const doc = comparison(data);
+      guide.append(doc);
+      fitComparison(doc);
+    } else {
+      guide.append(productMap(data));
+      for (const page of guide.querySelectorAll('article')) {
+        if (page.querySelectorAll('.map-proposal').length === 1 && !page.querySelector('.notice')) fitComparison(page);
+      }
+    }
+  } catch (error) {
+    // A link in a custom footer must not turn an error page into a valid PDF.
+    document.addEventListener('DOMContentLoaded', () => {
+      document.body.replaceChildren(element('p', 'Mapa incompleto. ' + error.message));
+    }, {once: true});
+  }
+</script>
+</html>

@@ -19,6 +19,8 @@ No fluxo de execução pelo Ralph, a aprovação do plano apresentado permite in
 
 ## 2. Iniciar o executor
 
+Para localizar as ferramentas preparadas pelo `remsoft init`, consulte `skills.json` em `%LOCALAPPDATA%/rem-soft-tools/tools` (Windows) ou `~/.local/share/rem-soft-tools/tools` (macOS/Linux). Use o Bash registrado em `bash`. Se o backend indicado em `agent.name` for o único disponível, passe `--backend` correspondente e use `agent.executable` em `RALPH_CODEX_BIN` ou `RALPH_OPENCODE_BIN` para essa execução. Em Git Bash, converta caminhos Windows com `cygpath -u` e prefira o shim de shell ao lado do .cmd quando existir. Uma escolha explícita de backend do usuário tem precedência.
+
 Leia [execução](../plan-issue/references/ralph-execution.md). Localize `ralph.sh` no pacote `plan-issue` instalado ao lado desta skill. Use Codex CLI por padrão ou OpenCode conforme a escolha do usuário. Preserve o modelo e as permissões configurados no CLI. As permissões desta conversa não são automaticamente herdadas por outro processo; escolha explícita de sandbox deve estar dentro da autorização conhecida. Uma falha não autoriza ampliar acesso, ignorar aprovações ou modificar configuração global. O ambiente precisa de Bash, Git e do CLI selecionado; no Windows, use Git Bash ou WSL com as ferramentas no mesmo ambiente.
 
 Na raiz do projeto, inicie uma única execução com o caminho real do plano e os comandos obrigatórios já revisados. Reaproveite o shell desses comandos. O executor faz somente Dev → Validação → Testes → Commit: uma sessão implementa, outra revisa, e o script executa os testes e cria o commit. Host, diagnóstico e investigação pertencem ao gate que precisar deles.

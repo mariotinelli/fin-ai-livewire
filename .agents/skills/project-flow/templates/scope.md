@@ -1,5 +1,7 @@
 # <Nome do escopo>
 
+Mapa funcional do projeto: <referência local à fonte editável e ao PDF, ou pendência específica>.
+
 ## Objetivo e fontes
 
 ## Catálogo
@@ -23,6 +25,8 @@ entrega consumidora, preservando regras e rastreabilidade. -->
 
 | Item | Requisito / ID remoto | Slicing publicado | Implementação comprovada | Pendências |
 | --- | --- | --- | --- | --- |
+
+<!-- No marco do requisito, registre a edição do mapa e os capítulos atualizados para cada item aprovado. -->
 
 ## Relações nativas
 

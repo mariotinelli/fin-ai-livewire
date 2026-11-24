@@ -15,11 +15,17 @@ confirmados e anexos; não copiar caminhos do computador ou links ao repositóri
 
 <Comportamento e contexto necessários para entender a tarefa sem a conversa.>
 
+<!-- Informe a jornada, o passo anterior, a mudança ou o comportamento preservado e o resultado desta filha.
+Depois da explicação, inclua os links confirmados da comparação do pai e do mapa com suas revisões.
+Se a própria filha tiver desenho adicional, identifique a revisão, o anexo confirmado e a fonte local flow-slice.html. -->
+
 ## Escopo e limites
 
 ## Critérios de aceite
 
 <Condições e resultados observáveis, incluindo critérios visuais aprovados.>
+
+<!-- Para QA, ligue cada verificação aos critérios do pai e aos IDs CT do DOCX aplicável. -->
 
 ## Dependências
 

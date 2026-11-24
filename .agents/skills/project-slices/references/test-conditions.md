@@ -12,6 +12,8 @@ Inclua condições na prévia completa de slices.md. Escreva `slices/condicoes-t
 
 ## Gerar documento real
 
+O `remsoft init` registra o conversor validado em `docx` no arquivo `%LOCALAPPDATA%/rem-soft-tools/tools/skills.json` (Windows) ou `~/.local/share/rem-soft-tools/tools/skills.json` (macOS/Linux). Use o executável ali indicado. Com Pandoc, converta a fonte Markdown em DOCX; com LibreOffice, use a fonte em HTML e exporte para Word. Confira o documento produzido conforme os critérios abaixo.
+
 Toda nova publicação precisa do DOCX `<ID do pai> - Condições de testes.docx`, inclusive QA-only. Use o ID confirmado da Feature ou Bug pai, nunca o ID da tarefa QA. Por exemplo, para a Feature 1016288, o arquivo entregue e anexado é `1016288 - Condições de testes.docx`.
 
 Guarde cada revisão em sua própria pasta: `slices/rNNN/<ID do pai> - Condições de testes.docx`, como `slices/r001/1016288 - Condições de testes.docx`. Assim, o nome do anexo permanece legível e revisões anteriores não são sobrescritas. Preserve documentos e anexos históricos com seus nomes existentes; o padrão vale para novos documentos, sem renomeação automática dos antigos.

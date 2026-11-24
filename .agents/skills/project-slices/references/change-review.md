@@ -6,6 +6,8 @@ Aplique [mudanças semânticas](../../vertical-slicing/references/semantic-chang
 
 ## Aplicar delta
 
+Compare o capítulo, o passo e os critérios registrados no trecho de cada filha. Para cada alteração pertinente, mostre os links da revisão anterior e os novos destinos confirmados. Preserve o par da revisão anterior para filhas concluídas ou fora do impacto, inclusive quando surgir outra edição do mapa geral.
+
 Para não iniciadas, mostre atualização localizada. Iniciadas exigem discussão explícita do impacto e representação compatível; concluídas permanecem históricas, com nova tarefa de diferença quando necessária. Não reescreva aceite antigo como se a mudança sempre tivesse existido. Não afete tarefas fora do impacto.
 
 Uma revisão só de condições/Word também apresenta o delta e destino QA; incorpore edição Word na fonte e gere nova revisão. Mudança editorial pode preservar anexo anterior mediante revisão semântica explícita, sem fingir documento novo. Mudança funcional exige condições/documento alinhados.

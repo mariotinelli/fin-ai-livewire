@@ -19,6 +19,8 @@ Confira identidade, contexto e versão remota conforme [preflight](../project-fl
 
 ## 2. Inspecionar e propor
 
+Prepare o [trecho do fluxo de cada tarefa](references/task-flow.md) a partir da revisão aprovada do pai. Em cada DEV e QA, explique a responsabilidade da filha antes dos links para os dois PDFs. A mesma referência trata QA-only, trabalho interno, Study e os recortes que precisam de desenho próprio.
+
 Invoke `vertical-slicing` para avaliar entregas verticais, cobertura, estimativas, fronteiras visuais e dependências reais. Inspecione código e testes; publicação não prova implementação. Mapeie cada regra/critério para DEV, comportamento existente com evidência, ou limite explicitamente aprovado. QA cobre o resultado completo. Sem DEV necessário, use [QA-only e adoção](references/existing-children.md).
 
 Revise a granularidade antes das horas e da redação final: cada DEV tem uma interação completa, útil e verificável com suas dependências declaradas. Se reunir objetivos com aceite próprio, avalie separá-los; mantê-los juntos exige uma justificativa breve de necessidade em Entrega/Escopo e limites. Compartilhar código, tela ou entidade, caber em seis horas e obter estimativas concordantes não justificam o agrupamento. A conferência mínima do resultado não absorve automaticamente outras operações. Reaproveite os pareceres já previstos para questionar fronteiras e sobreposição antes de estimar, sem novo gate ou pergunta obrigatória.
@@ -35,7 +37,7 @@ Quando houver arquivos de evidência/design, siga [evidências publicadas](../pr
 
 Siga [publicação](references/publication.md). Antes de apresentar a prévia, aplique a [revisão de escrita](../vertical-slicing/references/task-writing.md) às descrições finais formatadas, dentro desta mesma etapa. Peça uma decisão sobre o conjunto completo: pai/destino, filhas novas/adotadas/externas, campos, descrições completas, estimativas, relações, Sequencing e DOCX. Reutilize consentimento para o mesmo conteúdo, sem confirmação equivalente; mudanças materiais exigem nova revisão.
 
-Publique somente as operações autorizadas pelo MCP. Consulte IDs conhecidos e reconcilie resultados incertos antes de repetir. Preserve status do pai, conteúdo humano, relações e filhas alheias. Registre operações e pendências de modo legível no próprio slices.md, sem motor de estados.
+Inclua na prévia o par de links de cada pai e qualquer PDF próprio da filha. Publique somente as operações autorizadas pelo MCP. Consulte IDs conhecidos e reconcilie resultados incertos antes de repetir. Preserve status do pai, conteúdo humano, relações e filhas alheias. Registre operações e pendências de modo legível no próprio slices.md, sem motor de estados.
 
 **Concluído quando:** leitura remota confirma filhas, relações, numeração, anexo e preservação de dados alheios; publicação parcial permanece parcial.
 

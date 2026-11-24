@@ -4,9 +4,14 @@ Documentos Markdown ligam as etapas. JSON legado é evidência opcional, nunca e
 
 ## Caminhos
 
+Mapa funcional compartilhado entre escopos e demandas: seguir a convenção existente ou, na primeira geração, `docs/engineering/functional-map.html` e `docs/engineering/functional-map.pdf`. Ver [geração e retomada](functional-map.md).
+
+Uma comparação cita a edição que fundamentou seu fluxo anterior. Para aplicar ou recuperar um par de arquivos após aprovação, siga a [conferência da edição](map-approval.md). Preserve o par citado e use o caminho habitual para a edição vigente.
+
 - Escopo: `docs/harness/scopes/<YYYY-MM-DD>-<slug>/scope.md`.
 - Feature: `docs/harness/features/<ID>-<slug>/feature.md`.
 - Bug: `docs/harness/bugs/<ID>-<slug>/bug.md`.
+- Comparação de cada Feature ou Bug: `flow-comparison.html` e `flow-comparison.pdf` na pasta do próprio requisito, inclusive no rascunho. Ao confirmar o ID, mova o conjunto e confira também a referência de origem.
 - Fontes necessárias: `sources/` do item/escopo; fontes compartilhadas permanecem no escopo, com links relativos.
 - Antes de existir ID: rascunho explicitamente local em `docs/harness/.runs/<run-id>/`, preservado na interrupção; após confirmação, mover para destino canônico com links conferidos.
 - Slicing e tarefas: `slices/slices.md` e `tasks/<papel>-<id>-<slug>/task.md` sob o pai. Somente DEV recebe planning.md.
