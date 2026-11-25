@@ -13,7 +13,7 @@ Se o pedido for apenas gerar ou revisar o mapa do projeto, use o [modelo e a ref
 
 Na configuração inicial do mapa, ligue a etapa de entrega existente conforme [Registrar uma entrega](references/delivery.md). Se o pedido for apenas configurar a chamada, encerre após conferi-la. Quando a etapa informar uma entrega, siga diretamente a atualização e a publicação descritas nessa referência.
 
-Identifique se a solicitação é escopo com vários itens ou uma Feature/Bug, reutilizando escolhas já explícitas. Leia fontes declaradas, instruções, código e domínio pertinentes. Fontes e exemplos são evidência a avaliar com o usuário, não autoridade automática. Distinguir fatos verificados, decisões aprovadas e propostas.
+Identifique se o pedido trata do escopo do projeto ou de uma Feature/Bug avulsa. O levantamento inicial de um produto é um escopo mesmo quando o usuário mencionou só uma entrega. Reutilize escolhas já explícitas. Leia fontes declaradas, instruções, código e domínio pertinentes. Fontes e exemplos são evidência a avaliar com o usuário, não autoridade automática. Distinguir fatos verificados, decisões aprovadas e propostas.
 
 As entradas existentes `new-scope` e `new-issue` continuam selecionando esses dois ramos, respectivamente; não exigem comando auxiliar.
 
@@ -25,11 +25,15 @@ Para design, leia [fontes visuais](references/design-inputs.md). Para arquivos e
 
 ## 2. Catalogar quando houver escopo
 
+Em todo escopo, inspecione o projeto de destino para descobrir **o que já está pronto** e compare com o produto desejado. Siga a [revisão da base existente](references/catalog-discipline.md#funcionalidades-existentes-na-base) ao montar ou retomar o catálogo, inclusive em projeto novo e ao revisar tarefas já criadas.
+
 Siga [catálogo](references/catalog-discipline.md). Escreva scope.md com todos os candidatos, limites, dependências e ordem. Identifique capacidades visuais compartilhadas com dono próprio quando o produto as exigir. O catálogo aprovado vem antes de entrevistar itens em profundidade.
 
 **Concluído quando:** cada candidato tem destino/justificativa, cada Feature tem ator, fluxo, resultado e caminho de validação pelo QA no canal real do produto, e o usuário revisou o catálogo; próximo item respeita suas dependências.
 
 ## 3. Definir requisito
+
+Se um requisito avulso envolver a retirada de uma funcionalidade existente, aplique a mesma decisão por funcionalidade ao trecho afetado.
 
 Invoque `requirements-grilling` para resolver somente lacunas funcionais materiais e `domain-modeling` para vocabulário. Inspecione fatos técnicos; não peça ao usuário decisões de implementação nem imponha mecanismos no requisito.
 

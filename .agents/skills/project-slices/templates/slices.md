@@ -13,6 +13,8 @@
 | --- | --- | --- |
 | `<id>: <resumo>` | Slice 1 / existente / outra Feature | `<evidência>` |
 
+<!-- Para uma retirada aprovada, identifique a DEV e a QA que cobrem o ponto de entrada ou efeito retirado e os usos compartilhados que precisam continuar. -->
+
 ## Condições de teste
 
 As condições integram a aprovação da prévia completa e sua autorização de publicação. Consulte as [condições e o DOCX obrigatório](../references/test-conditions.md).

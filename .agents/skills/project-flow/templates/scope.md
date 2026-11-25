@@ -10,6 +10,10 @@ Mapa funcional do projeto: <referência local à fonte editável e ao PDF, ou pe
 de aceite pelo QA para cada Feature; preparação interna acompanha sua primeira
 entrega consumidora, preservando regras e rastreabilidade. -->
 
+<!-- Compare o escopo com as funcionalidades que já existem no destino, inclusive em projeto novo.
+Registre em Fontes a evidência e em Destino a decisão específica ou a pendência.
+Para retirada aprovada, identifique o requisito responsável, o que sai e o que preservar. -->
+
 | ID estável | Feature/Bug | Entrega e limites | Aceite resumido | Fontes | Destino |
 | --- | --- | --- | --- | --- | --- |
 

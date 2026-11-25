@@ -10,6 +10,8 @@ Prepare uma cópia candidata do mapa na mesma pasta da fonte, com nome distinto 
 
 ## Compor os capítulos
 
+Uma retirada de funcionalidade exclusiva da base fica rastreada no requisito. Inclua no guia somente os efeitos sobre jornadas do produto. Se a funcionalidade está em uso, mostre no capítulo atual o que deixará de estar disponível. Quando a retirada for entregue, retire da edição vigente o passo correspondente ou, se toda a jornada acabou, o capítulo e seus links. Preserve a comparação histórica.
+
 Releia a fonte da equipe antes de editar. Mantenha os capítulos em uso, seus IDs e notas. Acrescente o efeito de cada proposta junto à jornada correspondente, com explicação antes do desenho e exemplo do resultado. Atualize as ligações entre capítulos. Para uma capacidade nova, use **Previsto** e explique a alternativa manual ou a situação anterior conhecida. Se o texto de uma jornada prevista já descreve exatamente a proposta, apresente o desenho uma só vez.
 
 No [modelo HTML](../templates/functional-map.html), use estes campos dentro de `map-data`:
